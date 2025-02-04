@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Mail, Linkedin, Instagram } from 'lucide-react';
+import { Mail, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/header';
 
@@ -50,8 +50,8 @@ export default function HomePage() {
               <p className="text-gray-600 mb-6">
                 Ever wanted to try something new, meet cool people, or just have fun? 
                 Our Interest Groups are all about diving into hobbies, exploring new skills, 
-                and stepping outside your comfort zone — no experience needed! Whether you're into 
-                board games, photography, or even trying out a completely random skill, there's a group for you!
+                and stepping outside your comfort zone — no experience needed! Whether you&apos;re into 
+                board games, photography, or even trying out a completely random skill, there&apos;s a group for you!
               </p>
               <Button variant="outline" className="text-[#FF7D4E] hover:text-[#FF7D4E]/90 border-[#FF7D4E] hover:border-[#FF7D4E]/90 w-fit rounded-[5px]">
                 VIEW ALL
@@ -85,9 +85,9 @@ export default function HomePage() {
             <div className="flex flex-col justify-center order-1 md:order-2">
               <h2 className="text-4xl font-bold mb-4">Course Reviews</h2>
               <p className="text-gray-600 mb-6">
-                Not sure which courses to take? Learn from those who've been there! 
-                Our Course Review section features insights from seniors who've taken 
-                the classes you're considering — covering everything from workload and 
+                Not sure which courses to take? Learn from those who&apos;ve been there! 
+                Our Course Review section features insights from seniors who&apos;ve taken 
+                the classes you&apos;re considering — covering everything from workload and 
                 grading to hidden gems and survival tips.
               </p>
               <Button variant="outline" className="text-[#FF7D4E] hover:text-[#FF7D4E]/90 border-[#FF7D4E] hover:border-[#FF7D4E]/90 w-fit rounded-[5px]">
