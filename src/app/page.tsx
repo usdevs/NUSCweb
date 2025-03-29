@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
-import { Mail, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/header';
+import Footer from '@/components/footer';
 
 export default function HomePage() {
   return (
@@ -53,7 +53,7 @@ export default function HomePage() {
                 and stepping outside your comfort zone — no experience needed! Whether you&apos;re into 
                 board games, photography, or even trying out a completely random skill, there&apos;s a group for you!
               </p>
-              <Button variant="outline" className="text-[#FF7D4E] hover:text-[#FF7D4E]/90 border-[#FF7D4E] hover:border-[#FF7D4E]/90 w-fit rounded-[5px]">
+              <Button variant="outline" className="text-white hover:text-white/90 border-[#FF7D4E] hover:border-[#FF7D4E]/90 bg-[#FF7D4E] hover:bg-[#FF7D4E]/90 w-fit rounded-[5px]">
                 VIEW ALL
               </Button>
             </div>
@@ -90,7 +90,7 @@ export default function HomePage() {
                 the classes you&apos;re considering — covering everything from workload and 
                 grading to hidden gems and survival tips.
               </p>
-              <Button variant="outline" className="text-[#FF7D4E] hover:text-[#FF7D4E]/90 border-[#FF7D4E] hover:border-[#FF7D4E]/90 w-fit rounded-[5px]">
+              <Button variant="outline" className="text-white hover:text-white/90 border-[#FF7D4E] hover:border-[#FF7D4E]/90 bg-[#FF7D4E] hover:bg-[#FF7D4E]/90 w-fit rounded-[5px]">
                 VIEW ALL
               </Button>
             </div>
@@ -98,29 +98,9 @@ export default function HomePage() {
         </div>
       </div>
 
-      <footer className="bg-[#0C2C47] text-white py-4 px-8">
-        <div className="flex justify-between items-center max-w-7xl mx-auto">
-          <div className="flex space-x-4">
-            <Button variant="ghost" size="icon" className="text-white hover:text-white/80">
-              <Mail className="w-8 h-8" />
-            </Button>
-            <Button variant="ghost" size="icon" className="p-0">
-              <Image 
-                src="/images/linkedin.png"
-                alt="LinkedIn"
-                width={16}
-                height={16}
-              />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-white hover:text-white/80">
-              <Instagram className="w-8 h-8" />
-            </Button>
-          </div>
-          <Button variant="outline" className="text-[#FF7D4E] hover:text-[#FF7D4E]/90 border-[#FF7D4E] hover:border-[#FF7D4E]/90 bg-white hover:bg-white/90 rounded-[5px]">
-            REPORT A BUG
-          </Button>
-        </div>
-      </footer>
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

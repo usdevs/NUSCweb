@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
@@ -49,8 +49,8 @@ function Calendar({
         day_range_start: "day-range-start",
         day_range_end: "day-range-end",
         day_selected:
-          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-        day_today: "bg-accent text-accent-foreground",
+          "bg-[#0C2C47] text-white hover:bg-[#0C2C47] hover:text-white focus:bg-[#0C2C47] focus:text-white",
+        day_today: "bg-accent text-accent-foreground font-bold",
         day_outside:
           "day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground",
         day_disabled: "text-muted-foreground opacity-50",
@@ -66,6 +66,12 @@ function Calendar({
         IconRight: ({ className, ...props }) => (
           <ChevronRight className={cn("h-4 w-4", className)} {...props} />
         ),
+      }}
+      modifiersStyles={{
+        selected: {
+          backgroundColor: '#0C2C47',
+          color: 'white'
+        }
       }}
       {...props}
     />
