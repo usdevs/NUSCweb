@@ -219,7 +219,7 @@ export default function EventsPage() {
     <div className="bg-[#0C2C47] rounded-2xl overflow-hidden">
       {/* Day headers */}
       <div className="grid grid-cols-7 gap-0.5 p-0.5 pt-0">
-        {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((day, index) => (
+        {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((day) => (
           <div 
             key={day} 
             className="p-4 text-center text-[#0C2C47] font-bold text-base bg-white rounded-t-2xl border-b border-[#0C2C47]"
@@ -327,7 +327,7 @@ const renderWeekView = () => {
     <div className="bg-[#0C2C47] rounded-2xl overflow-hidden">
       {/* Day headers */}
       <div className="grid grid-cols-7 gap-0.5 p-0.5 pt-0">
-        {weekDays.map((day, index) => (
+        {weekDays.map((day) => (
           <div 
             key={`${day.toISOString()}-header`} 
             className="text-center text-[#0C2C47] bg-white rounded-t-2xl border-b border-[#0C2C47] p-4"
