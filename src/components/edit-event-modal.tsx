@@ -4,92 +4,106 @@ import React, { useState, useEffect } from 'react';
 import BaseModal from '@/components/base-modal';
 import FormField from '@/components/form-field';
 import {
-  BOOKING_VENUE_OPTIONS,
-  BOOKING_ORGANIZATION_OPTIONS
+  EVENT_ORGANIZATION_OPTIONS,
+  EVENT_CATEGORY_NAMES,
+  EVENT_VENUE_OPTIONS
 } from '@/lib/formOptions';
 
-interface BookingFormData {
+interface Event {
+  id: number;
   eventName: string;
   organization: string;
+  category: string;
+  venue: string;
+  date: Date;
+  startTime: string;
+  endTime: string;
+}
+
+interface EventFormData {
+  id?: number;
+  eventName: string;
+  organization: string;
+  category: string;
   venue: string;
   date?: Date;
   startTime: string;
   endTime: string;
-  addToCalendar: boolean;
 }
 
-interface CreateBookingModalProps {
+interface EditEventModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (bookingData: BookingFormData) => void;
-  initialVenue?: string;
-  initialStartTime?: string;
-  initialEndTime?: string;
-  initialDate?: Date;
-  showClashWarning?: boolean;
+  onSubmit: (eventData: EventFormData) => void;
+  onDelete: (eventId: number) => void;
+  event: Event | null;
 }
 
-export default function CreateBookingModal({ 
+export default function EditEventModal({ 
   isOpen, 
   onClose, 
-  onSubmit,
-  initialVenue,
-  initialStartTime,
-  initialEndTime,
-  initialDate,
-}: CreateBookingModalProps) {
+  onSubmit, 
+  onDelete,
+  event
+}: EditEventModalProps) {
   const [eventName, setEventName] = useState('');
   const [organization, setOrganization] = useState('');
-  const [venue, setVenue] = useState(BOOKING_VENUE_OPTIONS[0] || 'CTPH');
+  const [category, setCategory] = useState('');
+  const [venue, setVenue] = useState('');
   const [date, setDate] = useState(new Date().toISOString());
-  const [startTime, setStartTime] = useState('10:00 AM');
-  const [endTime, setEndTime] = useState('03:00 PM');
-  const [addToCalendar, setAddToCalendar] = useState(false);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
 
-  // Reset form when modal opens
+  // Update form when event changes
   useEffect(() => {
-    if (isOpen) {
-      setEventName('');
-      setOrganization('');
-      setVenue(initialVenue || BOOKING_VENUE_OPTIONS[0] || 'CTPH');
-      setDate(initialDate?.toISOString() || new Date().toISOString());
-      setStartTime(initialStartTime || '10:00 AM');
-      setEndTime(initialEndTime || '03:00 PM');
-      setAddToCalendar(false);
+    if (event) {
+      setEventName(event.eventName);
+      setOrganization(event.organization);
+      setCategory(event.category);
+      setVenue(event.venue);
+      setDate(event.date.toISOString());
+      setStartTime(event.startTime);
+      setEndTime(event.endTime);
     }
-  }, [isOpen, initialVenue, initialStartTime, initialEndTime, initialDate]);
+  }, [event]);
 
   const handleSubmit = () => {
-    const bookingData: BookingFormData = {
+    const eventData: EventFormData = {
+      id: event?.id,
       eventName,
       organization,
+      category,
       venue,
       date: new Date(date),
       startTime,
-      endTime,
-      addToCalendar
+      endTime
     };
     
-    onSubmit(bookingData);
+    onSubmit(eventData);
+  };
+
+  const handleDelete = () => {
+    if (event && event.id) {
+      onDelete(event.id);
+    }
   };
 
   return (
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title="CREATE A NEW BOOKING"
+      title="EDIT EVENT"
       onSubmit={handleSubmit}
+      onDelete={handleDelete}
       submitLabel="SUBMIT"
       cancelLabel="CANCEL"
-      showDeleteButton={false}
-      onDelete={() => {/* Handle delete if needed */}}
+      showDeleteButton={true}
     >
       <FormField
         label="EVENT NAME"
         type="text"
         value={eventName}
         onChange={(value) => setEventName(value as string)}
-        placeholder="Enter event name"
       />
 
       <FormField
@@ -97,7 +111,15 @@ export default function CreateBookingModal({
         type="select"
         value={organization}
         onChange={(value) => setOrganization(value as string)}
-        options={BOOKING_ORGANIZATION_OPTIONS}
+        options={EVENT_ORGANIZATION_OPTIONS}
+      />
+
+      <FormField
+        label="CATEGORY"
+        type="select"
+        value={category}
+        onChange={(value) => setCategory(value as string)}
+        options={EVENT_CATEGORY_NAMES}
       />
 
       <FormField
@@ -105,7 +127,7 @@ export default function CreateBookingModal({
         type="select"
         value={venue}
         onChange={(value) => setVenue(value as string)}
-        options={BOOKING_VENUE_OPTIONS}
+        options={EVENT_VENUE_OPTIONS}
       />
 
       <FormField
@@ -120,7 +142,6 @@ export default function CreateBookingModal({
         type="time"
         value={startTime}
         onChange={(value) => setStartTime(value as string)}
-        placeholder="10:00 AM"
       />
 
       <FormField
@@ -128,14 +149,6 @@ export default function CreateBookingModal({
         type="time"
         value={endTime}
         onChange={(value) => setEndTime(value as string)}
-        placeholder="03:00 PM"
-      />
-
-      <FormField
-        label="ADD TO EVENTS CALENDAR"
-        type="checkbox"
-        value={addToCalendar}
-        onChange={(value) => setAddToCalendar(value as boolean)}
       />
     </BaseModal>
   );

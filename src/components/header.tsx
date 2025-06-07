@@ -78,7 +78,7 @@ export default function Header() {
                   
                   {mobileSubmenuOpen && (
                     <div className="pl-4">
-                      <Link href="/" className="block py-1 text-sm" onClick={() => setIsSidebarOpen(false)}>
+                      <Link href="/events" className="block py-1 text-sm" onClick={() => setIsSidebarOpen(false)}>
                         EVENTS
                       </Link>
                       <Link href="/" className="block py-1 text-sm" onClick={() => setIsSidebarOpen(false)}>
@@ -150,7 +150,7 @@ export default function Header() {
               <CustomDropdown 
                 label="STUDENT LIFE" 
                 items={[
-                  { label: "EVENTS", href: "/" },
+                  { label: "EVENTS", href: "/events" },
                   { label: "STUDENT GROUPS", href: "/" },
                   { label: "VENUE BOOKING", href: "/bookings" }
                 ]} 
