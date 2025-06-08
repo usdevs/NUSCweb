@@ -6,9 +6,14 @@ import CreateBookingModal from '@/components/create-booking-modal';
 import EditBookingModal from '@/components/edit-booking-modal';
 import Header from '@/components/header';
 import EventCard from '@/components/event-card';
-import { format } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import CardPortal from '@/components/card-portal';
 import Footer from '@/components/footer';
+import { timeToIndex } from '@/lib/utils';
+import {
+  BOOKING_VENUE_OPTIONS,
+  TIMETABLE_TIMESLOTS
+} from '@/lib/formOptions';
 
 interface Booking {
   id: number;
@@ -36,25 +41,6 @@ interface DragPosition {
   time: string;
   room: string;
 }
-
-const timeToIndex = (time: string): number => {
-  if (time === '12AM') return 0;
-  if (time === '12PM') return 12;
-  
-  const match = time.match(/^(\d+)(AM|PM)$/);
-  if (!match) return 0;
-  
-  const hour = parseInt(match[1]);
-  const isPM = match[2] === 'PM';
-  
-  if (isPM && hour !== 12) {
-    return hour + 12;
-  } else if (!isPM && hour === 12) {
-    return 0;
-  } else {
-    return hour;
-  }
-};
 
 const formatDate = (date: Date): string => {
   return format(date, 'd MMMM');
@@ -99,21 +85,9 @@ export default function BookingsPage() {
     }
   ]);
   
-  const rooms = [
-    'CTPH',
-    'Chatterbox',
-    'RC1 Student Lounge (Buttery Common Area)',
-    'RC1 Pantry (Buttery Cooking Area)',
-    'RC2 Student Lounge (Buttery Common Area)',
-    'RC2 Pantry (Buttery Cooking Area)'
-  ];
+  const rooms = BOOKING_VENUE_OPTIONS;
 
-  const timeSlots = Array.from({ length: 24 }, (_, i) => {
-    const hour = i;
-    if (hour === 0) return '12AM';
-    if (hour === 12) return '12PM';
-    return `${hour % 12}${hour < 12 ? 'AM' : 'PM'}`;
-  });
+  const timeSlots = TIMETABLE_TIMESLOTS;
 
   const handleBookingClick = (booking: Booking) => {
     setSelectedBooking(booking);
@@ -227,13 +201,6 @@ export default function BookingsPage() {
     );
   };
 
-  // Check if two dates are the same day
-  const isSameDay = (date1: Date, date2: Date) => {
-    return date1.getDate() === date2.getDate() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getFullYear() === date2.getFullYear();
-  };
-
   const handleMouseDown = (time: string, room: string) => {
     if (!getCellBooking(time, room)) {
       setDragStart({ time, room });
@@ -336,7 +303,7 @@ export default function BookingsPage() {
               <React.Fragment key={`${room}-${time}`}>
                 {booking && isFirstCell ? (
                   <div 
-                    className="relative cursor-pointer p-2"
+                    className="relative cursor-pointer p-2 rounded-xl"
                     style={{ 
                       backgroundColor: booking.color,
                       height: `${span * 3}rem`,
@@ -386,7 +353,7 @@ export default function BookingsPage() {
       {/* Header */}
       <Header />
 
-      {/* Add an absolute positioned warning */}
+      {/* Warning */}
       {showClashWarning && (
         <div className="fixed top-20 inset-x-0 bg-[#FFE9E3] text-[#FF7D4E] py-4 px-3 text-center text-sm font-medium z-[9999] shadow-lg animate-fadeIn">
           THERE IS A CLASH IN BOOKINGS. PLEASE SELECT A DIFFERENT VENUE OR TIMING & RESUBMIT.
@@ -396,12 +363,11 @@ export default function BookingsPage() {
       <div className="flex flex-col lg:flex-row bg-[#0C2C47]">
         {/* Calendar - Hidden on mobile */}
         <div className="hidden lg:block w-72 bg-white p-4 rounded-lg">
-          <div className="mb-2 font-medium">Calendar</div>
           <Calendar
             mode="single"
             selected={date}
             onSelect={setDate}
-            className="rounded-md border w-full"
+            className="rounded-md w-full"
             showOutsideDays={false}
           />
         </div>

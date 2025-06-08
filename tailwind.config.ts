@@ -7,6 +7,18 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    'bg-blue-500',
+    'bg-blue-200',
+    'bg-yellow-500',
+    'bg-yellow-200',
+    'bg-green-500',
+    'bg-green-200',
+    'bg-pink-500',
+    'bg-[#FCDED6]',
+    'bg-gray-500',
+    'bg-gray-200',
+  ],
   theme: {
   	extend: {
   		colors: {
