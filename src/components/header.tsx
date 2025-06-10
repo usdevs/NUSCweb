@@ -151,7 +151,7 @@ export default function Header() {
                 label="STUDENT LIFE" 
                 items={[
                   { label: "EVENTS", href: "/events" },
-                  { label: "STUDENT GROUPS", href: "/" },
+                  { label: "STUDENT GROUPS", href: "/groups" },
                   { label: "VENUE BOOKING", href: "/bookings" }
                 ]} 
               />
