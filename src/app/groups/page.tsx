@@ -6,6 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import ShowIGModal from '@/components/show-ig-modal';
 
 interface OrganisationWithIGHead {
   id: string;
@@ -14,10 +15,13 @@ interface OrganisationWithIGHead {
   category: string;
   isInactive: boolean;
   isInvisible: boolean;
-  igHead?: {
-    name: string;
-    telegramHandle?: string;
-  };
+  userOrg: Array<{
+    isIGHead: boolean;
+    user: {
+      name: string;
+      telegramHandle?: string;
+    };
+  }>;
   inviteLink?: string;
   hasVerified?: boolean;
 }
@@ -29,7 +33,7 @@ interface IGCategories {
 const DEFAULT_FILTERS: string[] = ['Sports', 'SocioCultural', 'Others'];
 
 // Utility function to make categories prettier
-const makeCategoriesPrettier = (categories: any): IGCategories => {
+const makeCategoriesPrettier = (categories: Record<string, string>): IGCategories => {
   const prettierCategories: IGCategories = {};
   Object.keys(categories).forEach(key => {
     prettierCategories[key] = categories[key].replace(/([A-Z])/g, ' $1').trim();
@@ -46,7 +50,11 @@ export default function StudentGroupsPage() {
   const [isInactive, setIsInactive] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
+  // Modal state
+  const [selectedOrg, setSelectedOrg] = useState<OrganisationWithIGHead | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // Pagination
   const [page, setPage] = useState(1);
   const pageSize = 9;
@@ -57,7 +65,7 @@ export default function StudentGroupsPage() {
       try {
         setLoading(true);
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.nusc.club/';
-        
+
         const [orgsResponse, categoriesResponse] = await Promise.all([
           fetch(`${backendUrl}orgs`),
           fetch(`${backendUrl}orgs/categories`)
@@ -69,7 +77,7 @@ export default function StudentGroupsPage() {
 
         const orgsData = await orgsResponse.json();
         const categoriesData = await categoriesResponse.json();
-        
+
         setAllOrgs(orgsData);
         setAllIGCategories(makeCategoriesPrettier(categoriesData));
       } catch (err) {
@@ -124,8 +132,20 @@ export default function StudentGroupsPage() {
       (pageNumber - 1) * pageSize + pageSize
     );
   };
-  
+
+
   const totalPages = Math.ceil(igCardsToDisplay.length / pageSize);
+
+  // Handle showing modal for organization details
+  const handleShowMore = (org: OrganisationWithIGHead) => {
+    setSelectedOrg(org);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedOrg(null);
+  };
 
   if (loading) {
     return (
@@ -167,28 +187,31 @@ export default function StudentGroupsPage() {
         <div className="w-72 bg-white px-8 py-8 border-r">
           <div className="mb-6 bg-[#F5F5F5] p-4 rounded-md">
             <h3 className="font-semibold text-gray-900 mb-3">Copy link to...</h3>
-            <Button className="bg-[#FF7D4E] hover:bg-[#FF7D4E]/90 text-white text-sm ml-3 p-6 rounded-md">
+            <Button
+              className="bg-[#FF7D4E] hover:bg-[#FF7D4E]/90 text-white text-sm ml-3 p-6 rounded-md"
+              onClick={() => {navigator.clipboard.writeText("https://t.me/+Mm3qL3aL7c0zNDE1")}}
+            >
               STUDENT GROUP<br></br>TELEGRAM CHAT
             </Button>
           </div>
-          
+
           <div className="mb-6">
             <h3 className="font-semibold text-gray-900 mb-3">SEARCH</h3>
-            <Input 
-              type="search" 
-              placeholder="Search groups..." 
+            <Input
+              type="search"
+              placeholder="Search groups..."
               className="w-full"
               onChange={onInput}
               value={interestGroupSearchString}
             />
           </div>
-          
+
           <div className="mb-6">
             <h3 className="font-semibold text-gray-900 mb-3">CATEGORIES</h3>
             <div className="space-y-3">
               {Object.keys(allIGCategories).map((category) => (
                 <div key={category} className="flex items-center space-x-2">
-                  <Checkbox 
+                  <Checkbox
                     id={category}
                     checked={interestGroupFilters.includes(category)}
                     onCheckedChange={(checked) => handleCategoryChange(category, checked as boolean)}
@@ -204,7 +227,7 @@ export default function StudentGroupsPage() {
           <div>
             <h3 className="font-semibold text-gray-900 mb-3">OPTIONS</h3>
             <div className="flex items-center space-x-2">
-              <Checkbox 
+              <Checkbox
                 id="show-inactive"
                 checked={isInactive}
                 onCheckedChange={(checked) => handleInactiveChange(checked as boolean)}
@@ -215,14 +238,14 @@ export default function StudentGroupsPage() {
             </div>
           </div>
         </div>
-        
+
         {/* Main Content */}
         <div className="flex-1 bg-[#0C2C47] px-16 py-8">
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-white mb-2">Student Groups</h1>
             <p className="text-white/80">{igCardsToDisplay.length} RESULTS</p>
           </div>
-          
+
           {/* Groups Grid */}
           {igCardsToDisplay.length === 0 ? (
             <div className="text-center text-white/80 py-16">
@@ -239,44 +262,42 @@ export default function StudentGroupsPage() {
                         <span className="text-white text-sm font-bold">V</span>
                       </div>
                     )}
-                    
+
                     {group.isInactive && (
                       <div className="absolute top-2 left-2 bg-gray-500 text-white text-xs px-2 py-1 rounded">
                         INACTIVE
                       </div>
                     )}
-                    
+
                     <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">{group.name}</h3>
                     <p className="text-[#A1A1A1] text-sm mb-4 leading-relaxed line-clamp-6">
                       {group.description || "No description available."}
                     </p>
-                    
-                    {group.igHead && (
-                      <p className="text-xs text-gray-500 mb-4">
-                        Headed by {group.igHead.name}
-                        {group.igHead.telegramHandle && ` (@${group.igHead.telegramHandle})`}
-                      </p>
-                    )}
-                    
+
+                    <p className="text-sm text-gray-500 mb-4">
+                      Headed by {group.userOrg.filter((userOnOrg) => userOnOrg.isIGHead).map((igHead) => igHead.user.name).join(', ')}
+                    </p>
+
                     <div className="flex gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        variant="outline"
+                        size="sm"
                         className="bg-[#0C2C47] text-white hover:bg-[#0C2C47]/90 border-[#0C2C47] text-xs px-6 py-1"
+                        onClick={() => handleShowMore(group)}
                       >
-                        IG HEAD
+                        SHOW MORE
                       </Button>
                       {group.inviteLink ? (
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           className="bg-[#FF7D4E] hover:bg-[#FF7D4E]/90 text-white text-xs px-4 py-1"
                           onClick={() => window.open(group.inviteLink, '_blank')}
                         >
                           JOIN IG GROUP
                         </Button>
                       ) : (
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           className="bg-gray-400 text-white text-xs px-3 py-1 cursor-not-allowed"
                           disabled
                         >
@@ -287,29 +308,29 @@ export default function StudentGroupsPage() {
                   </div>
                 ))}
               </div>
-              
+
               {/* Pagination */}
               {totalPages > 1 && (
                 <div className="flex justify-center items-center space-x-2">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className="text-white hover:text-white/80 hover:bg-white/10"
                     onClick={() => setPage(1)}
                     disabled={page === 1}
                   >
                     &lt;&lt;
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className="text-white hover:text-white/80 hover:bg-white/10"
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
                   >
                     &lt;
                   </Button>
-                  
+
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     let pageNumber;
                     if (totalPages <= 5) {
@@ -321,7 +342,7 @@ export default function StudentGroupsPage() {
                     } else {
                       pageNumber = page - 2 + i;
                     }
-                    
+
                     return (
                       <Button
                         key={pageNumber}
@@ -338,19 +359,19 @@ export default function StudentGroupsPage() {
                       </Button>
                     );
                   })}
-                  
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className="text-white hover:text-white/80 hover:bg-white/10"
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
                   >
                     &gt;
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className="text-white hover:text-white/80 hover:bg-white/10"
                     onClick={() => setPage(totalPages)}
                     disabled={page === totalPages}
@@ -364,6 +385,13 @@ export default function StudentGroupsPage() {
         </div>
       </div>
       <Footer />
+
+      {/* Show IG Modal */}
+      <ShowIGModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        organisation={selectedOrg}
+      />
     </div>
   );
 }
