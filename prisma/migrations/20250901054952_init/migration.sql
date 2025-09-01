@@ -12,6 +12,7 @@ CREATE TABLE "public"."User" (
     "telegramUserName" TEXT NOT NULL,
     "telegramDpUrl" TEXT,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -20,9 +21,9 @@ CREATE TABLE "public"."User" (
 CREATE TABLE "public"."Organisation" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL DEFAULT 'A NUSC organisation',
+    "description" TEXT NOT NULL DEFAULT 'An NUSC organisation',
     "isAdminOrg" BOOLEAN NOT NULL DEFAULT false,
-    "inviteLink" TEXT NOT NULL,
+    "inviteToken" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "category" "public"."IGCategory" NOT NULL,
     "isInactive" BOOLEAN NOT NULL DEFAULT false,
@@ -36,8 +37,8 @@ CREATE TABLE "public"."UserOnOrg" (
     "userId" INTEGER NOT NULL,
     "orgId" INTEGER NOT NULL,
     "assignedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "isIGHead" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "UserOnOrg_pkey" PRIMARY KEY ("userId","orgId")
 );
@@ -51,65 +52,20 @@ CREATE TABLE "public"."Venue" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."VenueAdminRole" (
-    "id" SERIAL NOT NULL,
-    "venueId" INTEGER NOT NULL,
-    "roleId" INTEGER NOT NULL,
-
-    CONSTRAINT "VenueAdminRole_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "public"."Booking" (
     "id" SERIAL NOT NULL,
     "eventName" TEXT NOT NULL,
     "venueId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     "userOrgId" INTEGER NOT NULL,
-    "bookedForOrgId" INTEGER,
+    "bookedForOrgId" INTEGER NOT NULL,
     "start" TIMESTAMP(3) NOT NULL,
     "end" TIMESTAMP(3) NOT NULL,
     "bookedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "Booking_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."Ability" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Ability_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."Role" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."RoleAbility" (
-    "id" SERIAL NOT NULL,
-    "roleId" INTEGER NOT NULL,
-    "abilityId" INTEGER NOT NULL,
-
-    CONSTRAINT "RoleAbility_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."OrgRole" (
-    "id" SERIAL NOT NULL,
-    "orgId" INTEGER NOT NULL,
-    "roleId" INTEGER NOT NULL,
-
-    CONSTRAINT "OrgRole_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -168,18 +124,6 @@ CREATE UNIQUE INDEX "User_telegramId_key" ON "public"."User"("telegramId");
 CREATE UNIQUE INDEX "Organisation_slug_key" ON "public"."Organisation"("slug");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Ability_name_key" ON "public"."Ability"("name");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Role_name_key" ON "public"."Role"("name");
-
--- CreateIndex
-CREATE UNIQUE INDEX "RoleAbility_roleId_abilityId_key" ON "public"."RoleAbility"("roleId", "abilityId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "OrgRole_orgId_roleId_key" ON "public"."OrgRole"("orgId", "roleId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Professor_name_key" ON "public"."Professor"("name");
 
 -- CreateIndex
@@ -195,12 +139,6 @@ ALTER TABLE "public"."UserOnOrg" ADD CONSTRAINT "UserOnOrg_userId_fkey" FOREIGN 
 ALTER TABLE "public"."UserOnOrg" ADD CONSTRAINT "UserOnOrg_orgId_fkey" FOREIGN KEY ("orgId") REFERENCES "public"."Organisation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."VenueAdminRole" ADD CONSTRAINT "VenueAdminRole_venueId_fkey" FOREIGN KEY ("venueId") REFERENCES "public"."Venue"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."VenueAdminRole" ADD CONSTRAINT "VenueAdminRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "public"."Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "public"."Booking" ADD CONSTRAINT "Booking_venueId_fkey" FOREIGN KEY ("venueId") REFERENCES "public"."Venue"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -208,18 +146,6 @@ ALTER TABLE "public"."Booking" ADD CONSTRAINT "Booking_userId_userOrgId_fkey" FO
 
 -- AddForeignKey
 ALTER TABLE "public"."Booking" ADD CONSTRAINT "Booking_bookedForOrgId_fkey" FOREIGN KEY ("bookedForOrgId") REFERENCES "public"."Organisation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."RoleAbility" ADD CONSTRAINT "RoleAbility_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "public"."Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."RoleAbility" ADD CONSTRAINT "RoleAbility_abilityId_fkey" FOREIGN KEY ("abilityId") REFERENCES "public"."Ability"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."OrgRole" ADD CONSTRAINT "OrgRole_orgId_fkey" FOREIGN KEY ("orgId") REFERENCES "public"."Organisation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."OrgRole" ADD CONSTRAINT "OrgRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "public"."Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."CourseOffering" ADD CONSTRAINT "CourseOffering_courseCode_fkey" FOREIGN KEY ("courseCode") REFERENCES "public"."Course"("code") ON DELETE CASCADE ON UPDATE CASCADE;

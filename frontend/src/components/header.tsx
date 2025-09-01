@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { LoginButton } from '@telegram-auth/react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, Send, ChevronDown, ChevronRight } from 'lucide-react';
+import { Menu, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -31,12 +32,6 @@ export default function Header() {
     const loginStatus = localStorage.getItem('isLoggedIn') === 'true';
     setIsLoggedIn(loginStatus);
   }, []);
-
-  const handleLoginToggle = () => {
-    const newLoginState = !isLoggedIn;
-    setIsLoggedIn(newLoginState);
-    localStorage.setItem('isLoggedIn', newLoginState.toString());
-  };
 
   return (
     <header
@@ -237,12 +232,10 @@ export default function Header() {
           )}
 
           {/* Login/Logout button */}
-          <Button variant='ghost' onClick={handleLoginToggle} asChild>
-            <Link href='/' className='flex items-center gap-2'>
-              <Send className='h-4 w-4' />
-              {isLoggedIn ? 'LOGOUT' : 'LOGIN'}
-            </Link>
-          </Button>
+          <LoginButton
+            botUsername={process.env.NEXT_PUBLIC_TELEGRAM_LOGIN_BOT!}
+            authCallbackUrl='/api/auth/callback'
+          />
         </div>
       </div>
     </header>

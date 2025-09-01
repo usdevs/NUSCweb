@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import BaseModal from '@/components/base-modal';
 import FormField from '@/components/form-field';
 import {

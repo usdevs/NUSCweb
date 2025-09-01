@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -699,7 +699,7 @@ export default function EventsPage() {
                         } else {
                           // Multi-row segment
                           return (
-                            <React.Fragment key={segmentIndex}>
+                            <>
                               <div
                                 className='absolute rounded-l-md bg-[#FCDED6]'
                                 style={{
@@ -718,7 +718,7 @@ export default function EventsPage() {
                                   height: `${cellHeight}px`,
                                 }}
                               />
-                            </React.Fragment>
+                            </>
                           );
                         }
                       });

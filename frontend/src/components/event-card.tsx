@@ -1,4 +1,3 @@
-import React from 'react';
 import { Calendar, User, Clock, MapPin } from 'lucide-react';
 
 interface EventCardProps {

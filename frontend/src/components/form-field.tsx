@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 
 interface FormFieldProps {
@@ -26,7 +26,7 @@ export default function FormField({
   required = false,
   id,
 }: FormFieldProps) {
-  const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   // Convert string date to Date object for calendar
   const getDateValue = () => {
