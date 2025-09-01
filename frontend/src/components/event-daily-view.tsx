@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
@@ -25,71 +25,80 @@ interface EventDailyViewProps {
   getCategoryBgColor: (category: string) => string;
 }
 
-export default function EventDailyView({ 
-  isOpen, 
-  onClose, 
-  date, 
-  events, 
+export default function EventDailyView({
+  isOpen,
+  onClose,
+  date,
+  events,
   onEventClick,
-  getCategoryBgColor
+  getCategoryBgColor,
 }: EventDailyViewProps) {
   if (!isOpen || !date) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className='fixed inset-0 z-50 overflow-y-auto'>
       {/* Backdrop overlay */}
-      <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
-      
+      <div
+        className='fixed inset-0 bg-black bg-opacity-50'
+        onClick={onClose}
+      ></div>
+
       {/* Modal content */}
-      <div className="relative flex items-center justify-center min-h-screen p-4">
-        <div className="relative w-full max-w-sm bg-[#0C2C47] rounded-[20px] overflow-hidden shadow-lg p-6">
+      <div className='relative flex min-h-screen items-center justify-center p-4'>
+        <div className='relative w-full max-w-sm overflow-hidden rounded-[20px] bg-[#0C2C47] p-6 shadow-lg'>
           {/* Header */}
-          <div className="bg-[#0C2C47] text-white px-4 flex items-center justify-between">
-            <h2 className="text-sm font-semibold">
+          <div className='flex items-center justify-between bg-[#0C2C47] px-4 text-white'>
+            <h2 className='text-sm font-semibold'>
               {format(date, 'd MMMM').toUpperCase()} EVENTS
             </h2>
             <Button
-              variant="ghost"
-              size="icon"
-              className="text-white hover:text-white/80 h-6 w-6"
+              variant='ghost'
+              size='icon'
+              className='h-6 w-6 text-white hover:text-white/80'
               onClick={onClose}
             >
-              <X className="h-4 w-4" />
+              <X className='h-4 w-4' />
             </Button>
           </div>
-          
+
           {/* Events list */}
-          <div className="p-4 space-y-3 max-h-96 overflow-y-auto">
+          <div className='max-h-96 space-y-3 overflow-y-auto p-4'>
             {events.length === 0 ? (
-              <div className="text-center text-gray-500 py-8">
+              <div className='py-8 text-center text-gray-500'>
                 No events scheduled for this day
               </div>
             ) : (
-              events.map(event => (
+              events.map((event) => (
                 <div
                   key={event.id}
-                  className={`p-3 rounded-xl cursor-pointer ${getCategoryBgColor(event.category)}`}
+                  className={`cursor-pointer rounded-xl p-3 ${getCategoryBgColor(event.category)}`}
                   onClick={() => {
                     onEventClick(event);
-                    onClose(); 
+                    onClose();
                   }}
                 >
+                  <h3 className='mb-2 text-sm font-semibold text-[#0C2C47]'>
+                    {event.eventName}
+                  </h3>
 
-                  <h3 className="font-semibold text-sm mb-2 text-[#0C2C47]">{event.eventName}</h3>
-                  
-                  <div className="space-y-1 text-xs text-[#0C2C47]">
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 fill-current" style={{ fill: '#0C2C47' }} />
+                  <div className='space-y-1 text-xs text-[#0C2C47]'>
+                    <div className='flex items-center gap-2'>
+                      <User
+                        className='h-4 w-4 fill-current'
+                        style={{ fill: '#0C2C47' }}
+                      />
                       <span>{event.organization}</span>
                     </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
-                      <span>{event.startTime} - {event.endTime}</span>
+
+                    <div className='flex items-center gap-2'>
+                      <Clock className='h-4 w-4' />
+                      <span>
+                        {event.startTime} - {event.endTime}
+                      </span>
                     </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4" />
+
+                    <div className='flex items-center gap-2'>
+                      <MapPin className='h-4 w-4' />
                       <span>{event.venue}</span>
                     </div>
                   </div>

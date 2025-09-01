@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -18,10 +18,8 @@ const CardPortal: React.FC<CardPortalProps> = ({ children }) => {
   if (!mounted) return null;
 
   return createPortal(
-    <div className="fixed z-[9999] pointer-events-none">
-      {children}
-    </div>,
-    document.body
+    <div className='pointer-events-none fixed z-[9999]'>{children}</div>,
+    document.body,
   );
 };
 

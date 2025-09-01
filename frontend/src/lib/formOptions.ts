@@ -15,12 +15,15 @@ export const BOOKING_ORGANIZATION_OPTIONS: string[] = [
   'Others',
 ];
 
-export const TIMETABLE_TIMESLOTS: string[] = Array.from({ length: 24 }, (_, i) => {
-  const hour = i;
-  if (hour === 0) return '12AM';
-  if (hour === 12) return '12PM';
-  return `${hour % 12}${hour < 12 ? 'AM' : 'PM'}`;
-});
+export const TIMETABLE_TIMESLOTS: string[] = Array.from(
+  { length: 24 },
+  (_, i) => {
+    const hour = i;
+    if (hour === 0) return '12AM';
+    if (hour === 12) return '12PM';
+    return `${hour % 12}${hour < 12 ? 'AM' : 'PM'}`;
+  },
+);
 
 export const EVENT_VENUE_OPTIONS: string[] = [
   'CTPH',
@@ -50,4 +53,6 @@ export const EVENT_CATEGORIES: Array<{ name: string; bgColor: string }> = [
   { name: 'OTHERS', bgColor: 'bg-gray-200' },
 ];
 
-export const EVENT_CATEGORY_NAMES: string[] = EVENT_CATEGORIES.map(cat => cat.name);
+export const EVENT_CATEGORY_NAMES: string[] = EVENT_CATEGORIES.map(
+  (cat) => cat.name,
+);

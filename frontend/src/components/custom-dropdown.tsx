@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
@@ -45,40 +45,45 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ label, items }) => {
   }, []);
 
   return (
-    <div 
-      className="relative" 
+    <div
+      className='relative'
       ref={dropdownRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <button
-        className="px-4 py-2 text-sm flex items-center gap-1 h-10"
+        className='flex h-10 items-center gap-1 px-4 py-2 text-sm'
         onClick={handleClick}
       >
         {label}
-        <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          className={`h-4 w-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+        />
       </button>
-      
+
       {isOpen && (
-        <div className="absolute top-full left-0 w-full h-6 z-[9999]"></div>
+        <div className='absolute left-0 top-full z-[9999] h-6 w-full'></div>
       )}
-      
-      <div 
-        className={`fixed md:absolute top-[calc(100%+4px)] left-1/2 transform -translate-x-1/2 w-40 bg-white rounded-md shadow-lg z-[9999] overflow-hidden transition-all duration-300 origin-top ${
-          isOpen 
-            ? 'opacity-100 scale-y-100' 
-            : 'opacity-0 scale-y-0 pointer-events-none'
+
+      <div
+        className={`fixed left-1/2 top-[calc(100%+4px)] z-[9999] w-40 origin-top -translate-x-1/2 transform overflow-hidden rounded-md bg-white shadow-lg transition-all duration-300 md:absolute ${
+          isOpen
+            ? 'scale-y-100 opacity-100'
+            : 'pointer-events-none scale-y-0 opacity-0'
         }`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={(e) => e.stopPropagation()}
       >
-        <ul className="py-1">
+        <ul className='py-1'>
           {items.map((item, index) => (
-            <li key={index} className="text-center hover:bg-gray-100 transition-colors duration-200">
+            <li
+              key={index}
+              className='text-center transition-colors duration-200 hover:bg-gray-100'
+            >
               <Link
                 href={item.href}
-                className="block px-4 py-2 text-sm text-gray-700 w-full"
+                className='block w-full px-4 py-2 text-sm text-gray-700'
               >
                 {item.label}
               </Link>

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import BaseModal from '@/components/base-modal';
@@ -6,7 +6,7 @@ import FormField from '@/components/form-field';
 import {
   EVENT_ORGANIZATION_OPTIONS,
   EVENT_CATEGORY_NAMES,
-  EVENT_VENUE_OPTIONS
+  EVENT_VENUE_OPTIONS,
 } from '@/lib/formOptions';
 
 interface Event {
@@ -39,12 +39,12 @@ interface EditEventModalProps {
   event: Event | null;
 }
 
-export default function EditEventModal({ 
-  isOpen, 
-  onClose, 
-  onSubmit, 
+export default function EditEventModal({
+  isOpen,
+  onClose,
+  onSubmit,
   onDelete,
-  event
+  event,
 }: EditEventModalProps) {
   const [eventName, setEventName] = useState('');
   const [organization, setOrganization] = useState('');
@@ -76,9 +76,9 @@ export default function EditEventModal({
       venue,
       date: new Date(date),
       startTime,
-      endTime
+      endTime,
     };
-    
+
     onSubmit(eventData);
   };
 
@@ -92,61 +92,61 @@ export default function EditEventModal({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title="EDIT EVENT"
+      title='EDIT EVENT'
       onSubmit={handleSubmit}
       onDelete={handleDelete}
-      submitLabel="SUBMIT"
-      cancelLabel="CANCEL"
+      submitLabel='SUBMIT'
+      cancelLabel='CANCEL'
       showDeleteButton={true}
     >
       <FormField
-        label="EVENT NAME"
-        type="text"
+        label='EVENT NAME'
+        type='text'
         value={eventName}
         onChange={(value) => setEventName(value as string)}
       />
 
       <FormField
-        label="ORGANISATION"
-        type="select"
+        label='ORGANISATION'
+        type='select'
         value={organization}
         onChange={(value) => setOrganization(value as string)}
         options={EVENT_ORGANIZATION_OPTIONS}
       />
 
       <FormField
-        label="CATEGORY"
-        type="select"
+        label='CATEGORY'
+        type='select'
         value={category}
         onChange={(value) => setCategory(value as string)}
         options={EVENT_CATEGORY_NAMES}
       />
 
       <FormField
-        label="VENUE"
-        type="select"
+        label='VENUE'
+        type='select'
         value={venue}
         onChange={(value) => setVenue(value as string)}
         options={EVENT_VENUE_OPTIONS}
       />
 
       <FormField
-        label="DATE"
-        type="date"
+        label='DATE'
+        type='date'
         value={date}
         onChange={(value) => setDate(value as string)}
       />
 
       <FormField
-        label="START TIME"
-        type="time"
+        label='START TIME'
+        type='time'
         value={startTime}
         onChange={(value) => setStartTime(value as string)}
       />
 
       <FormField
-        label="END TIME"
-        type="time"
+        label='END TIME'
+        type='time'
         value={endTime}
         onChange={(value) => setEndTime(value as string)}
       />

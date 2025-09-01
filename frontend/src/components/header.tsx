@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -39,62 +39,88 @@ export default function Header() {
   };
 
   return (
-    <header className={`border-b sticky top-0 z-[100] bg-white shadow-lg ${isSidebarOpen ? 'lg:block hidden' : 'block'}`}>
-      <div className="flex items-center justify-between px-4 py-2">
+    <header
+      className={`sticky top-0 z-[100] border-b bg-white shadow-lg ${isSidebarOpen ? 'hidden lg:block' : 'block'}`}
+    >
+      <div className='flex items-center justify-between px-4 py-2'>
         {/* Mobile Menu */}
-        <div className="lg:hidden">
+        <div className='lg:hidden'>
           <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
+              <Button variant='ghost' size='icon'>
+                <Menu className='h-6 w-6' />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left">
+            <SheetContent side='left'>
               <SheetHeader>
                 <SheetTitle></SheetTitle>
-                <SheetDescription className="sr-only">
+                <SheetDescription className='sr-only'>
                   Main navigation menu for mobile devices
                 </SheetDescription>
               </SheetHeader>
-              
-              <nav className="flex flex-col gap-4 mt-6">
-                <Link href="/" className="text-orange-500 font-bold" onClick={() => setIsSidebarOpen(false)}>
+
+              <nav className='mt-6 flex flex-col gap-4'>
+                <Link
+                  href='/'
+                  className='font-bold text-orange-500'
+                  onClick={() => setIsSidebarOpen(false)}
+                >
                   NUS COLLEGE CLUB
                 </Link>
-                
+
                 {/* Student Life */}
                 <div>
-                  <button 
-                    className="flex w-full items-center justify-between py-2"
+                  <button
+                    className='flex w-full items-center justify-between py-2'
                     onClick={() => setMobileSubmenuOpen(!mobileSubmenuOpen)}
                   >
                     <span>STUDENT LIFE</span>
                     {mobileSubmenuOpen ? (
-                      <ChevronDown className="h-4 w-4" />
+                      <ChevronDown className='h-4 w-4' />
                     ) : (
-                      <ChevronRight className="h-4 w-4" />
+                      <ChevronRight className='h-4 w-4' />
                     )}
                   </button>
-                  
+
                   {mobileSubmenuOpen && (
-                    <div className="pl-4">
-                      <Link href="/events" className="block py-1 text-sm" onClick={() => setIsSidebarOpen(false)}>
+                    <div className='pl-4'>
+                      <Link
+                        href='/events'
+                        className='block py-1 text-sm'
+                        onClick={() => setIsSidebarOpen(false)}
+                      >
                         EVENTS
                       </Link>
-                      <Link href="/" className="block py-1 text-sm" onClick={() => setIsSidebarOpen(false)}>
+                      <Link
+                        href='/'
+                        className='block py-1 text-sm'
+                        onClick={() => setIsSidebarOpen(false)}
+                      >
                         STUDENT GROUPS
                       </Link>
-                      <Link href="/bookings" className="block py-1 text-sm" onClick={() => setIsSidebarOpen(false)}>
+                      <Link
+                        href='/bookings'
+                        className='block py-1 text-sm'
+                        onClick={() => setIsSidebarOpen(false)}
+                      >
                         VENUE BOOKING
                       </Link>
                     </div>
                   )}
                 </div>
-                
-                <Link href="/" className="block py-2" onClick={() => setIsSidebarOpen(false)}>
+
+                <Link
+                  href='/'
+                  className='block py-2'
+                  onClick={() => setIsSidebarOpen(false)}
+                >
                   COURSE REVIEWS
                 </Link>
-                <Link href="/" className="block py-2" onClick={() => setIsSidebarOpen(false)}>
+                <Link
+                  href='/'
+                  className='block py-2'
+                  onClick={() => setIsSidebarOpen(false)}
+                >
                   NEWSLETTER
                 </Link>
 
@@ -102,30 +128,42 @@ export default function Header() {
                 {isLoggedIn && (
                   <>
                     <div>
-                      <button 
-                        className="flex w-full items-center justify-between py-2"
+                      <button
+                        className='flex w-full items-center justify-between py-2'
                         onClick={() => setAdminSubmenuOpen(!adminSubmenuOpen)}
                       >
                         <span>ADMIN</span>
                         {adminSubmenuOpen ? (
-                          <ChevronDown className="h-4 w-4" />
+                          <ChevronDown className='h-4 w-4' />
                         ) : (
-                          <ChevronRight className="h-4 w-4" />
+                          <ChevronRight className='h-4 w-4' />
                         )}
                       </button>
-                      
+
                       {adminSubmenuOpen && (
-                        <div className="pl-4">
-                          <Link href="/" className="block py-1 text-sm" onClick={() => setIsSidebarOpen(false)}>
+                        <div className='pl-4'>
+                          <Link
+                            href='/'
+                            className='block py-1 text-sm'
+                            onClick={() => setIsSidebarOpen(false)}
+                          >
                             ORGANISATIONS
                           </Link>
-                          <Link href="/" className="block py-1 text-sm" onClick={() => setIsSidebarOpen(false)}>
+                          <Link
+                            href='/'
+                            className='block py-1 text-sm'
+                            onClick={() => setIsSidebarOpen(false)}
+                          >
                             USERS
                           </Link>
                         </div>
                       )}
                     </div>
-                    <Link href="" className="block py-2" onClick={() => setIsSidebarOpen(false)}>
+                    <Link
+                      href=''
+                      className='block py-2'
+                      onClick={() => setIsSidebarOpen(false)}
+                    >
                       TOKEN
                     </Link>
                   </>
@@ -136,35 +174,35 @@ export default function Header() {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden lg:block">
+        <div className='hidden lg:block'>
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link href="/" legacyBehavior passHref>
+                <Link href='/' legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    <span className="text-orange-500">NUS COLLEGE CLUB</span>
+                    <span className='text-orange-500'>NUS COLLEGE CLUB</span>
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
 
-              <CustomDropdown 
-                label="STUDENT LIFE" 
+              <CustomDropdown
+                label='STUDENT LIFE'
                 items={[
-                  { label: "EVENTS", href: "/events" },
-                  { label: "STUDENT GROUPS", href: "/" },
-                  { label: "VENUE BOOKING", href: "/bookings" }
-                ]} 
+                  { label: 'EVENTS', href: '/events' },
+                  { label: 'STUDENT GROUPS', href: '/' },
+                  { label: 'VENUE BOOKING', href: '/bookings' },
+                ]}
               />
-              
+
               <NavigationMenuItem>
-                <Link href="/" legacyBehavior passHref>
+                <Link href='/' legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     COURSE REVIEWS
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="/" legacyBehavior passHref>
+                <Link href='/' legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     NEWSLETTER
                   </NavigationMenuLink>
@@ -175,33 +213,33 @@ export default function Header() {
         </div>
 
         {/* Right side buttons */}
-        <div className="flex items-center gap-4">
+        <div className='flex items-center gap-4'>
           {/* Admin dropdown for logged in users */}
-          <div className="hidden lg:flex">
+          <div className='hidden lg:flex'>
             {isLoggedIn && (
-              <CustomDropdown 
-                label="ADMIN" 
+              <CustomDropdown
+                label='ADMIN'
                 items={[
-                  { label: "ORGANISATIONS", href: "/" },
-                  { label: "USERS", href: "/" }
-                ]} 
+                  { label: 'ORGANISATIONS', href: '/' },
+                  { label: 'USERS', href: '/' },
+                ]}
               />
             )}
           </div>
 
           {/* Token link - only visible when logged in */}
           {isLoggedIn && (
-            <Button variant="ghost" asChild className="hidden lg:flex">
-              <Link href="" className="flex items-center gap-2"> 
+            <Button variant='ghost' asChild className='hidden lg:flex'>
+              <Link href='' className='flex items-center gap-2'>
                 TOKEN
               </Link>
             </Button>
           )}
 
           {/* Login/Logout button */}
-          <Button variant="ghost" onClick={handleLoginToggle} asChild>
-            <Link href="/" className="flex items-center gap-2">
-              <Send className="h-4 w-4" /> 
+          <Button variant='ghost' onClick={handleLoginToggle} asChild>
+            <Link href='/' className='flex items-center gap-2'>
+              <Send className='h-4 w-4' />
               {isLoggedIn ? 'LOGOUT' : 'LOGIN'}
             </Link>
           </Button>

@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import BaseModal from '@/components/base-modal';
 import FormField from '@/components/form-field';
 import {
   BOOKING_VENUE_OPTIONS,
-  BOOKING_ORGANIZATION_OPTIONS
+  BOOKING_ORGANIZATION_OPTIONS,
 } from '@/lib/formOptions';
 
 interface BookingFormData {
@@ -29,9 +29,9 @@ interface CreateBookingModalProps {
   showClashWarning?: boolean;
 }
 
-export default function CreateBookingModal({ 
-  isOpen, 
-  onClose, 
+export default function CreateBookingModal({
+  isOpen,
+  onClose,
   onSubmit,
   initialVenue,
   initialStartTime,
@@ -67,9 +67,9 @@ export default function CreateBookingModal({
       date: new Date(date),
       startTime,
       endTime,
-      addToCalendar
+      addToCalendar,
     };
-    
+
     onSubmit(bookingData);
   };
 
@@ -77,63 +77,65 @@ export default function CreateBookingModal({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title="CREATE A NEW BOOKING"
+      title='CREATE A NEW BOOKING'
       onSubmit={handleSubmit}
-      submitLabel="SUBMIT"
-      cancelLabel="CANCEL"
+      submitLabel='SUBMIT'
+      cancelLabel='CANCEL'
       showDeleteButton={false}
-      onDelete={() => {/* Handle delete if needed */}}
+      onDelete={() => {
+        /* Handle delete if needed */
+      }}
     >
       <FormField
-        label="EVENT NAME"
-        type="text"
+        label='EVENT NAME'
+        type='text'
         value={eventName}
         onChange={(value) => setEventName(value as string)}
-        placeholder="Enter event name"
+        placeholder='Enter event name'
       />
 
       <FormField
-        label="ORGANISATION"
-        type="select"
+        label='ORGANISATION'
+        type='select'
         value={organization}
         onChange={(value) => setOrganization(value as string)}
         options={BOOKING_ORGANIZATION_OPTIONS}
       />
 
       <FormField
-        label="VENUE"
-        type="select"
+        label='VENUE'
+        type='select'
         value={venue}
         onChange={(value) => setVenue(value as string)}
         options={BOOKING_VENUE_OPTIONS}
       />
 
       <FormField
-        label="DATE"
-        type="date"
+        label='DATE'
+        type='date'
         value={date}
         onChange={(value) => setDate(value as string)}
       />
 
       <FormField
-        label="START TIME"
-        type="time"
+        label='START TIME'
+        type='time'
         value={startTime}
         onChange={(value) => setStartTime(value as string)}
-        placeholder="10:00 AM"
+        placeholder='10:00 AM'
       />
 
       <FormField
-        label="END TIME"
-        type="time"
+        label='END TIME'
+        type='time'
         value={endTime}
         onChange={(value) => setEndTime(value as string)}
-        placeholder="03:00 PM"
+        placeholder='03:00 PM'
       />
 
       <FormField
-        label="ADD TO EVENTS CALENDAR"
-        type="checkbox"
+        label='ADD TO EVENTS CALENDAR'
+        type='checkbox'
         value={addToCalendar}
         onChange={(value) => setAddToCalendar(value as boolean)}
       />
