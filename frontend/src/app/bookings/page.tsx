@@ -188,16 +188,21 @@ export default function BookingsPage() {
 
   const getCellBooking = (time: string, room: string) => {
     const timeIndex = timeToIndex(time);
+    console.log('ASDF', 'running this')
     
     // Find a booking that:
     // 1. Matches the room
     // 2. Is on the current selected date
     // 3. The time falls within the booking's start and end times
-    return bookings.find(booking => 
-      booking.venue === room && 
+    return bookings.find(booking => {
+      const a = booking.venue === room && 
       isSameDay(booking.date, date || new Date()) &&
       timeIndex >= timeToIndex(booking.startTime) &&
       timeIndex < timeToIndex(booking.endTime)
+      console.log('asdf', booking, a)
+      return a
+    }
+      
     );
   };
 
@@ -366,7 +371,10 @@ export default function BookingsPage() {
           <Calendar
             mode="single"
             selected={date}
-            onSelect={setDate}
+            onSelect={(a) => {
+              console.log(a)
+              setDate(a)
+            }}
             className="rounded-md w-full"
             showOutsideDays={false}
           />
