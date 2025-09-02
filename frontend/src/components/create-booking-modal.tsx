@@ -1,70 +1,57 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import BaseModal from '@/components/base-modal';
 import FormField from '@/components/form-field';
 import {
-  BOOKING_VENUE_OPTIONS,
   BOOKING_ORGANIZATION_OPTIONS,
+  BOOKING_VENUE_OPTIONS,
 } from '@/lib/formOptions';
-
-interface BookingFormData {
-  eventName: string;
-  organization: string;
-  venue: string;
-  date?: Date;
-  startTime: string;
-  endTime: string;
-  addToCalendar: boolean;
-}
+import { BookingFormData } from './booking/component';
+import type { VenueView } from '@/lib/utils/venues';
 
 interface CreateBookingModalProps {
+  venues: VenueView[];
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (bookingData: BookingFormData) => void;
-  initialVenue?: string;
-  initialStartTime?: string;
-  initialEndTime?: string;
-  initialDate?: Date;
-  showClashWarning?: boolean;
+  initialTimeRange: {
+    venue: VenueView;
+    startTime: Date;
+    endTime: Date;
+  } | null;
 }
 
 export default function CreateBookingModal({
+  venues,
   isOpen,
   onClose,
   onSubmit,
-  initialVenue,
-  initialStartTime,
-  initialEndTime,
-  initialDate,
+  initialTimeRange,
 }: CreateBookingModalProps) {
   const [eventName, setEventName] = useState('');
-  const [organization, setOrganization] = useState('');
-  const [venue, setVenue] = useState(BOOKING_VENUE_OPTIONS[0] || 'CTPH');
-  const [date, setDate] = useState(new Date().toISOString());
-  const [startTime, setStartTime] = useState('10:00 AM');
-  const [endTime, setEndTime] = useState('03:00 PM');
+  const [organizationId, setOrganizationId] = useState(0);
+  const [venue, setVenue] = useState(initialTimeRange?.venue || null);
+  const [startTime, setStartTime] = useState(
+    initialTimeRange?.startTime || new Date(),
+  );
+  const [endTime, setEndTime] = useState(() => {
+    if (initialTimeRange) return initialTimeRange.endTime;
+    const in2Hours = new Date();
+    in2Hours.setHours(in2Hours.getHours() + 2);
+    return in2Hours;
+  });
   const [addToCalendar, setAddToCalendar] = useState(false);
 
-  // Reset form when modal opens
-  useEffect(() => {
-    if (isOpen) {
-      setEventName('');
-      setOrganization('');
-      setVenue(initialVenue || BOOKING_VENUE_OPTIONS[0] || 'CTPH');
-      setDate(initialDate?.toISOString() || new Date().toISOString());
-      setStartTime(initialStartTime || '10:00 AM');
-      setEndTime(initialEndTime || '03:00 PM');
-      setAddToCalendar(false);
-    }
-  }, [isOpen, initialVenue, initialStartTime, initialEndTime, initialDate]);
-
   const handleSubmit = () => {
+    if (!venue || !startTime || !endTime) {
+      return;
+    }
+
     const bookingData: BookingFormData = {
       eventName,
-      organization,
-      venue,
-      date: new Date(date),
+      organizationId,
+      venueId: venue.id,
       startTime,
       endTime,
       addToCalendar,
@@ -97,8 +84,8 @@ export default function CreateBookingModal({
       <FormField
         label='ORGANISATION'
         type='select'
-        value={organization}
-        onChange={(value) => setOrganization(value as string)}
+        value={organizationId}
+        onChange={(value) => setOrganizationId(value)}
         options={BOOKING_ORGANIZATION_OPTIONS}
       />
 
@@ -106,14 +93,16 @@ export default function CreateBookingModal({
         label='VENUE'
         type='select'
         value={venue}
-        onChange={(value) => setVenue(value as string)}
+        onChange={(value) =>
+          setVenue(venues.find(({ name }) => name === value)!)
+        }
         options={BOOKING_VENUE_OPTIONS}
       />
 
       <FormField
-        label='DATE'
-        type='date'
-        value={date}
+        label='START DATE'
+        type='time'
+        value={startTime}
         onChange={(value) => setDate(value as string)}
       />
 
@@ -123,6 +112,13 @@ export default function CreateBookingModal({
         value={startTime}
         onChange={(value) => setStartTime(value as string)}
         placeholder='10:00 AM'
+      />
+
+      <FormField
+        label='END DATE'
+        type='date'
+        value={date}
+        onChange={(value) => setDate(value as string)}
       />
 
       <FormField

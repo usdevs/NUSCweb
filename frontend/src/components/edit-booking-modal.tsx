@@ -1,23 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import BaseModal from '@/components/base-modal';
 import FormField from '@/components/form-field';
 import {
   BOOKING_VENUE_OPTIONS,
   BOOKING_ORGANIZATION_OPTIONS,
 } from '@/lib/formOptions';
-
-interface Booking {
-  id: number;
-  eventName: string;
-  organization: string;
-  venue: string;
-  date: Date;
-  startTime: string;
-  endTime: string;
-  color: string;
-}
+import type { BookingView } from '@/lib/utils/bookings';
 
 interface BookingFormData {
   id?: number;
@@ -35,7 +25,7 @@ interface EditBookingModalProps {
   onClose: () => void;
   onSubmit: (bookingData: BookingFormData) => void;
   onDelete: (bookingId: number) => void;
-  booking: Booking | null;
+  booking: BookingView | null;
   showClashWarning?: boolean;
 }
 
@@ -47,25 +37,15 @@ export default function EditBookingModal({
   booking,
   showClashWarning = false,
 }: EditBookingModalProps) {
-  const [eventName, setEventName] = useState('');
-  const [organization, setOrganization] = useState('');
-  const [venue, setVenue] = useState('');
-  const [date, setDate] = useState(new Date().toISOString());
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [eventName, setEventName] = useState(booking?.eventName || '');
+  const [organization, setOrganization] = useState(
+    booking?.bookedBy.org.name || '',
+  );
+  const [venue, setVenue] = useState(booking?.venue.name || '');
+  const [date, setDate] = useState(booking?.start.toISOString());
+  const [startTime, setStartTime] = useState(booking?.start);
+  const [endTime, setEndTime] = useState(booking?.end);
   const [addToCalendar, setAddToCalendar] = useState(false);
-
-  // Update form when booking changes
-  useEffect(() => {
-    if (booking) {
-      setEventName(booking.eventName);
-      setOrganization(booking.organization);
-      setVenue(booking.venue);
-      setDate(booking.date.toISOString());
-      setStartTime(booking.startTime);
-      setEndTime(booking.endTime);
-    }
-  }, [booking]);
 
   const handleSubmit = () => {
     // If no clashes, submit the booking

@@ -1,13 +1,9 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
 
 export default function HomePage() {
   return (
-    <div className='min-h-screen bg-white'>
-      <Header />
-
+    <>
       <div className='bg-navy-900 relative h-[738px] w-full overflow-hidden'>
         <div className='absolute inset-0'>
           <Image
@@ -107,10 +103,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-
-      <div className='mt-auto'>
-        <Footer />
-      </div>
-    </div>
+    </>
   );
 }

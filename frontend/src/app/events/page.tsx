@@ -2,12 +2,10 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
 import CreateEventModal from '@/components/create-event-modal';
 import EditEventModal from '@/components/edit-event-modal';
 import EventDailyView from '@/components/event-daily-view';
-import { ChevronLeft, ChevronRight, User, Clock, MapPin } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   format,
   startOfMonth,
@@ -21,8 +19,10 @@ import {
   isWithinInterval,
 } from 'date-fns';
 import { EVENT_CATEGORIES } from '@/lib/formOptions';
+import MonthView from '@/components/event/MonthView';
+import WeekView from '@/components/event/WeekView';
 
-interface Event {
+export interface Event {
   id: number;
   eventName: string;
   organization: string;
@@ -55,8 +55,6 @@ export default function EventsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [createEventDate, setCreateEventDate] = useState<Date | null>(null);
-
-  const today = new Date();
 
   const [events, setEvents] = useState<Event[]>([
     {
@@ -224,247 +222,9 @@ export default function EventsPage() {
     }
   };
 
-  const renderMonthView = () => {
-    const monthStart = startOfMonth(currentDate);
-    const monthEnd = endOfMonth(currentDate);
-    const calendarStart = startOfWeek(monthStart, { weekStartsOn: 1 });
-    const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 1 });
-    const calendarDays = eachDayOfInterval({
-      start: calendarStart,
-      end: calendarEnd,
-    });
-
-    const weeks = [];
-    for (let i = 0; i < calendarDays.length; i += 7) {
-      weeks.push(calendarDays.slice(i, i + 7));
-    }
-
-    return (
-      <div className='overflow-hidden rounded-2xl bg-[#0C2C47]'>
-        {/* Day headers */}
-        <div className='grid grid-cols-7 gap-0.5 p-0.5 pt-0'>
-          {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((day) => (
-            <div
-              key={day}
-              className='rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-base font-bold text-[#0C2C47]'
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-
-        {/* Calendar grid */}
-        <div className='mx-0.5 mb-0.5 grid grid-cols-7 gap-0.5'>
-          {weeks.map((week, weekIndex) =>
-            week.map((day, dayIndex) => {
-              const dayEvents = getFilteredEvents(day);
-              const isCurrentMonth = day.getMonth() === currentDate.getMonth();
-              const isLastRow = weekIndex === weeks.length - 1;
-              const isFirstCol = dayIndex === 0;
-              const isLastCol = dayIndex === 6;
-              const maxEventsToShow = 2;
-              const hasMoreEvents = dayEvents.length > maxEventsToShow;
-
-              if (!isCurrentMonth) {
-                return (
-                  <div
-                    key={`${weekIndex}-${dayIndex}`}
-                    className={`h-[140px] bg-white ${
-                      isLastRow && isFirstCol
-                        ? 'rounded-bl-2xl'
-                        : isLastRow && isLastCol
-                          ? 'rounded-br-2xl'
-                          : ''
-                    }`}
-                  />
-                );
-              }
-
-              return (
-                <div
-                  key={`${weekIndex}-${dayIndex}`}
-                  className={`h-[140px] cursor-pointer bg-white p-4 hover:bg-gray-50 ${
-                    isLastRow && isFirstCol
-                      ? 'rounded-bl-2xl'
-                      : isLastRow && isLastCol
-                        ? 'rounded-br-2xl'
-                        : ''
-                  }`}
-                  onClick={(e) => {
-                    const target = e.target as HTMLElement;
-                    if (
-                      e.target === e.currentTarget ||
-                      target.classList?.contains('day-content')
-                    ) {
-                      handleEmptyDayClick(day);
-                    }
-                  }}
-                >
-                  <div className='day-content pointer-events-none'>
-                    {(() => {
-                      const isToday = isSameDay(day, today);
-                      return (
-                        <div
-                          className={`mb-2 text-base font-bold ${
-                            isToday
-                              ? 'flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7D4E] text-white'
-                              : 'text-[#0C2C47]'
-                          }`}
-                        >
-                          {day.getDate()}
-                        </div>
-                      );
-                    })()}
-                    <div className='pointer-events-auto space-y-1'>
-                      {dayEvents.slice(0, maxEventsToShow).map((event) => (
-                        <div
-                          key={event.id}
-                          className='flex cursor-pointer items-center gap-2 text-xs'
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEventClick(event);
-                          }}
-                        >
-                          <div
-                            className={`h-2 w-2 rounded-full ${getCategoryBgColor(event.category)} flex-shrink-0`}
-                          ></div>
-                          <span className='truncate font-medium text-[#0C2C47]'>
-                            {event.eventName}
-                          </span>
-                        </div>
-                      ))}
-                      {hasMoreEvents && (
-                        <button
-                          className='w-full rounded bg-gray-300 px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-400'
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleShowMore(day);
-                          }}
-                        >
-                          SHOW MORE
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            }),
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const renderWeekView = () => {
-    const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
-    const weekEnd = endOfWeek(currentDate, { weekStartsOn: 1 });
-    const weekDays = eachDayOfInterval({ start: weekStart, end: weekEnd });
-
-    return (
-      <div className='overflow-hidden rounded-2xl bg-[#0C2C47]'>
-        {/* Day headers */}
-        <div className='grid grid-cols-7 gap-0.5 p-0.5 pt-0'>
-          {weekDays.map((day) => (
-            <div
-              key={`${day.toISOString()}-header`}
-              className='rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-[#0C2C47]'
-            >
-              <div className='text-base font-bold'>
-                {format(day, 'EEE').toUpperCase()}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Week grid */}
-        <div className='mx-0.5 mb-0.5 grid min-h-[600px] grid-cols-7 gap-0.5'>
-          {weekDays.map((day, index) => {
-            const dayEvents = getFilteredEvents(day);
-            const isFirstCol = index === 0;
-            const isLastCol = index === 6;
-
-            return (
-              <div
-                key={day.toISOString()}
-                className={`cursor-pointer bg-white p-4 hover:bg-gray-50 ${
-                  isFirstCol
-                    ? 'rounded-bl-2xl'
-                    : isLastCol
-                      ? 'rounded-br-2xl'
-                      : ''
-                }`}
-                onClick={(e) => {
-                  const target = e.target as HTMLElement;
-                  if (
-                    e.target === e.currentTarget ||
-                    target.classList?.contains('day-content')
-                  ) {
-                    handleEmptyDayClick(day);
-                  }
-                }}
-              >
-                <div className='day-content pointer-events-none'>
-                  {(() => {
-                    const isToday = isSameDay(day, today);
-                    return (
-                      <div
-                        className={`mb-2 text-base font-bold ${
-                          isToday
-                            ? 'flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7D4E] text-white'
-                            : 'text-[#0C2C47]'
-                        }`}
-                      >
-                        {day.getDate()}
-                      </div>
-                    );
-                  })()}
-
-                  {/* Events */}
-                  <div className='pointer-events-auto space-y-2'>
-                    {dayEvents.map((event) => (
-                      <div
-                        key={event.id}
-                        className='cursor-pointer rounded bg-[#FCDED6] p-2 text-xs'
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEventClick(event);
-                        }}
-                      >
-                        <div className='font-medium'>{event.eventName}</div>
-                        <div className='flex items-center gap-1 text-gray-600'>
-                          <User
-                            className='h-4 w-4 fill-current'
-                            style={{ fill: '#0C2C47' }}
-                          />
-                          <span>{event.organization}</span>
-                        </div>
-                        <div className='flex items-center gap-1 text-gray-600'>
-                          <Clock className='h-4 w-4' />
-                          <span>
-                            {event.startTime} - {event.endTime}
-                          </span>
-                        </div>
-                        <div className='flex items-center gap-1 text-gray-600'>
-                          <MapPin className='h-4 w-4' />
-                          <span>{event.venue}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div className='min-h-screen bg-[#0C2C47]'>
-      <Header />
-
-      <div className='flex'>
+    <>
+      <div className='flex bg-[#0C2C47]'>
         {/* Sidebar */}
         <div className='min-h-screen w-72 bg-white px-8 py-4'>
           {/* View Toggle */}
@@ -863,7 +623,23 @@ export default function EventsPage() {
           </div>
 
           {/* Calendar View */}
-          {viewMode === 'MONTH' ? renderMonthView() : renderWeekView()}
+          {viewMode === 'MONTH' ? (
+            <MonthView
+              currentDate={currentDate}
+              getFilteredEvents={getFilteredEvents}
+              handleEmptyDayClick={handleEmptyDayClick}
+              getCategoryBgColor={getCategoryBgColor}
+              handleEventClick={handleEventClick}
+              handleShowMore={handleShowMore}
+            />
+          ) : (
+            <WeekView
+              currentDate={currentDate}
+              getFilteredEvents={getFilteredEvents}
+              handleEmptyDayClick={handleEmptyDayClick}
+              handleEventClick={handleEventClick}
+            />
+          )}
         </div>
       </div>
 
@@ -894,8 +670,6 @@ export default function EventsPage() {
         onEventClick={handleEventClick}
         getCategoryBgColor={getCategoryBgColor}
       />
-
-      <Footer />
-    </div>
+    </>
   );
 }

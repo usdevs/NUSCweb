@@ -1,22 +1,10 @@
-import prisma from '@/lib/prisma';
-import Bookings from './component';
-
-const getBookings = async () =>
-  prisma.booking.findMany({
-    select: {
-      id: true,
-      eventName: true,
-      start: true,
-      end: true,
-      venue: { select: { name: true } },
-      bookedBy: { select: { org: { select: { name: true } } } },
-    },
-  });
+import Bookings from '../../components/booking/component';
+import { getBookings } from '@/lib/utils/bookings';
+import { getVenues } from '@/lib/utils/venues';
 
 export default async function BookingsPage() {
   const bookings = await getBookings();
+  const venues = await getVenues();
 
-  return <Bookings bookings={bookings} />;
+  return <Bookings bookings={bookings} venues={venues} />;
 }
-
-export type BookingView = Awaited<ReturnType<typeof getBookings>>[number];
