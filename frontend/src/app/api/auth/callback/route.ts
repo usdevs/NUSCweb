@@ -1,7 +1,7 @@
 import { AuthDataValidator } from '@telegram-auth/server';
 import { urlStrToAuthDataMap } from '@telegram-auth/server/utils';
 import { StatusCodes } from 'http-status-codes';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 import prisma from '@/lib/prisma';
 import { redirect } from 'next/navigation';
@@ -133,5 +133,8 @@ export async function GET(req: Request) {
   cookieStore.set('auth', token, {
     expires: in1hour,
   });
-  redirect('/');
+
+  const headersList = await headers();
+  const redirectUrl = headersList.get('Referer');
+  redirect(redirectUrl || '/');
 }

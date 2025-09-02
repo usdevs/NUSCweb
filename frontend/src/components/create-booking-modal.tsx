@@ -117,7 +117,7 @@ export default function CreateBookingModal({
       <FormField
         label='END DATE'
         type='date'
-        value={date}
+        value={new Date()}
         onChange={(value) => setDate(value as string)}
       />
 
