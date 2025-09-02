@@ -1,15 +1,14 @@
 import { AuthDataValidator } from '@telegram-auth/server';
 import { urlStrToAuthDataMap } from '@telegram-auth/server/utils';
 import { StatusCodes } from 'http-status-codes';
-import { default as jwt } from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 
 import prisma from '@/lib/prisma';
 import { redirect } from 'next/navigation';
+import { generateToken } from '@/lib/utils/jwt';
 
 const validator = new AuthDataValidator({ botToken: process.env.BOT_TOKEN });
 
-const SECRET_KEY = process.env.SECRET_KEY || 'hello';
 const NO_MATCHING_USER_MESSAGE = `You are not authorized to access the NUSC website!
 Note: this may be an issue if you have recently changed your Telegram username without actually having logged into the NUSC website.
 If so, please add your new username via the Admin tab.`;
@@ -35,12 +34,6 @@ If so, please add your new username via the Admin tab.`;
 //   });
 //   window.location.reload();
 // };
-
-const generateToken = (payload: string | Buffer | object): string =>
-  jwt.sign(payload, SECRET_KEY, {
-    algorithm: 'HS256',
-    expiresIn: '1h',
-  });
 
 const generatePermissions = async (userId: number) => {
   const userRoles = await prisma.userOnOrg.findMany({
@@ -136,9 +129,8 @@ export async function GET(req: Request) {
 
   const in1hour = new Date();
   in1hour.setTime(in1hour.getTime() + 60 * 60 * 1000);
-  console.log(token);
 
-  cookieStore.set('token', token, {
+  cookieStore.set('auth', token, {
     expires: in1hour,
   });
   redirect('/');

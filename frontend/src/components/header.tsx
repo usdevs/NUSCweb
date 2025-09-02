@@ -1,9 +1,9 @@
 'use client';
 
 import { LoginButton } from '@telegram-auth/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, ChevronDown, ChevronRight } from 'lucide-react';
+import { Menu, ChevronDown, ChevronRight, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -21,17 +21,14 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import CustomDropdown from './custom-dropdown';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function Header() {
   const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [adminSubmenuOpen, setAdminSubmenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    const loginStatus = localStorage.getItem('isLoggedIn') === 'true';
-    setIsLoggedIn(loginStatus);
-  }, []);
+  const isLoggedIn = useAuth();
 
   return (
     <header
@@ -121,47 +118,38 @@ export default function Header() {
 
                 {/* Admin menu for logged in users */}
                 {isLoggedIn && (
-                  <>
-                    <div>
-                      <button
-                        className='flex w-full items-center justify-between py-2'
-                        onClick={() => setAdminSubmenuOpen(!adminSubmenuOpen)}
-                      >
-                        <span>ADMIN</span>
-                        {adminSubmenuOpen ? (
-                          <ChevronDown className='h-4 w-4' />
-                        ) : (
-                          <ChevronRight className='h-4 w-4' />
-                        )}
-                      </button>
-
-                      {adminSubmenuOpen && (
-                        <div className='pl-4'>
-                          <Link
-                            href='/'
-                            className='block py-1 text-sm'
-                            onClick={() => setIsSidebarOpen(false)}
-                          >
-                            ORGANISATIONS
-                          </Link>
-                          <Link
-                            href='/'
-                            className='block py-1 text-sm'
-                            onClick={() => setIsSidebarOpen(false)}
-                          >
-                            USERS
-                          </Link>
-                        </div>
-                      )}
-                    </div>
-                    <Link
-                      href=''
-                      className='block py-2'
-                      onClick={() => setIsSidebarOpen(false)}
+                  <div>
+                    <button
+                      className='flex w-full items-center justify-between py-2'
+                      onClick={() => setAdminSubmenuOpen(!adminSubmenuOpen)}
                     >
-                      TOKEN
-                    </Link>
-                  </>
+                      <span>ADMIN</span>
+                      {adminSubmenuOpen ? (
+                        <ChevronDown className='h-4 w-4' />
+                      ) : (
+                        <ChevronRight className='h-4 w-4' />
+                      )}
+                    </button>
+
+                    {adminSubmenuOpen && (
+                      <div className='pl-4'>
+                        <Link
+                          href='/'
+                          className='block py-1 text-sm'
+                          onClick={() => setIsSidebarOpen(false)}
+                        >
+                          ORGANISATIONS
+                        </Link>
+                        <Link
+                          href='/'
+                          className='block py-1 text-sm'
+                          onClick={() => setIsSidebarOpen(false)}
+                        >
+                          USERS
+                        </Link>
+                      </div>
+                    )}
+                  </div>
                 )}
               </nav>
             </SheetContent>
@@ -222,20 +210,18 @@ export default function Header() {
             )}
           </div>
 
-          {/* Token link - only visible when logged in */}
-          {isLoggedIn && (
-            <Button variant='ghost' asChild className='hidden lg:flex'>
-              <Link href='' className='flex items-center gap-2'>
-                TOKEN
-              </Link>
-            </Button>
-          )}
-
           {/* Login/Logout button */}
-          <LoginButton
-            botUsername={process.env.NEXT_PUBLIC_TELEGRAM_LOGIN_BOT!}
-            authCallbackUrl='/api/auth/callback'
-          />
+          {isLoggedIn ? (
+            <Link href='/' className='flex items-center gap-2'>
+              <Send className='h-4 w-4' />
+              LOGOUT
+            </Link>
+          ) : (
+            <LoginButton
+              botUsername={process.env.NEXT_PUBLIC_TELEGRAM_LOGIN_BOT!}
+              authCallbackUrl='/api/auth/callback'
+            />
+          )}
         </div>
       </div>
     </header>
