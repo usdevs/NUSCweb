@@ -9,5 +9,9 @@ services:
       POSTGRES_DB: nusc
     networks:
       - nusc
+    volumes:
+      - nuscdb:/var/lib/postgresql/data
+volumes:
+  nuscdb:
 networks:
   nusc:
