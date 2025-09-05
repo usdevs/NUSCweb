@@ -6,15 +6,7 @@ import { z } from 'zod/v4';
 import prisma from '@/lib/prisma';
 import { cookies } from 'next/headers';
 import { validateCookie } from '@/lib/utils/jwt';
-
-const NewBookingSchema = z.object({
-  eventName: z.string().nonempty(),
-  organizationId: z.coerce.number().int().positive(),
-  venueId: z.coerce.number().int().positive(),
-  startTime: z.iso.datetime(),
-  endTime: z.iso.datetime(),
-  addToCalendar: z.coerce.boolean(),
-});
+import { NewBookingSchema } from '../schema/booking';
 
 // TODO: Check for sufficient permissions before creating/editing/deleting
 // TODO: Abstract token checking to separate function
@@ -85,10 +77,6 @@ export const createBooking = async (
     message: 'Booking created!',
   };
 };
-
-const EditBookingSchema = NewBookingSchema.extend({
-  id: z.coerce.number().int().positive(),
-});
 
 type EditBookingState = {
   success: boolean;

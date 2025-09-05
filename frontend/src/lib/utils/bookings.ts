@@ -8,7 +8,8 @@ export const getBookings = async () =>
       start: true,
       end: true,
       venue: { select: { id: true, name: true } },
-      bookedBy: { select: { org: { select: { name: true } } } },
+      bookedBy: { select: { org: { select: { id: true, name: true } } } },
+      isEvent: true,
     },
   });
 

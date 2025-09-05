@@ -3,13 +3,18 @@
 import { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 
+interface Option {
+  displayValue: string;
+  value: string | number;
+}
+
 interface FormFieldProps {
   label: string;
   type: 'text' | 'select' | 'date' | 'time' | 'checkbox';
   value: string | boolean;
   onChange: (value: string | boolean) => void;
   placeholder?: string;
-  options?: string[];
+  options?: string[] | Option[];
   disabled?: boolean;
   required?: boolean;
   id?: string;
@@ -77,42 +82,41 @@ export default function FormField({
       <label htmlFor={fieldId} className='text-left text-[13px] font-normal'>
         {label}
       </label>
-      {type === 'text' ||
-        (type === 'time' && (
-          <div className='flex items-center'>
-            <input
-              id={fieldId}
-              type='text'
-              className={`flex h-6 ${type === 'time' ? 'w-6/12' : 'w-full'} rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${typeof value === 'string' && value ? '' : 'text-gray-500'}`}
-              value={typeof value === 'string' ? value : ''}
-              onChange={(e) => onChange(e.target.value)}
-              placeholder={placeholder}
-              disabled={disabled}
-              required={required}
-            />
-            {type === 'time' && (
-              <button
-                type='button'
-                className='ml-2 text-gray-400 hover:text-gray-500'
+      {(type === 'text' || type === 'time') && (
+        <div className='flex items-center'>
+          <input
+            id={fieldId}
+            type='text'
+            className={`flex h-6 ${type === 'time' ? 'w-6/12' : 'w-full'} rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${typeof value === 'string' && value ? '' : 'text-gray-500'}`}
+            value={typeof value === 'string' ? value : ''}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder}
+            disabled={disabled}
+            required={required}
+          />
+          {type === 'time' && (
+            <button
+              type='button'
+              className='ml-2 text-gray-400 hover:text-gray-500'
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='18'
+                height='18'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
               >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  width='18'
-                  height='18'
-                  viewBox='0 0 24 24'
-                  fill='none'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                >
-                  <circle cx='12' cy='12' r='10'></circle>
-                  <polyline points='12 6 12 12 16 14'></polyline>
-                </svg>
-              </button>
-            )}
-          </div>
-        ))}
+                <circle cx='12' cy='12' r='10'></circle>
+                <polyline points='12 6 12 12 16 14'></polyline>
+              </svg>
+            </button>
+          )}
+        </div>
+      )}
       {type === 'select' && (
         <div className='relative'>
           <select
@@ -126,11 +130,17 @@ export default function FormField({
             <option value='' disabled>
               {placeholder || `Select ${label.toLowerCase()}`}
             </option>
-            {options.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
+            {options.map((option) =>
+              typeof option === 'string' ? (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ) : (
+                <option key={option.value} value={option.value}>
+                  {option.displayValue}
+                </option>
+              ),
+            )}
           </select>
           <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
             <svg

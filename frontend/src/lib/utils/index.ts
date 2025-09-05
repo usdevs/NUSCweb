@@ -37,3 +37,5 @@ export const dateTo12Hour = (date: Date): string => {
 
   return `${hours}${suffix}`;
 };
+
+export const dateTimeFormatter = Intl.DateTimeFormat('en-SG');

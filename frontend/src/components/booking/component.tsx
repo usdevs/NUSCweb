@@ -5,11 +5,9 @@ import { useState, useEffect, useActionState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { Calendar } from '@/components/ui/calendar';
-import CreateBookingModal from '@/components/create-booking-modal';
-import EditBookingModal from '@/components/edit-booking-modal';
 import EventCard from '@/components/event-card';
 import CardPortal from '@/components/card-portal';
-import { timeToIndex } from '@/lib/utils';
+import { dateTimeFormatter, timeToIndex } from '@/lib/utils';
 import { TIMETABLE_TIMESLOTS } from '@/lib/formOptions';
 import type { BookingView } from '@/lib/utils/bookings';
 import {
@@ -19,16 +17,41 @@ import {
 } from '@/lib/actions/booking';
 import type { VenueView } from '@/lib/utils/venues';
 import VenueTimetable from './VenueTimetable';
-
-export interface BookingFormData {
-  id?: number;
-  eventName: string;
-  organizationId: number;
-  venueId: number;
-  startTime: Date;
-  endTime: Date;
-  addToCalendar: boolean;
-}
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod/v4';
+import { NewBookingSchema } from '@/lib/schema/booking';
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '../ui/form';
+import { Checkbox } from '../ui/checkbox';
+import { Input } from '../ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { CalendarIcon } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import { useAuth } from '@/lib/hooks/useAuth';
+import { toast } from 'sonner';
 
 export interface DragPosition {
   time: string;
@@ -38,12 +61,24 @@ export interface DragPosition {
 interface BookingsProp {
   bookings: BookingView[];
   venues: VenueView[];
+  userOrgs: {
+    id: number;
+    name: string;
+  }[];
 }
 
-const today = new Date();
+function ceilTo30() {
+  const ms = 1000 * 60 * 30;
+  return new Date(Math.ceil(new Date().getTime() / ms) * ms);
+}
+const today = ceilTo30();
 
-export default function Bookings({ bookings, venues }: BookingsProp) {
+const in2Hours = new Date(today);
+in2Hours.setHours(in2Hours.getHours() + 2);
+
+export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
   const searchParams = useSearchParams();
+  const isAuthenticated = useAuth();
 
   let date = today;
   try {
@@ -62,8 +97,7 @@ export default function Bookings({ bookings, venues }: BookingsProp) {
     endTime: Date;
   } | null>(null);
 
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const isEditModalOpen = selectedBooking !== null;
+  const isModalOpen = selectedBooking !== null || selectedTimeRange !== null;
 
   const [showClashWarning, setShowClashWarning] = useState(false);
 
@@ -80,7 +114,7 @@ export default function Bookings({ bookings, venues }: BookingsProp) {
     useActionState(editBooking, null);
 
   // Check against existing bookings
-  const hasClash = (formData: BookingFormData) =>
+  const hasClash = (formData: z.input<typeof NewBookingSchema>) =>
     bookings.some((booking) => {
       // Skip if not the same venue
       if (booking.venue.id !== formData.venueId) {
@@ -97,7 +131,9 @@ export default function Bookings({ bookings, venues }: BookingsProp) {
       );
     });
 
-  const handleCreateSubmit = (formData: BookingFormData) => {
+  const handleCreateSubmit = (formData: z.input<typeof NewBookingSchema>) => {
+    console.log(formData);
+    return;
     if (hasClash(formData)) {
       setShowClashWarning(true);
       return;
@@ -113,10 +149,12 @@ export default function Bookings({ bookings, venues }: BookingsProp) {
     // TODO: Handle if this fails
     createBookingAction(newBooking);
 
-    setIsCreateModalOpen(false);
+    setSelectedTimeRange(null);
   };
 
-  const handleEditSubmit = (formData: BookingFormData) => {
+  const handleEditSubmit = (formData: z.input<typeof NewBookingSchema>) => {
+    console.log('asdf', formData);
+    return;
     if (!formData.id) return;
 
     if (hasClash(formData)) {
@@ -136,6 +174,20 @@ export default function Bookings({ bookings, venues }: BookingsProp) {
     editBookingAction(newBooking);
 
     setSelectedBooking(null);
+  };
+
+  const handleSubmit = (formData: z.input<typeof NewBookingSchema>) => {
+    if (!isAuthenticated) {
+      toast.error(
+        selectedBooking === null
+          ? 'Please login to make a booking!'
+          : 'Please login to edit bookings!',
+      );
+      return;
+    }
+    const handle =
+      selectedBooking === null ? handleCreateSubmit : handleEditSubmit;
+    handle(formData);
   };
 
   const handleMouseUp = () => {
@@ -161,9 +213,6 @@ export default function Bookings({ bookings, venues }: BookingsProp) {
         endTime,
       });
 
-      // Open create modal with selected time range and room
-      setIsCreateModalOpen(true);
-
       // Reset drag state
       setDragStart(null);
       setDragEnd(null);
@@ -176,14 +225,11 @@ export default function Bookings({ bookings, venues }: BookingsProp) {
     setSelectedBooking(null);
   };
 
-  const handleCloseCreateModal = () => {
-    setIsCreateModalOpen(false);
-    setShowClashWarning(false);
-  };
-
-  const handleCloseEditModal = () => {
-    setShowClashWarning(false);
+  const handleCloseModal = () => {
     setSelectedBooking(null);
+    setSelectedTimeRange(null);
+    setShowClashWarning(false);
+    form.reset();
   };
 
   // Track mouse position for positioning the hover card
@@ -199,6 +245,26 @@ export default function Bookings({ bookings, venues }: BookingsProp) {
       document.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
+
+  const form = useForm<z.input<typeof NewBookingSchema>>({
+    resolver: standardSchemaResolver(NewBookingSchema),
+    defaultValues: {
+      eventName: '',
+      organizationId: 0,
+      venueId: 0,
+      startTime: today,
+      endTime: in2Hours,
+      addToCalendar: false,
+    },
+  });
+
+  // TODO: AFTER HERE IS NEXT COMPONENT
+
+  const [selectStartDayOpen, setSelectStartDayOpen] = useState(false);
+  const [selectEndDayOpen, setSelectEndDayOpen] = useState(false);
+
+  const formatTime = (d: Date) =>
+    d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 
   return (
     <>
@@ -248,7 +314,7 @@ export default function Bookings({ bookings, venues }: BookingsProp) {
 
             {/* Scrollable container for room timetables */}
             <div className='flex-1 overflow-x-auto'>
-              <div className='flex gap-[1]' onMouseUp={handleMouseUp}>
+              <div className='flex gap-1' onMouseUp={handleMouseUp}>
                 {/* TODO: Currently not really index */}
                 {venues.map((venue) => (
                   <VenueTimetable
@@ -259,7 +325,15 @@ export default function Bookings({ bookings, venues }: BookingsProp) {
                     dragStart={dragStart}
                     dragEnd={dragEnd}
                     date={date}
-                    handleBookingClick={setSelectedBooking}
+                    handleBookingClick={(booking) => {
+                      setSelectedBooking(booking);
+                      form.setValue('eventName', booking.eventName);
+                      form.setValue('organizationId', booking.bookedBy.org.id);
+                      form.setValue('venueId', booking.venue.id);
+                      form.setValue('startTime', booking.start);
+                      form.setValue('endTime', booking.end);
+                      form.setValue('addToCalendar', booking.isEvent);
+                    }}
                     setHoveredBooking={setHoveredBooking}
                     setDragStart={setDragStart}
                     setDragEnd={setDragEnd}
@@ -272,23 +346,270 @@ export default function Bookings({ bookings, venues }: BookingsProp) {
       </div>
 
       {/* Create Booking Modal */}
-      <CreateBookingModal
-        venues={venues}
-        isOpen={isCreateModalOpen}
-        onClose={handleCloseCreateModal}
-        onSubmit={handleCreateSubmit}
-        initialTimeRange={selectedTimeRange}
-      />
+      <Form {...form}>
+        <Dialog
+          open={isModalOpen}
+          onOpenChange={(open) => {
+            if (!open) handleCloseModal();
+          }}
+        >
+          <DialogContent>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className='flex flex-col gap-4 sm:max-w-md'
+            >
+              <DialogHeader className='bg-[#0C2C47] text-white'>
+                <DialogTitle>
+                  {selectedBooking === null
+                    ? 'CREATE A NEW BOOKING'
+                    : 'EDIT BOOKING'}
+                </DialogTitle>
+              </DialogHeader>
+              <FormField
+                control={form.control}
+                name='eventName'
+                render={({ field }) => (
+                  <FormItem>
+                    <div className='grid grid-cols-[1fr_2fr] items-center gap-3'>
+                      <FormLabel>EVENT NAME</FormLabel>
+                      <FormControl>
+                        <Input
+                          type='text'
+                          id='event-name'
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder='Enter event name'
+                          className='placeholder:text-gray-500'
+                          required
+                        />
+                      </FormControl>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='organizationId'
+                render={({ field }) => (
+                  <FormItem>
+                    <div className='grid grid-cols-[1fr_2fr] items-center gap-3'>
+                      <FormLabel>ORGANISATION</FormLabel>
+                      <Select
+                        value={
+                          field.value === 0 ? undefined : field.value.toString()
+                        }
+                        onValueChange={(value) =>
+                          field.onChange(Number.parseInt(value))
+                        }
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder='Select organisation' />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {userOrgs.map(({ id, name }) => (
+                            <SelectItem key={id} value={id.toString()}>
+                              {name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='venueId'
+                render={({ field }) => (
+                  <FormItem>
+                    <div className='grid grid-cols-[1fr_2fr] items-center gap-3'>
+                      <FormLabel>VENUE</FormLabel>
+                      <Select
+                        value={
+                          field.value === 0 ? undefined : field.value.toString()
+                        }
+                        onValueChange={(value) =>
+                          field.onChange(Number.parseInt(value))
+                        }
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder='Select venue' />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {venues.map(({ id, name }) => (
+                            <SelectItem key={id} value={id.toString()}>
+                              {name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='startTime'
+                render={({ field }) => (
+                  <FormItem>
+                    <div className='grid grid-cols-[1fr_2fr] items-center gap-3'>
+                      <FormLabel>START TIME</FormLabel>
+                      <div className='grid grid-cols-2 gap-2'>
+                        <Popover
+                          open={selectStartDayOpen}
+                          onOpenChange={setSelectStartDayOpen}
+                        >
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button variant='outline' id='date'>
+                                {field.value
+                                  ? dateTimeFormatter.format(field.value)
+                                  : 'Select date'}
+                                <CalendarIcon />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className='w-auto p-0' align='start'>
+                            <Calendar
+                              mode='single'
+                              captionLayout='dropdown'
+                              selected={field.value}
+                              onSelect={(selectedDate) => {
+                                if (selectedDate) {
+                                  field.value.setFullYear(
+                                    selectedDate.getFullYear(),
+                                    selectedDate.getMonth(),
+                                    selectedDate.getDate(),
+                                  );
+                                  field.onChange(field.value);
+                                }
+                              }}
+                              autoFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <Input
+                          type='time'
+                          value={formatTime(field.value)}
+                          onChange={(e) => {
+                            const [hours, minutes] = e.target.value
+                              .split(':')
+                              .map(Number);
+                            field.value.setHours(hours, minutes);
+                            field.onChange(field.value);
+                          }}
+                          className='appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
+                          step={1800}
+                        />
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='endTime'
+                render={({ field }) => (
+                  <FormItem>
+                    <div className='grid grid-cols-[1fr_2fr] items-center gap-3'>
+                      <FormLabel>END TIME</FormLabel>
+                      <div className='grid grid-cols-2 gap-2'>
+                        <Popover
+                          open={selectEndDayOpen}
+                          onOpenChange={setSelectEndDayOpen}
+                        >
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button variant='outline' id='date'>
+                                {field.value
+                                  ? dateTimeFormatter.format(field.value)
+                                  : 'Select date'}
+                                <CalendarIcon />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className='w-auto p-0' align='start'>
+                            <Calendar
+                              mode='single'
+                              captionLayout='dropdown'
+                              selected={field.value}
+                              onSelect={(selectedDate) => {
+                                if (selectedDate) {
+                                  field.value.setFullYear(
+                                    selectedDate.getFullYear(),
+                                    selectedDate.getMonth(),
+                                    selectedDate.getDate(),
+                                  );
+                                  field.onChange(field.value);
+                                }
+                              }}
+                              autoFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <Input
+                          type='time'
+                          value={formatTime(field.value)}
+                          onChange={(e) => {
+                            const [hours, minutes] = e.target.value
+                              .split(':')
+                              .map(Number);
+                            field.value.setHours(hours, minutes);
+                            field.onChange(field.value);
+                          }}
+                          className='appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
+                          step={1800}
+                        />
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='addToCalendar'
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <FormLabel />
+                      <div className='flex items-center gap-3'>
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                            }}
+                          />
+                        </FormControl>
+                        <FormLabel>ADD TO EVENTS CALENDAR</FormLabel>
+                      </div>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                  </>
+                )}
+              />
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant='outline'>Cancel</Button>
+                </DialogClose>
+                <Button
+                  type='submit'
+                  className='rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90'
+                >
+                  Submit
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </Form>
 
-      {/* Edit Booking Modal */}
-      <EditBookingModal
-        isOpen={isEditModalOpen}
-        onClose={handleCloseEditModal}
-        onSubmit={handleEditSubmit}
-        onDelete={handleDeleteBooking}
-        booking={selectedBooking}
-        showClashWarning={showClashWarning}
-      />
+      {JSON.stringify(form.formState.errors)}
 
       {/* Hover card portal */}
       {hoveredBooking && (

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 
 import Footer from '@/components/footer';
 import Header from '@/components/header';
+import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,7 +22,8 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className='min-h-screen bg-white'>
           <Header />
-          {children}
+          <main>{children}</main>
+          <Toaster richColors />
           <div className='mt-auto'>
             <Footer />
           </div>

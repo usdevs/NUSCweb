@@ -71,6 +71,7 @@ model Booking {
     start          DateTime
     end            DateTime
     bookedAt       DateTime     @default(now())
+    isEvent        Boolean      @default(false)
     deleted        Boolean      @default(false) // supports soft delete
     deletedAt      DateTime?
 }
