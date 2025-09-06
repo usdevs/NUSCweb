@@ -1,26 +1,27 @@
 'use client';
 
+import {
+  addMonths,
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  format,
+  isSameDay,
+  isWithinInterval,
+  startOfMonth,
+  startOfWeek,
+  subMonths,
+} from 'date-fns';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+
 import CreateEventModal from '@/components/create-event-modal';
 import EditEventModal from '@/components/edit-event-modal';
-import EventDailyView from '@/components/event-daily-view';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import {
-  format,
-  startOfMonth,
-  endOfMonth,
-  eachDayOfInterval,
-  isSameDay,
-  addMonths,
-  subMonths,
-  startOfWeek,
-  endOfWeek,
-  isWithinInterval,
-} from 'date-fns';
-import { EVENT_CATEGORIES } from '@/lib/formOptions';
 import MonthView from '@/components/event/MonthView';
 import WeekView from '@/components/event/WeekView';
+import EventDailyView from '@/components/event-daily-view';
+import { Button } from '@/components/ui/button';
+import { EVENT_CATEGORIES } from '@/lib/formOptions';
 
 export interface Event {
   id: number;
@@ -228,8 +229,12 @@ export default function EventsPage() {
         {/* Sidebar */}
         <div className='min-h-screen w-72 bg-white px-8 py-4'>
           {/* View Toggle */}
-          <div className='relative mb-6 h-10 overflow-visible rounded-[8px] bg-white'>
-            <div className='absolute inset-0 rounded-[8px] border border-[#A1A1A1]' />
+          <div
+            className={`relative mb-6 h-10 overflow-visible rounded-[8px] bg-white`}
+          >
+            <div
+              className={`absolute inset-0 rounded-[8px] border border-[#A1A1A1]`}
+            />
             <div
               className={`absolute top-0 h-full bg-[#FCDED6] transition-transform duration-300 ease-in-out ${
                 viewMode === 'MONTH'
@@ -241,10 +246,12 @@ export default function EventsPage() {
               className={`absolute top-0 h-full border-2 border-[#FF7D4E] transition-transform duration-300 ease-in-out ${
                 viewMode === 'MONTH'
                   ? '-left-px w-[calc(50%+2px)] translate-x-0 rounded-l-[7px]'
-                  : 'w-[calc(50%+2px)] translate-x-[calc(100%-4px)] rounded-r-[7px]'
+                  : `w-[calc(50%+2px)] translate-x-[calc(100%-4px)] rounded-r-[7px]`
               }`}
             />
-            <div className='absolute left-1/2 top-0 z-10 h-full w-px -translate-x-px transform bg-[#A1A1A1]' />
+            <div
+              className={`absolute top-0 left-1/2 z-10 h-full w-px -translate-x-px transform bg-[#A1A1A1]`}
+            />
             <div className='relative z-20 flex h-full'>
               <Button
                 variant='ghost'
@@ -277,7 +284,7 @@ export default function EventsPage() {
                 <Button
                   variant='ghost'
                   size='icon'
-                  className='h-6 w-6 text-[#0C2C47] hover:bg-gray-100'
+                  className={`h-6 w-6 text-[#0C2C47] hover:bg-gray-100`}
                   onClick={handlePrevious}
                 >
                   <ChevronLeft className='h-4 w-4' />
@@ -285,7 +292,7 @@ export default function EventsPage() {
                 <Button
                   variant='ghost'
                   size='icon'
-                  className='h-6 w-6 text-[#0C2C47] hover:bg-gray-100'
+                  className={`h-6 w-6 text-[#0C2C47] hover:bg-gray-100`}
                   onClick={handleNext}
                 >
                   <ChevronRight className='h-4 w-4' />
@@ -513,7 +520,7 @@ export default function EventsPage() {
                               ? 'text-gray-300'
                               : isInCurrentPeriod
                                 ? 'font-medium text-[#0C2C47]'
-                                : 'rounded text-[#0C2C47] hover:bg-gray-100'
+                                : `rounded text-[#0C2C47] hover:bg-gray-100`
                           }`}
                           onClick={() => setCurrentDate(day)}
                         >
@@ -591,7 +598,7 @@ export default function EventsPage() {
               <Button
                 variant='ghost'
                 size='icon'
-                className='h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90'
+                className={`h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90`}
                 onClick={handlePrevious}
               >
                 <ChevronLeft className='h-4 w-4' />
@@ -599,7 +606,7 @@ export default function EventsPage() {
               <Button
                 variant='ghost'
                 size='icon'
-                className='h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90'
+                className={`h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90`}
                 onClick={handleNext}
               >
                 <ChevronRight className='h-4 w-4' />

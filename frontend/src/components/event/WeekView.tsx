@@ -6,6 +6,7 @@ import {
   startOfWeek,
 } from 'date-fns';
 import { Clock, MapPin, User } from 'lucide-react';
+
 import type { Event } from '@/app/events/page';
 
 interface WeekViewProps {
@@ -34,7 +35,7 @@ export default function WeekView({
         {weekDays.map((day) => (
           <div
             key={`${day.toISOString()}-header`}
-            className='rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-[#0C2C47]'
+            className={`rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-[#0C2C47]`}
           >
             <div className='text-base font-bold'>
               {format(day, 'EEE').toUpperCase()}
@@ -70,14 +71,14 @@ export default function WeekView({
                 }
               }}
             >
-              <div className='day-content pointer-events-none'>
+              <div className='pointer-events-none'>
                 {(() => {
                   const isToday = isSameDay(day, today);
                   return (
                     <div
                       className={`mb-2 text-base font-bold ${
                         isToday
-                          ? 'flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7D4E] text-white'
+                          ? `flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7D4E] text-white`
                           : 'text-[#0C2C47]'
                       }`}
                     >
@@ -91,7 +92,7 @@ export default function WeekView({
                   {dayEvents.map((event) => (
                     <div
                       key={event.id}
-                      className='cursor-pointer rounded bg-[#FCDED6] p-2 text-xs'
+                      className={`cursor-pointer rounded bg-[#FCDED6] p-2 text-xs`}
                       onClick={(e) => {
                         e.stopPropagation();
                         handleEventClick(event);

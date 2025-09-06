@@ -1,7 +1,13 @@
 'use client';
 
+import { CalendarIcon, Trash2Icon } from 'lucide-react';
+import { useState } from 'react';
+import type { UseFormReturn } from 'react-hook-form';
+import z from 'zod/v4';
+
+import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { dateTimeFormatter } from '@/lib/utils/client/time';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogClose,
@@ -10,7 +16,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -19,11 +24,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form';
-import { Checkbox } from '../ui/checkbox';
-import { Input } from '../ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { CalendarIcon, Trash2Icon } from 'lucide-react';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
@@ -32,13 +39,11 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
-import type { UseFormReturn } from 'react-hook-form';
+} from '@/components/ui/select';
 import { NewBookingSchema } from '@/lib/schema/booking';
-import z from 'zod/v4';
+import { dateTimeFormatter } from '@/lib/utils/client/time';
 import type { BookingView } from '@/lib/utils/server/bookings';
 import type { VenueView } from '@/lib/utils/server/venues';
-import { useState } from 'react';
 
 const formatTime = (d: Date) =>
   d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
@@ -81,7 +86,7 @@ export default function BookingModal({
         <DialogContent aria-describedby={undefined}>
           <form
             onSubmit={form.handleSubmit(handleSubmitBooking)}
-            className='flex flex-col gap-2 sm:max-w-md'
+            className={`flex flex-col gap-2 sm:max-w-md`}
           >
             <DialogHeader className='bg-[#0C2C47] text-white'>
               <DialogTitle>
@@ -116,7 +121,9 @@ export default function BookingModal({
               control={form.control}
               name='organizationId'
               render={({ field }) => (
-                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
+                <FormItem
+                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
+                >
                   <FormLabel>ORGANISATION</FormLabel>
                   <Select
                     value={
@@ -153,7 +160,9 @@ export default function BookingModal({
               control={form.control}
               name='venueId'
               render={({ field }) => (
-                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
+                <FormItem
+                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
+                >
                   <FormLabel>VENUE</FormLabel>
                   <Select
                     value={
@@ -190,7 +199,9 @@ export default function BookingModal({
               control={form.control}
               name='startTime'
               render={({ field }) => (
-                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
+                <FormItem
+                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
+                >
                   <FormLabel>START TIME</FormLabel>
                   <div className='grid grid-cols-2 gap-2'>
                     <Popover
@@ -236,7 +247,7 @@ export default function BookingModal({
                         field.value.setHours(hours, minutes);
                         field.onChange(field.value);
                       }}
-                      className='bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
+                      className={`appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none`}
                       step={1800}
                     />
                   </div>
@@ -247,7 +258,9 @@ export default function BookingModal({
               control={form.control}
               name='endTime'
               render={({ field }) => (
-                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
+                <FormItem
+                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
+                >
                   <FormLabel>END TIME</FormLabel>
                   <div className='grid grid-cols-2 gap-2'>
                     <Popover
@@ -293,7 +306,7 @@ export default function BookingModal({
                         field.value.setHours(hours, minutes);
                         field.onChange(field.value);
                       }}
-                      className='bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
+                      className={`appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none`}
                       step={1800}
                     />
                   </div>
@@ -326,7 +339,7 @@ export default function BookingModal({
                 <Button
                   variant='destructive'
                   size='icon'
-                  className='rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90'
+                  className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
                   onClick={(e) => {
                     handleDeleteBooking(selectedBooking.id);
                     e.preventDefault();
@@ -342,7 +355,7 @@ export default function BookingModal({
                 </DialogClose>
                 <Button
                   type='submit'
-                  className='rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90'
+                  className={`rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90`}
                 >
                   Submit
                 </Button>

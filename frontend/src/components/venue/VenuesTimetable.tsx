@@ -2,18 +2,18 @@
 
 import { isSameDay } from 'date-fns';
 import { type Dispatch, type SetStateAction, useState } from 'react';
-
-import { TIMETABLE_TIMESLOTS } from '@/lib/formOptions';
-import { VenueView } from '@/lib/utils/server/venues';
-import { BookingView } from '@/lib/utils/server/bookings';
-
-import CardPortal from '../CardPortal';
-import BookingCard from '../booking/BookingCard';
-import VenueTimetable from './VenueTimetable';
-import { timeToIndex } from '@/lib/utils/client';
 import { UseFormReturn } from 'react-hook-form';
 import { z } from 'zod/v4';
+
+import BookingCard from '@/components/booking/BookingCard';
+import CardPortal from '@/components/CardPortal';
+import { TIMETABLE_TIMESLOTS } from '@/lib/formOptions';
 import { NewBookingSchema } from '@/lib/schema/booking';
+import { timeToIndex } from '@/lib/utils/client';
+import { BookingView } from '@/lib/utils/server/bookings';
+import { VenueView } from '@/lib/utils/server/venues';
+
+import VenueTimetable from './VenueTimetable';
 
 export interface DragPosition {
   time: string;
@@ -82,16 +82,16 @@ export default function VenuesTimetable({
   };
 
   return (
-    <div className='mt-10 flex-1 overflow-auto px-2 lg:ml-8 lg:px-0'>
+    <div className={`mt-10 flex-1 overflow-auto px-2 lg:ml-8 lg:px-0`}>
       {/* Timetable - Full width on mobile */}
       <div className='flex'>
         {/* Time labels column */}
-        <div className='flex w-10 flex-col text-right lg:w-14'>
+        <div className={`flex w-10 flex-col text-right lg:w-14`}>
           <div className='h-8' />
           {TIMETABLE_TIMESLOTS.map((time) => (
             <div
               key={time}
-              className='relative flex h-12 items-center justify-end pr-2 text-xs text-white lg:text-sm'
+              className={`relative flex h-12 items-center justify-end pr-2 text-xs text-white lg:text-sm`}
             >
               {time}
               {/* White connecting line */}

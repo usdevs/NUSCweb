@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
 import { ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
 
 interface DropdownItem {
   label: string;
@@ -57,16 +57,16 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ label, items }) => {
       >
         {label}
         <ChevronDown
-          className={`h-4 w-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+          className={`h-4 w-4 transition-transform duration-300 ${isOpen ? `rotate-180` : ''}`}
         />
       </button>
 
       {isOpen && (
-        <div className='absolute left-0 top-full z-9999 h-6 w-full'></div>
+        <div className='absolute top-full left-0 z-9999 h-6 w-full'></div>
       )}
 
       <div
-        className={`fixed left-1/2 top-[calc(100%+4px)] z-9999 w-40 origin-top -translate-x-1/2 transform overflow-hidden rounded-md bg-white shadow-lg transition-all duration-300 md:absolute ${
+        className={`fixed top-[calc(100%+4px)] left-1/2 z-9999 w-40 origin-top -translate-x-1/2 transform overflow-hidden rounded-md bg-white shadow-lg transition-all duration-300 md:absolute ${
           isOpen
             ? 'scale-y-100 opacity-100'
             : 'pointer-events-none scale-y-0 opacity-0'
@@ -79,7 +79,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ label, items }) => {
           {items.map((item, index) => (
             <li
               key={index}
-              className='text-center transition-colors duration-200 hover:bg-gray-100'
+              className={`text-center transition-colors duration-200 hover:bg-gray-100`}
             >
               <Link
                 href={item.href}

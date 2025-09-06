@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+
+import ShowIGModal from '@/components/show-ig-modal';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import ShowIGModal from '@/components/show-ig-modal';
 
 interface OrganisationWithIGHead {
   id: string;
@@ -162,9 +163,13 @@ export default function StudentGroupsPage() {
 
   if (loading) {
     return (
-      <div className='flex min-h-[calc(100vh-160px)] items-center justify-center'>
+      <div
+        className={`flex min-h-[calc(100vh-160px)] items-center justify-center`}
+      >
         <div className='text-center'>
-          <div className='mx-auto mb-4 h-32 w-32 animate-spin rounded-full border-b-2 border-[#FF7D4E]'></div>
+          <div
+            className={`mx-auto mb-4 h-32 w-32 animate-spin rounded-full border-b-2 border-[#FF7D4E]`}
+          ></div>
           <p className='text-gray-600'>Loading student groups...</p>
         </div>
       </div>
@@ -173,14 +178,16 @@ export default function StudentGroupsPage() {
 
   if (error) {
     return (
-      <div className='flex min-h-[calc(100vh-160px)] items-center justify-center'>
+      <div
+        className={`flex min-h-[calc(100vh-160px)] items-center justify-center`}
+      >
         <div className='text-center'>
           <p className='mb-4 text-red-600'>
             Error loading student groups: {error}
           </p>
           <Button
             onClick={() => window.location.reload()}
-            className='bg-[#FF7D4E] hover:bg-[#FF7D4E]/90'
+            className={`bg-[#FF7D4E] hover:bg-[#FF7D4E]/90`}
           >
             Retry
           </Button>
@@ -199,7 +206,7 @@ export default function StudentGroupsPage() {
               Copy link to...
             </h3>
             <Button
-              className='ml-3 rounded-md bg-[#FF7D4E] p-6 text-sm text-white hover:bg-[#FF7D4E]/90'
+              className={`ml-3 rounded-md bg-[#FF7D4E] p-6 text-sm text-white hover:bg-[#FF7D4E]/90`}
               onClick={() => {
                 navigator.clipboard.writeText('https://t.me/+Mm3qL3aL7c0zNDE1');
               }}
@@ -273,28 +280,38 @@ export default function StudentGroupsPage() {
             </div>
           ) : (
             <>
-              <div className='mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+              <div
+                className={`mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3`}
+              >
                 {paginateArray(page).map((group) => (
                   <div
                     key={group.id}
                     className='relative rounded-lg bg-white p-6'
                   >
                     {group.hasVerified && (
-                      <div className='absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-purple-600'>
+                      <div
+                        className={`absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-purple-600`}
+                      >
                         <span className='text-sm font-bold text-white'>V</span>
                       </div>
                     )}
 
                     {group.isInactive && (
-                      <div className='absolute left-2 top-2 rounded bg-gray-500 px-2 py-1 text-xs text-white'>
+                      <div
+                        className={`absolute top-2 left-2 rounded bg-gray-500 px-2 py-1 text-xs text-white`}
+                      >
                         INACTIVE
                       </div>
                     )}
 
-                    <h3 className='mb-3 text-center text-xl font-bold text-gray-900'>
+                    <h3
+                      className={`mb-3 text-center text-xl font-bold text-gray-900`}
+                    >
                       {group.name}
                     </h3>
-                    <p className='mb-4 line-clamp-6 text-sm leading-relaxed text-[#A1A1A1]'>
+                    <p
+                      className={`mb-4 line-clamp-6 text-sm leading-relaxed text-[#A1A1A1]`}
+                    >
                       {group.description || 'No description available.'}
                     </p>
 
@@ -310,7 +327,7 @@ export default function StudentGroupsPage() {
                       <Button
                         variant='outline'
                         size='sm'
-                        className='border-[#0C2C47] bg-[#0C2C47] px-6 py-1 text-xs text-white hover:bg-[#0C2C47]/90'
+                        className={`border-[#0C2C47] bg-[#0C2C47] px-6 py-1 text-xs text-white hover:bg-[#0C2C47]/90`}
                         onClick={() => handleShowMore(group)}
                       >
                         SHOW MORE
@@ -318,7 +335,7 @@ export default function StudentGroupsPage() {
                       {group.inviteLink ? (
                         <Button
                           size='sm'
-                          className='bg-[#FF7D4E] px-4 py-1 text-xs text-white hover:bg-[#FF7D4E]/90'
+                          className={`bg-[#FF7D4E] px-4 py-1 text-xs text-white hover:bg-[#FF7D4E]/90`}
                           onClick={() =>
                             window.open(group.inviteLink, '_blank')
                           }
@@ -328,7 +345,7 @@ export default function StudentGroupsPage() {
                       ) : (
                         <Button
                           size='sm'
-                          className='cursor-not-allowed bg-gray-400 px-3 py-1 text-xs text-white'
+                          className={`cursor-not-allowed bg-gray-400 px-3 py-1 text-xs text-white`}
                           disabled
                         >
                           NO GROUP LINK
@@ -345,7 +362,7 @@ export default function StudentGroupsPage() {
                   <Button
                     variant='ghost'
                     size='sm'
-                    className='text-white hover:bg-white/10 hover:text-white/80'
+                    className={`text-white hover:bg-white/10 hover:text-white/80`}
                     onClick={() => setPage(1)}
                     disabled={page === 1}
                   >
@@ -354,7 +371,7 @@ export default function StudentGroupsPage() {
                   <Button
                     variant='ghost'
                     size='sm'
-                    className='text-white hover:bg-white/10 hover:text-white/80'
+                    className={`text-white hover:bg-white/10 hover:text-white/80`}
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
                   >
@@ -380,8 +397,8 @@ export default function StudentGroupsPage() {
                         variant={page === pageNumber ? 'default' : 'ghost'}
                         className={
                           page === pageNumber
-                            ? 'min-w-[32px] bg-white text-[#0C2C47] hover:bg-white/90'
-                            : 'min-w-[32px] text-white hover:bg-white/10 hover:text-white/80'
+                            ? `min-w-[32px] bg-white text-[#0C2C47] hover:bg-white/90`
+                            : `min-w-[32px] text-white hover:bg-white/10 hover:text-white/80`
                         }
                         onClick={() => setPage(pageNumber)}
                       >
@@ -393,7 +410,7 @@ export default function StudentGroupsPage() {
                   <Button
                     variant='ghost'
                     size='sm'
-                    className='text-white hover:bg-white/10 hover:text-white/80'
+                    className={`text-white hover:bg-white/10 hover:text-white/80`}
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
                   >
@@ -402,7 +419,7 @@ export default function StudentGroupsPage() {
                   <Button
                     variant='ghost'
                     size='sm'
-                    className='text-white hover:bg-white/10 hover:text-white/80'
+                    className={`text-white hover:bg-white/10 hover:text-white/80`}
                     onClick={() => setPage(totalPages)}
                     disabled={page === totalPages}
                   >

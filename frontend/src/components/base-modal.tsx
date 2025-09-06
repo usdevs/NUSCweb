@@ -1,7 +1,8 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+
+import { Button } from '@/components/ui/button';
 
 interface BaseModalProps {
   isOpen: boolean;
@@ -34,27 +35,31 @@ export default function BaseModal({
     <div className='fixed inset-0 z-50 overflow-y-auto'>
       {/* Backdrop overlay */}
       <div
-        className='fixed inset-0 bg-black bg-opacity-50'
+        className='bg-opacity-50 fixed inset-0 bg-black'
         onClick={onClose}
       ></div>
 
       {/* Modal content */}
-      <div className='relative flex min-h-screen items-center justify-center p-4'>
+      <div
+        className={`relative flex min-h-screen items-center justify-center p-4`}
+      >
         <div
           role='dialog'
           aria-modal='true'
-          className='relative w-full max-w-md overflow-hidden rounded-[20px] bg-white shadow-lg'
+          className={`relative w-full max-w-md overflow-hidden rounded-[20px] bg-white shadow-lg`}
         >
           <VisuallyHidden>
             <h2 id='dialog-title'>{title}</h2>
           </VisuallyHidden>
 
           {/* Header */}
-          <div className='flex items-center justify-between bg-[#0C2C47] p-4 px-6 text-white'>
+          <div
+            className={`flex items-center justify-between bg-[#0C2C47] p-4 px-6 text-white`}
+          >
             <h2 className='text-sm font-semibold'>{title}</h2>
             <button
               onClick={onClose}
-              className='text-white hover:text-gray-200'
+              className={`text-white hover:text-gray-200`}
               aria-label='Close'
             >
               <svg
@@ -84,7 +89,7 @@ export default function BaseModal({
                 <Button
                   variant='destructive'
                   size='icon'
-                  className='rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90'
+                  className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
                   onClick={onDelete}
                 >
                   <svg
@@ -113,13 +118,13 @@ export default function BaseModal({
                 <Button
                   variant='outline'
                   onClick={onClose}
-                  className='h-8 rounded-[5px] border-gray-300 px-4 text-xs text-gray-700'
+                  className={`h-8 rounded-[5px] border-gray-300 px-4 text-xs text-gray-700`}
                 >
                   {cancelLabel}
                 </Button>
                 {onSubmit && (
                   <Button
-                    className='h-8 rounded-[5px] border-none bg-[#FF7D4E] px-4 text-xs text-white hover:bg-[#FF7D4E]/90'
+                    className={`h-8 rounded-[5px] border-none bg-[#FF7D4E] px-4 text-xs text-white hover:bg-[#FF7D4E]/90`}
                     onClick={onSubmit}
                     disabled={isSubmitDisabled}
                   >

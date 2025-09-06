@@ -1,26 +1,27 @@
 'use client';
 
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { addHours } from 'date-fns';
-import { useState, useEffect, useActionState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useActionState, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod/v4';
 
 import { Calendar } from '@/components/ui/calendar';
-import { getNext30Minutes } from '@/lib/utils/client/time';
-import type { BookingView } from '@/lib/utils/server/bookings';
+import VenuesTimetable from '@/components/venue/VenuesTimetable';
 import {
   createBooking,
   deleteBooking,
   editBooking,
 } from '@/lib/actions/booking';
-import type { VenueView } from '@/lib/utils/server/venues';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod/v4';
-import { NewBookingSchema } from '@/lib/schema/booking';
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { toast } from 'sonner';
+import { NewBookingSchema } from '@/lib/schema/booking';
+import { getNext30Minutes } from '@/lib/utils/client/time';
+import type { BookingView } from '@/lib/utils/server/bookings';
+import type { VenueView } from '@/lib/utils/server/venues';
+
 import BookingModal from './BookingModal';
-import VenuesTimetable from '../venue/VenuesTimetable';
 
 interface BookingsProp {
   bookings: BookingView[];
@@ -194,10 +195,10 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
   }, []);
 
   return (
-    <div className='flex flex-col bg-[#0C2C47] lg:flex-row'>
+    <div className={`flex flex-col bg-[#0C2C47] lg:flex-row`}>
       {/* Calendar - Hidden on mobile */}
       {/* TODO: How do mobile people select dates? */}
-      <div className='hidden w-72 rounded-lg bg-white p-4 lg:block'>
+      <div className={`hidden w-72 rounded-lg bg-white p-4 lg:block`}>
         <Calendar
           mode='single'
           selected={date}

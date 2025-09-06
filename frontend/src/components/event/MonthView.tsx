@@ -6,6 +6,7 @@ import {
   startOfMonth,
   startOfWeek,
 } from 'date-fns';
+
 import type { Event } from '@/app/events/page';
 
 const today = new Date();
@@ -49,7 +50,7 @@ export default function MonthView({
         {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((day) => (
           <div
             key={day}
-            className='rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-base font-bold text-[#0C2C47]'
+            className={`rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-base font-bold text-[#0C2C47]`}
           >
             {day}
           </div>
@@ -103,14 +104,14 @@ export default function MonthView({
                   }
                 }}
               >
-                <div className='day-content pointer-events-none'>
+                <div className='pointer-events-none'>
                   {(() => {
                     const isToday = isSameDay(day, today);
                     return (
                       <div
                         className={`mb-2 text-base font-bold ${
                           isToday
-                            ? 'flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7D4E] text-white'
+                            ? `flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7D4E] text-white`
                             : 'text-[#0C2C47]'
                         }`}
                       >
@@ -122,7 +123,7 @@ export default function MonthView({
                     {dayEvents.slice(0, maxEventsToShow).map((event) => (
                       <div
                         key={event.id}
-                        className='flex cursor-pointer items-center gap-2 text-xs'
+                        className={`flex cursor-pointer items-center gap-2 text-xs`}
                         onClick={(e) => {
                           e.stopPropagation();
                           handleEventClick(event);
@@ -138,7 +139,7 @@ export default function MonthView({
                     ))}
                     {hasMoreEvents && (
                       <button
-                        className='w-full rounded bg-gray-300 px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-400'
+                        className={`w-full rounded bg-gray-300 px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-400`}
                         onClick={(e) => {
                           e.stopPropagation();
                           handleShowMore(day);

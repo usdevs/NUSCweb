@@ -1,6 +1,7 @@
-import type { BookingView } from '@/lib/utils/server/bookings';
 import { format } from 'date-fns';
-import { Calendar, User, Clock, MapPin } from 'lucide-react';
+import { Calendar, Clock, MapPin, User } from 'lucide-react';
+
+import type { BookingView } from '@/lib/utils/server/bookings';
 
 interface BookingCardProps {
   booking: BookingView;
@@ -8,7 +9,9 @@ interface BookingCardProps {
 
 const BookingCard: React.FC<BookingCardProps> = ({ booking }) => {
   return (
-    <div className='max-w-[260px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl'>
+    <div
+      className={`max-w-[260px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl`}
+    >
       {/* Card Header */}
       <div className='flex items-start gap-3 bg-[#0C2C47] p-3 text-white'>
         <Calendar className='mt-1 h-5 w-5 shrink-0' />

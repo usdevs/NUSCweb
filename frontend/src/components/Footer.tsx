@@ -1,11 +1,12 @@
-import Image from 'next/image';
 import { Instagram } from 'lucide-react';
+import Image from 'next/image';
+
 import { Button } from '@/components/ui/button';
 
 export default function Footer() {
   return (
     <footer className='bg-[#0C2C47] px-8 py-4 text-white'>
-      <div className='max-w-8xl mx-auto flex items-center justify-between'>
+      <div className='mx-auto flex items-center justify-between'>
         <div className='flex space-x-4'>
           <Button variant='ghost' size='icon' className='p-0' asChild>
             <a
@@ -24,7 +25,7 @@ export default function Footer() {
           <Button
             variant='ghost'
             size='icon'
-            className='text-white hover:text-white/80'
+            className={`text-white hover:text-white/80`}
             asChild
           >
             <a
@@ -38,7 +39,7 @@ export default function Footer() {
         </div>
         <Button
           variant='outline'
-          className='rounded-[5px] border-[#FF7D4E] bg-[#FF7D4E] text-white hover:border-[#FF7D4E]/90 hover:bg-[#FF7D4E]/90 hover:text-white/90'
+          className={`rounded-[5px] border-[#FF7D4E] bg-[#FF7D4E] text-white hover:border-[#FF7D4E]/90 hover:bg-[#FF7D4E]/90 hover:text-white/90`}
         >
           REPORT A BUG
         </Button>

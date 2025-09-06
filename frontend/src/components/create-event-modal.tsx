@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import BaseModal from '@/components/base-modal';
 import FormField from '@/components/form-field';
 import {
-  EVENT_ORGANIZATION_OPTIONS,
   EVENT_CATEGORY_NAMES,
+  EVENT_ORGANIZATION_OPTIONS,
   EVENT_VENUE_OPTIONS,
 } from '@/lib/formOptions';
 

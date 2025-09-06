@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+
 import { Calendar } from '@/components/ui/calendar';
 
 interface Option {
@@ -65,7 +66,7 @@ export default function FormField({
         <input
           id={fieldId}
           type='checkbox'
-          className='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500'
+          className={`h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500`}
           checked={typeof value === 'boolean' ? value : false}
           onChange={(e) => onChange(e.target.checked)}
           disabled={disabled}
@@ -87,7 +88,7 @@ export default function FormField({
           <input
             id={fieldId}
             type='text'
-            className={`flex h-6 ${type === 'time' ? 'w-6/12' : 'w-full'} rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring ${typeof value === 'string' && value ? '' : 'text-gray-500'}`}
+            className={`flex h-6 ${type === 'time' ? 'w-6/12' : 'w-full'} rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden ${typeof value === 'string' && value ? '' : `text-gray-500`}`}
             value={typeof value === 'string' ? value : ''}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
@@ -97,7 +98,7 @@ export default function FormField({
           {type === 'time' && (
             <button
               type='button'
-              className='ml-2 text-gray-400 hover:text-gray-500'
+              className={`ml-2 text-gray-400 hover:text-gray-500`}
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -121,7 +122,7 @@ export default function FormField({
         <div className='relative'>
           <select
             id={fieldId}
-            className={`flex h-6 w-full appearance-none rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring ${typeof value === 'string' && value ? '' : 'text-gray-500'}`}
+            className={`flex h-6 w-full appearance-none rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden ${typeof value === 'string' && value ? '' : `text-gray-500`}`}
             value={typeof value === 'string' ? value : ''}
             onChange={(e) => onChange(e.target.value)}
             disabled={disabled}
@@ -142,7 +143,9 @@ export default function FormField({
               ),
             )}
           </select>
-          <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
+          <div
+            className={`pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700`}
+          >
             <svg
               className='h-4 w-4 fill-current'
               xmlns='http://www.w3.org/2000/svg'
@@ -158,7 +161,7 @@ export default function FormField({
           <input
             id={fieldId}
             type='text'
-            className='flex h-6 w-8/12 rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs text-gray-500 focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring'
+            className={`flex h-6 w-8/12 rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs text-gray-500 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden`}
             value={formatDateForDisplay(getDateValue())}
             readOnly
             placeholder={placeholder || 'Select date'}
@@ -168,7 +171,7 @@ export default function FormField({
           />
           <button
             type='button'
-            className='ml-2 text-gray-400 hover:text-gray-500'
+            className={`ml-2 text-gray-400 hover:text-gray-500`}
             onClick={() => setIsCalendarOpen(!isCalendarOpen)}
             disabled={disabled}
           >
@@ -190,7 +193,9 @@ export default function FormField({
             </svg>
           </button>
           {isCalendarOpen && (
-            <div className='absolute left-1/4 top-48 z-10 mt-1 rounded-md border bg-white shadow-lg'>
+            <div
+              className={`absolute top-48 left-1/4 z-10 mt-1 rounded-md border bg-white shadow-lg`}
+            >
               <Calendar
                 mode='single'
                 selected={getDateValue()}

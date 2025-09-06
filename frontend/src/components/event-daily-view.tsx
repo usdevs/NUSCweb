@@ -1,8 +1,9 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { X, User, Clock, MapPin } from 'lucide-react';
 import { format } from 'date-fns';
+import { Clock, MapPin, User, X } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 interface Event {
   id: number;
@@ -38,22 +39,28 @@ export default function EventDailyView({
     <div className='fixed inset-0 z-50 overflow-y-auto'>
       {/* Backdrop overlay */}
       <div
-        className='fixed inset-0 bg-black bg-opacity-50'
+        className='bg-opacity-50 fixed inset-0 bg-black'
         onClick={onClose}
       ></div>
 
       {/* Modal content */}
-      <div className='relative flex min-h-screen items-center justify-center p-4'>
-        <div className='relative w-full max-w-sm overflow-hidden rounded-[20px] bg-[#0C2C47] p-6 shadow-lg'>
+      <div
+        className={`relative flex min-h-screen items-center justify-center p-4`}
+      >
+        <div
+          className={`relative w-full max-w-sm overflow-hidden rounded-[20px] bg-[#0C2C47] p-6 shadow-lg`}
+        >
           {/* Header */}
-          <div className='flex items-center justify-between bg-[#0C2C47] px-4 text-white'>
+          <div
+            className={`flex items-center justify-between bg-[#0C2C47] px-4 text-white`}
+          >
             <h2 className='text-sm font-semibold'>
               {format(date, 'd MMMM').toUpperCase()} EVENTS
             </h2>
             <Button
               variant='ghost'
               size='icon'
-              className='h-6 w-6 text-white hover:text-white/80'
+              className={`h-6 w-6 text-white hover:text-white/80`}
               onClick={onClose}
             >
               <X className='h-4 w-4' />

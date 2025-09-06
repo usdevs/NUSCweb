@@ -1,11 +1,13 @@
 'use client';
 
+import { format } from 'date-fns';
+import { Dispatch, SetStateAction } from 'react';
+
 import { TIMETABLE_TIMESLOTS } from '@/lib/formOptions';
 import { timeToIndex } from '@/lib/utils/client';
 import type { BookingView } from '@/lib/utils/server/bookings';
 import type { VenueView } from '@/lib/utils/server/venues';
-import { format, isSameDay } from 'date-fns';
-import { Dispatch, Fragment, SetStateAction } from 'react';
+
 import type { DragPosition } from './VenuesTimetable';
 
 interface VenueTimetableProps {
@@ -59,7 +61,9 @@ export default function VenueTimetable({
   return (
     <div className='min-w-[200px] flex-1 overflow-hidden rounded-lg'>
       {/* Room header */}
-      <div className='flex h-14 items-center justify-center rounded-tl-3xl rounded-tr-3xl border-b bg-white p-2 text-center text-sm font-medium whitespace-normal text-[#0C2C47]'>
+      <div
+        className={`flex h-14 items-center justify-center rounded-tl-3xl rounded-tr-3xl border-b bg-white p-2 text-center text-sm font-medium whitespace-normal text-[#0C2C47]`}
+      >
         {venue.name}
       </div>
 
@@ -94,7 +98,7 @@ export default function VenueTimetable({
             return (
               <div
                 key={`${venue.id}-${time}`}
-                className={`relative h-12 cursor-cell p-2 ${isSelected ? 'bg-blue-200' : 'bg-white'}`}
+                className={`relative h-12 cursor-cell p-2 ${isSelected ? `bg-blue-200` : `bg-white`}`}
                 onMouseDown={() => handleMouseDown(time)}
                 onMouseMove={() => handleMouseMove(time)}
               />

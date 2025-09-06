@@ -1,30 +1,30 @@
 'use client';
 
-import Cookies from 'js-cookie';
 import { LoginButton } from '@telegram-auth/react';
-import { useState } from 'react';
+import Cookies from 'js-cookie';
+import { ChevronDown, ChevronRight, Menu, Send } from 'lucide-react';
 import Link from 'next/link';
-import { Menu, ChevronDown, ChevronRight, Send } from 'lucide-react';
+import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from '@/components/ui/sheet';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import CustomDropdown from './custom-dropdown';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { NavigationMenuContent } from '@radix-ui/react-navigation-menu';
+
+import CustomDropdown from './custom-dropdown';
 
 export default function Header() {
   const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(false);
@@ -35,7 +35,9 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-100 border-b bg-white shadow-lg ${isSidebarOpen ? 'hidden lg:block' : 'block'}`}
+      className={`sticky top-0 z-100 border-b bg-white shadow-lg ${
+        isSidebarOpen ? `hidden lg:block` : `block`
+      }`}
     >
       <div className='flex items-center justify-between px-4 py-2'>
         {/* Mobile Menu */}
@@ -160,7 +162,7 @@ export default function Header() {
         </div>
 
         {/* Desktop Menu */}
-        <div className='hidden lg:block'>
+        <div className={`hidden lg:block`}>
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
@@ -208,7 +210,7 @@ export default function Header() {
         {/* Right side buttons */}
         <div className='flex items-center gap-4'>
           {/* Admin dropdown for logged in users */}
-          <div className='hidden lg:flex'>
+          <div className={`hidden lg:flex`}>
             {isLoggedIn && (
               <CustomDropdown
                 label='ADMIN'

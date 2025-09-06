@@ -1,8 +1,8 @@
+import Bookings from '@/components/booking/Bookings';
+import { getAuthCookie } from '@/lib/auth/server';
 import prisma from '@/lib/prisma';
-import Bookings from '../../components/booking/Bookings';
 import { getBookings } from '@/lib/utils/server/bookings';
 import { getVenues } from '@/lib/utils/server/venues';
-import { getAuthCookie } from '@/lib/auth/server';
 
 export default async function BookingsPage() {
   const [authCookie, bookings, venues] = await Promise.all([
