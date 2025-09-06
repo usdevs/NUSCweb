@@ -87,7 +87,7 @@ export default function FormField({
           <input
             id={fieldId}
             type='text'
-            className={`flex h-6 ${type === 'time' ? 'w-6/12' : 'w-full'} rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${typeof value === 'string' && value ? '' : 'text-gray-500'}`}
+            className={`flex h-6 ${type === 'time' ? 'w-6/12' : 'w-full'} rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring ${typeof value === 'string' && value ? '' : 'text-gray-500'}`}
             value={typeof value === 'string' ? value : ''}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
@@ -121,7 +121,7 @@ export default function FormField({
         <div className='relative'>
           <select
             id={fieldId}
-            className={`flex h-6 w-full appearance-none rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${typeof value === 'string' && value ? '' : 'text-gray-500'}`}
+            className={`flex h-6 w-full appearance-none rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring ${typeof value === 'string' && value ? '' : 'text-gray-500'}`}
             value={typeof value === 'string' ? value : ''}
             onChange={(e) => onChange(e.target.value)}
             disabled={disabled}
@@ -158,7 +158,7 @@ export default function FormField({
           <input
             id={fieldId}
             type='text'
-            className='flex h-6 w-8/12 rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs text-gray-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring'
+            className='flex h-6 w-8/12 rounded-[5px] border border-input border-stone-400 bg-transparent px-3 py-1 text-xs text-gray-500 focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring'
             value={formatDateForDisplay(getDateValue())}
             readOnly
             placeholder={placeholder || 'Select date'}

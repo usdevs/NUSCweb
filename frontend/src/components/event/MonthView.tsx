@@ -129,7 +129,7 @@ export default function MonthView({
                         }}
                       >
                         <div
-                          className={`h-2 w-2 rounded-full ${getCategoryBgColor(event.category)} flex-shrink-0`}
+                          className={`h-2 w-2 rounded-full ${getCategoryBgColor(event.category)} shrink-0`}
                         ></div>
                         <span className='truncate font-medium text-[#0C2C47]'>
                           {event.eventName}

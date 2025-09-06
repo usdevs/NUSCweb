@@ -62,11 +62,11 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ label, items }) => {
       </button>
 
       {isOpen && (
-        <div className='absolute left-0 top-full z-[9999] h-6 w-full'></div>
+        <div className='absolute left-0 top-full z-9999 h-6 w-full'></div>
       )}
 
       <div
-        className={`fixed left-1/2 top-[calc(100%+4px)] z-[9999] w-40 origin-top -translate-x-1/2 transform overflow-hidden rounded-md bg-white shadow-lg transition-all duration-300 md:absolute ${
+        className={`fixed left-1/2 top-[calc(100%+4px)] z-9999 w-40 origin-top -translate-x-1/2 transform overflow-hidden rounded-md bg-white shadow-lg transition-all duration-300 md:absolute ${
           isOpen
             ? 'scale-y-100 opacity-100'
             : 'pointer-events-none scale-y-0 opacity-0'

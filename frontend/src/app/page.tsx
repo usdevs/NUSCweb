@@ -14,11 +14,11 @@ export default function HomePage() {
             className='h-full w-full object-cover'
             priority
           />
-          <div className='absolute inset-0 bg-gradient-to-b from-[rgba(29,107,173,0)] to-[#0C2C47]'></div>
+          <div className='absolute inset-0 bg-linear-to-b from-[rgba(29,107,173,0)] to-[#0C2C47]'></div>
         </div>
         <div className='relative z-10 flex h-full items-center justify-center px-8'>
           <div className='flex flex-col items-center gap-16 md:flex-row'>
-            <div className='order-first md:order-none'>
+            <div className='order-first md:order-0'>
               <Image
                 src='/images/mascot.png'
                 alt='College mascot'

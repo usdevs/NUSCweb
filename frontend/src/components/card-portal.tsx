@@ -18,7 +18,7 @@ const CardPortal: React.FC<CardPortalProps> = ({ children }) => {
   if (!mounted) return null;
 
   return createPortal(
-    <div className='pointer-events-none fixed z-[9999]'>{children}</div>,
+    <div className='pointer-events-none fixed z-9999'>{children}</div>,
     document.body,
   );
 };

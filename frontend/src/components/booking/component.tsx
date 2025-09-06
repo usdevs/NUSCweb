@@ -279,7 +279,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
     <>
       {/* Warning */}
       {showClashWarning && (
-        <div className='animate-fadeIn fixed inset-x-0 top-20 z-[9999] bg-[#FFE9E3] px-3 py-4 text-center text-sm font-medium text-[#FF7D4E] shadow-lg'>
+        <div className='animate-fadeIn fixed inset-x-0 top-20 z-9999 bg-[#FFE9E3] px-3 py-4 text-center text-sm font-medium text-[#FF7D4E] shadow-lg'>
           THERE IS A CLASH IN BOOKINGS. PLEASE SELECT A DIFFERENT VENUE OR
           TIMING & RESUBMIT.
         </div>

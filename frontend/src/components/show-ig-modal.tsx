@@ -107,7 +107,7 @@ export default function ShowIGModal({ isOpen, onClose, organisation }: ShowIGMod
             <select
               value={selectedIGHead}
               onChange={(e) => setSelectedIGHead(e.target.value)}
-              className="w-full p-3 bg-white border border-gray-300 rounded-md text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-3 bg-white border border-gray-300 rounded-md text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Select an IG Head</option>
               {igHeads.map((head) => (

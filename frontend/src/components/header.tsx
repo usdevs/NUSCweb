@@ -33,7 +33,7 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-[100] border-b bg-white shadow-lg ${isSidebarOpen ? 'hidden lg:block' : 'block'}`}
+      className={`sticky top-0 z-100 border-b bg-white shadow-lg ${isSidebarOpen ? 'hidden lg:block' : 'block'}`}
     >
       <div className='flex items-center justify-between px-4 py-2'>
         {/* Mobile Menu */}
