@@ -1,7 +1,8 @@
 'use client';
 
 import { TIMETABLE_TIMESLOTS } from '@/lib/formOptions';
-import { dateTo12Hour, timeToIndex } from '@/lib/utils';
+import { timeToIndex } from '@/lib/utils';
+import { dateTo12Hour } from '@/lib/utils/time';
 import type { BookingView } from '@/lib/utils/bookings';
 import type { VenueView } from '@/lib/utils/venues';
 import { isSameDay } from 'date-fns';

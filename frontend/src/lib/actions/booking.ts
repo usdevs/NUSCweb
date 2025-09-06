@@ -3,13 +3,15 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod/v4';
 
+import { getAuthCookie, hasOrgPerms } from '@/lib/auth/server';
 import prisma from '@/lib/prisma';
-import { cookies } from 'next/headers';
-import { validateCookie } from '@/lib/utils/jwt';
-import { NewBookingSchema } from '../schema/booking';
+import {
+  DeleteBookingSchema,
+  EditBookingSchema,
+  NewBookingSchema,
+} from '@/lib/schema/booking';
 
 // TODO: Check for sufficient permissions before creating/editing/deleting
-// TODO: Abstract token checking to separate function
 
 type CreateBookingState = {
   success: boolean;
@@ -20,22 +22,11 @@ export const createBooking = async (
   _prevState: CreateBookingState,
   formData: FormData,
 ): Promise<CreateBookingState> => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('auth');
+  const token = await getAuthCookie();
   if (!token) {
     return {
       success: false,
-      message: 'Please log in!',
-    };
-  }
-  try {
-    validateCookie(token.value);
-  } catch {
-    // Invalid cookie, or expired
-    cookieStore.delete('auth');
-    return {
-      success: false,
-      message: 'Please log in!',
+      message: 'Please login!',
     };
   }
 
@@ -55,18 +46,32 @@ export const createBooking = async (
     };
   }
 
+  // Ensure user has the permissions for the corresponding organisation
+  if (!hasOrgPerms(token, data.organizationId)) {
+    return {
+      success: false,
+      message: 'You do not belong to the organisation!',
+    };
+  }
+
   try {
     await prisma.booking.create({
       data: {
         eventName: data.eventName,
+        venueId: data.venueId,
+        userId: token.userId,
+        userOrgId: data.organizationId,
+        bookedForOrgId: data.organizationId,
         start: data.startTime,
         end: data.endTime,
+        isEvent: data.addToCalendar,
       },
     });
-  } catch {
+  } catch (error) {
+    console.error(error);
     return {
       success: false,
-      message: 'Booking creation failed',
+      message: 'Error creating booking!',
     };
   }
 
@@ -74,7 +79,7 @@ export const createBooking = async (
 
   return {
     success: true,
-    message: 'Booking created!',
+    message: 'Successfully created booking!',
   };
 };
 
@@ -87,22 +92,75 @@ export const editBooking = async (
   _prevState: EditBookingState,
   formData: FormData,
 ): Promise<EditBookingState> => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('auth');
+  const token = await getAuthCookie();
   if (!token) {
     return {
       success: false,
-      message: 'Please log in!',
+      message: 'Please login!',
     };
   }
+
+  let data;
   try {
-    validateCookie(token.value);
-  } catch {
-    // Invalid cookie, or expired
-    cookieStore.delete('auth');
+    data = EditBookingSchema.parse(Object.fromEntries(formData));
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        message: z.prettifyError(error),
+      };
+    }
     return {
       success: false,
-      message: 'Please log in!',
+      message: 'Unknown error occurred. Please contact admin.',
+    };
+  }
+
+  const origBooking = await prisma.booking.findUnique({
+    where: {
+      id: data.id,
+    },
+  });
+
+  if (!origBooking) {
+    return {
+      success: false,
+      message: 'Invalid booking!',
+    };
+  }
+
+  // Ensure user has the permissions for the corresponding organisation
+  if (
+    !hasOrgPerms(token, data.organizationId) ||
+    !hasOrgPerms(token, origBooking.bookedForOrgId)
+  ) {
+    return {
+      success: false,
+      message: 'You do not belong to the organisation!',
+    };
+  }
+
+  try {
+    await prisma.booking.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        eventName: data.eventName,
+        venueId: data.venueId,
+        userId: token.userId,
+        userOrgId: data.organizationId,
+        bookedForOrgId: data.organizationId,
+        start: data.startTime,
+        end: data.endTime,
+        isEvent: data.addToCalendar,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Error editing booking',
     };
   }
 
@@ -110,33 +168,80 @@ export const editBooking = async (
 
   return {
     success: true,
-    message: 'Booking edited!',
+    message: 'Successfully edited booking!',
   };
 };
 
-export const deleteBooking = async (id: number) => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('auth');
+type DeleteBookingState = {
+  success: boolean;
+  message: string;
+} | null;
+
+export const deleteBooking = async (
+  _prevState: DeleteBookingState,
+  formData: FormData,
+): Promise<DeleteBookingState> => {
+  const token = await getAuthCookie();
   if (!token) {
     return {
       success: false,
-      message: 'Please log in!',
+      message: 'Please login!',
     };
   }
+
+  let data;
   try {
-    validateCookie(token.value);
-  } catch {
-    // Invalid cookie, or expired
-    cookieStore.delete('auth');
+    data = DeleteBookingSchema.parse(Object.fromEntries(formData));
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        message: z.prettifyError(error),
+      };
+    }
     return {
       success: false,
-      message: 'Please log in!',
+      message: 'Unknown error occurred. Please contact admin.',
     };
   }
 
-  await prisma.booking.delete({
-    where: { id },
+  const origBooking = await prisma.booking.findUnique({
+    where: {
+      id: data.id,
+    },
   });
 
+  if (!origBooking) {
+    return {
+      success: false,
+      message: 'Invalid booking!',
+    };
+  }
+
+  // Ensure user has the permissions for the corresponding organisation
+  if (!hasOrgPerms(token, origBooking.bookedForOrgId)) {
+    return {
+      success: false,
+      message: 'You do not belong to the organisation!',
+    };
+  }
+
+  try {
+    await prisma.booking.delete({
+      where: { id: data.id },
+    });
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Error deleting booking',
+    };
+  }
+
   revalidatePath('/bookings');
+
+  return {
+    success: true,
+    message: 'Successfully deleted booking',
+  };
 };

@@ -2,9 +2,10 @@ import { AuthDataValidator } from '@telegram-auth/server';
 import { urlStrToAuthDataMap } from '@telegram-auth/server/utils';
 import { StatusCodes } from 'http-status-codes';
 import { cookies, headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 import prisma from '@/lib/prisma';
-import { redirect } from 'next/navigation';
+import type AuthCookie from '@/lib/schema/auth';
 import { generateToken } from '@/lib/utils/jwt';
 
 const validator = new AuthDataValidator({ botToken: process.env.BOT_TOKEN });
@@ -12,28 +13,6 @@ const validator = new AuthDataValidator({ botToken: process.env.BOT_TOKEN });
 const NO_MATCHING_USER_MESSAGE = `You are not authorized to access the NUSC website!
 Note: this may be an issue if you have recently changed your Telegram username without actually having logged into the NUSC website.
 If so, please add your new username via the Admin tab.`;
-
-// const idk = () => {
-//   const { token, orgIds, userCredentials, userId, permissions } = res;
-//   if (userCredentials === undefined) {
-//     throw new Error('Undefined userCredentials received');
-//   }
-//   const userInfo = {
-//     firstName: userCredentials.first_name,
-//     telegramId: userCredentials.id,
-//     photoUrl: userCredentials.photo_url,
-//     username: userCredentials.username,
-//   };
-//   setAuth({
-//     token,
-//     orgIds,
-//     userInfo,
-//     userId,
-//     permissions,
-//     setupTime: new Date(),
-//   });
-//   window.location.reload();
-// };
 
 const generatePermissions = async (userId: number) => {
   const userRoles = await prisma.userOnOrg.findMany({
@@ -50,7 +29,7 @@ const generatePermissions = async (userId: number) => {
   });
 
   const isOverallAdmin = userRoles.some((userRole) => userRole.org.isAdminOrg);
-  const userOrgs = userRoles.map((userRole) => userRole.org.name);
+  const userOrgs = userRoles.map((userRole) => userRole.org);
 
   return {
     userOrgs,
@@ -104,28 +83,14 @@ export async function GET(req: Request) {
     });
   }
 
-  const userOrgs = await prisma.userOnOrg.findMany({
-    where: {
-      userId: userId,
-    },
-    include: {
-      org: {
-        select: {
-          isAdminOrg: true,
-        },
-      },
-    },
-  });
-
   const cookieStore = await cookies();
-  const orgIds = userOrgs.map((userOrg) => userOrg.orgId);
   const permissions = await generatePermissions(userId);
-  const token = generateToken({
+  const authObject: AuthCookie = {
     userCredentials,
-    orgIds,
     userId,
-    permissions,
-  });
+    ...permissions,
+  };
+  const token = generateToken(authObject);
 
   const in1hour = new Date();
   in1hour.setTime(in1hour.getTime() + 60 * 60 * 1000);

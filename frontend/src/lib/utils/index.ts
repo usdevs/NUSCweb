@@ -25,17 +25,3 @@ export const timeToIndex = (time: string): number => {
     return hour;
   }
 };
-
-export const dateTo12Hour = (date: Date): string => {
-  if (!date) return '';
-
-  let hours = date.getHours(); // 0–23
-  const suffix = hours >= 12 ? 'PM' : 'AM';
-
-  hours = hours % 12;
-  if (hours === 0) hours = 12; // handle midnight (0) and noon (12)
-
-  return `${hours}${suffix}`;
-};
-
-export const dateTimeFormatter = Intl.DateTimeFormat('en-SG');

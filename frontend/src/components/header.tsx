@@ -1,5 +1,6 @@
 'use client';
 
+import Cookies from 'js-cookie';
 import { LoginButton } from '@telegram-auth/react';
 import { useState } from 'react';
 import Link from 'next/link';
@@ -212,10 +213,17 @@ export default function Header() {
 
           {/* Login/Logout button */}
           {isLoggedIn ? (
-            <Link href='/' className='flex items-center gap-2'>
+            <Button
+              className='flex items-center gap-2'
+              onClick={() => {
+                Cookies.remove('auth');
+                window.location.reload();
+              }}
+              variant='ghost'
+            >
               <Send className='h-4 w-4' />
               LOGOUT
-            </Link>
+            </Button>
           ) : (
             <LoginButton
               botUsername={process.env.NEXT_PUBLIC_TELEGRAM_LOGIN_BOT!}

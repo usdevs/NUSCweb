@@ -2,13 +2,18 @@ import { z } from 'zod/v4';
 
 export const NewBookingSchema = z.object({
   eventName: z.string().nonempty(),
-  organizationId: z.number().int().positive(),
-  venueId: z.number().int().positive(),
-  startTime: z.date(),
-  endTime: z.date(),
-  addToCalendar: z.boolean(),
+  organizationId: z.coerce.number<number>().int().positive(),
+  venueId: z.coerce.number<number>().int().positive(),
+  startTime: z.coerce.date<Date>(),
+  endTime: z.coerce.date<Date>(),
+  addToCalendar: z.coerce.boolean<boolean>(),
 });
 
-export const EditBookingSchema = NewBookingSchema.extend({
-  id: z.number().int().positive(),
+export const DeleteBookingSchema = z.object({
+  id: z.coerce.number<number>().int().positive(),
+});
+
+export const EditBookingSchema = z.object({
+  ...NewBookingSchema.shape,
+  ...DeleteBookingSchema.shape,
 });
