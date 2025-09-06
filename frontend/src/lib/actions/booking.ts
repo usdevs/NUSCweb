@@ -11,8 +11,6 @@ import {
   NewBookingSchema,
 } from '@/lib/schema/booking';
 
-// TODO: Check for sufficient permissions before creating/editing/deleting
-
 type CreateBookingState = {
   success: boolean;
   message: string;

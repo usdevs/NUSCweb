@@ -2,7 +2,7 @@ import type { JwtPayload } from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 
 import type AuthCookie from '@/lib/schema/auth';
-import { validateCookie } from '@/lib/utils/jwt';
+import { validateCookie } from '@/lib/utils/server/jwt';
 
 export const isOverallAdmin = (authCookie: AuthCookie) =>
   authCookie.isOverallAdmin;

@@ -1,10 +1,10 @@
 'use client';
 
 import { TIMETABLE_TIMESLOTS } from '@/lib/formOptions';
-import { timeToIndex } from '@/lib/utils';
-import { dateTo12Hour } from '@/lib/utils/time';
-import type { BookingView } from '@/lib/utils/bookings';
-import type { VenueView } from '@/lib/utils/venues';
+import { timeToIndex } from '@/lib/utils/client';
+import { dateTo12Hour } from '@/lib/utils/client/time';
+import type { BookingView } from '@/lib/utils/server/bookings';
+import type { VenueView } from '@/lib/utils/server/venues';
 import { isSameDay } from 'date-fns';
 import { Dispatch, Fragment, SetStateAction } from 'react';
 import type { DragPosition } from './component';

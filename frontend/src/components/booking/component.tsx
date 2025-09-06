@@ -7,16 +7,16 @@ import { useSearchParams } from 'next/navigation';
 import { Calendar } from '@/components/ui/calendar';
 import EventCard from '@/components/event-card';
 import CardPortal from '@/components/card-portal';
-import { timeToIndex } from '@/lib/utils';
-import { dateTimeFormatter, getNext30Minutes } from '@/lib/utils/time';
+import { timeToIndex } from '@/lib/utils/client';
+import { dateTimeFormatter, getNext30Minutes } from '@/lib/utils/client/time';
 import { TIMETABLE_TIMESLOTS } from '@/lib/formOptions';
-import type { BookingView } from '@/lib/utils/bookings';
+import type { BookingView } from '@/lib/utils/server/bookings';
 import {
   createBooking,
   deleteBooking,
   editBooking,
 } from '@/lib/actions/booking';
-import type { VenueView } from '@/lib/utils/venues';
+import type { VenueView } from '@/lib/utils/server/venues';
 import VenueTimetable from './VenueTimetable';
 import {
   Dialog,

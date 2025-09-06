@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 
 import prisma from '@/lib/prisma';
 import type AuthCookie from '@/lib/schema/auth';
-import { generateToken } from '@/lib/utils/jwt';
+import { generateToken } from '@/lib/utils/server/jwt';
 
 const validator = new AuthDataValidator({ botToken: process.env.BOT_TOKEN });
 
