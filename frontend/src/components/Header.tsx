@@ -19,10 +19,12 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
+  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import CustomDropdown from './custom-dropdown';
 import { useAuth } from '@/lib/hooks/useAuth';
+import { NavigationMenuContent } from '@radix-ui/react-navigation-menu';
 
 export default function Header() {
   const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(false);
@@ -162,35 +164,42 @@ export default function Header() {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link href='/' legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    <span className='text-orange-500'>NUS COLLEGE CLUB</span>
-                  </NavigationMenuLink>
-                </Link>
+                <NavigationMenuLink
+                  className={navigationMenuTriggerStyle()}
+                  asChild
+                >
+                  <Link href='/' className='text-orange-500'>
+                    NUS COLLEGE CLUB
+                  </Link>
+                </NavigationMenuLink>
               </NavigationMenuItem>
 
-              <CustomDropdown
-                label='STUDENT LIFE'
-                items={[
-                  { label: 'EVENTS', href: '/events' },
-                  { label: 'STUDENT GROUPS', href: '/groups' },
-                  { label: 'VENUE BOOKING', href: '/bookings' },
-                ]}
-              />
+              <NavigationMenuItem>
+                <CustomDropdown
+                  label='STUDENT LIFE'
+                  items={[
+                    { label: 'EVENTS', href: '/events' },
+                    { label: 'STUDENT GROUPS', href: '/groups' },
+                    { label: 'VENUE BOOKING', href: '/bookings' },
+                  ]}
+                />
+              </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link href='/' legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    COURSE REVIEWS
-                  </NavigationMenuLink>
-                </Link>
+                <NavigationMenuLink
+                  className={navigationMenuTriggerStyle()}
+                  asChild
+                >
+                  <Link href='/'>COURSE REVIEWS</Link>
+                </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href='/' legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    NEWSLETTER
-                  </NavigationMenuLink>
-                </Link>
+                <NavigationMenuLink
+                  className={navigationMenuTriggerStyle()}
+                  asChild
+                >
+                  <Link href='/'>NEWSLETTER</Link>
+                </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
