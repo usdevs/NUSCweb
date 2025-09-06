@@ -23,7 +23,7 @@ export default function RootLayout({
         <div className='min-h-screen bg-white'>
           <Header />
           <main>{children}</main>
-          <Toaster richColors />
+          <Toaster richColors position='bottom-center' />
           <div className='mt-auto'>
             <Footer />
           </div>

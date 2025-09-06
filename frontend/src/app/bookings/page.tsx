@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import Bookings from '../../components/booking/component';
+import Bookings from '../../components/booking/Bookings';
 import { getBookings } from '@/lib/utils/server/bookings';
 import { getVenues } from '@/lib/utils/server/venues';
 import { getAuthCookie } from '@/lib/auth/server';

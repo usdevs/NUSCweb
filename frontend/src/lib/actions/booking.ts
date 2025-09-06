@@ -16,6 +16,8 @@ type CreateBookingState = {
   message: string;
 } | null;
 
+// TODO: Check if there are clashes in bookings
+
 export const createBooking = async (
   _prevState: CreateBookingState,
   formData: FormData,
