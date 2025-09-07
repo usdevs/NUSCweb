@@ -56,192 +56,196 @@ export default function Header() {
                 </SheetDescription>
               </SheetHeader>
 
-              <nav className='mt-6 flex flex-col gap-4'>
-                <Link
-                  href='/'
-                  className='font-bold text-orange-500'
-                  onClick={() => setIsSidebarOpen(false)}
-                >
-                  NUS COLLEGE CLUB
-                </Link>
-
-                {/* Student Life */}
-                <div>
-                  <button
-                    className='flex w-full items-center justify-between py-2'
-                    onClick={() => setMobileSubmenuOpen(!mobileSubmenuOpen)}
-                  >
-                    <span>STUDENT LIFE</span>
-                    {mobileSubmenuOpen ? (
-                      <ChevronDown className='h-4 w-4' />
-                    ) : (
-                      <ChevronRight className='h-4 w-4' />
-                    )}
-                  </button>
-
-                  {mobileSubmenuOpen && (
-                    <div className='pl-4'>
-                      <Link
-                        href='/events'
-                        className='block py-1 text-sm'
-                        onClick={() => setIsSidebarOpen(false)}
-                      >
-                        EVENTS
-                      </Link>
+              <NavigationMenu className='mt-6 w-full max-w-full flex-col items-start'>
+                <NavigationMenuList className='flex-col items-start gap-8'>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
                       <Link
                         href='/'
-                        className='block py-1 text-sm'
+                        className='font-bold text-orange-500'
                         onClick={() => setIsSidebarOpen(false)}
                       >
-                        STUDENT GROUPS
+                        NUS COLLEGE CLUB
                       </Link>
-                      <Link
-                        href='/bookings'
-                        className='block py-1 text-sm'
-                        onClick={() => setIsSidebarOpen(false)}
-                      >
-                        VENUE BOOKING
-                      </Link>
-                    </div>
-                  )}
-                </div>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
 
-                <Link
-                  href='/'
-                  className='block py-2'
-                  onClick={() => setIsSidebarOpen(false)}
-                >
-                  COURSE REVIEWS
-                </Link>
-                <Link
-                  href='/'
-                  className='block py-2'
-                  onClick={() => setIsSidebarOpen(false)}
-                >
-                  NEWSLETTER
-                </Link>
-
-                {/* Admin menu for logged in users */}
-                {isLoggedIn && (
-                  <div>
+                  <NavigationMenuItem className='w-full'>
+                    {/* Student Life */}
                     <button
-                      className='flex w-full items-center justify-between py-2'
-                      onClick={() => setAdminSubmenuOpen(!adminSubmenuOpen)}
+                      className='flex w-full items-center justify-between'
+                      onClick={() => setMobileSubmenuOpen((open) => !open)}
                     >
-                      <span>ADMIN</span>
-                      {adminSubmenuOpen ? (
+                      <span>STUDENT LIFE</span>
+                      {mobileSubmenuOpen ? (
                         <ChevronDown className='h-4 w-4' />
                       ) : (
                         <ChevronRight className='h-4 w-4' />
                       )}
                     </button>
-
-                    {adminSubmenuOpen && (
+                    {mobileSubmenuOpen && (
                       <div className='pl-4'>
                         <Link
-                          href='/'
+                          href='/events'
                           className='block py-1 text-sm'
                           onClick={() => setIsSidebarOpen(false)}
                         >
-                          ORGANISATIONS
+                          EVENTS
                         </Link>
                         <Link
                           href='/'
                           className='block py-1 text-sm'
                           onClick={() => setIsSidebarOpen(false)}
                         >
-                          USERS
+                          STUDENT GROUPS
+                        </Link>
+                        <Link
+                          href='/bookings'
+                          className='block py-1 text-sm'
+                          onClick={() => setIsSidebarOpen(false)}
+                        >
+                          VENUE BOOKING
                         </Link>
                       </div>
                     )}
-                  </div>
-                )}
-              </nav>
+                  </NavigationMenuItem>
+
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link href='/' onClick={() => setIsSidebarOpen(false)}>
+                        COURSE REVIEWS
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link href='/' onClick={() => setIsSidebarOpen(false)}>
+                        NEWSLETTER
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+
+                  {/* Admin menu for logged in users */}
+                  {isLoggedIn && (
+                    <NavigationMenuItem className='w-full'>
+                      {/* Student Life */}
+                      <button
+                        className='flex w-full items-center justify-between'
+                        onClick={() => setAdminSubmenuOpen((open) => !open)}
+                      >
+                        <span>ADMIN</span>
+                        {adminSubmenuOpen ? (
+                          <ChevronDown className='h-4 w-4' />
+                        ) : (
+                          <ChevronRight className='h-4 w-4' />
+                        )}
+                      </button>
+                      <div>
+                        {adminSubmenuOpen && (
+                          <div className='pl-4'>
+                            <Link
+                              href='/'
+                              className='block py-1 text-sm'
+                              onClick={() => setIsSidebarOpen(false)}
+                            >
+                              ORGANISATIONS
+                            </Link>
+                            <Link
+                              href='/'
+                              className='block py-1 text-sm'
+                              onClick={() => setIsSidebarOpen(false)}
+                            >
+                              USERS
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    </NavigationMenuItem>
+                  )}
+                </NavigationMenuList>
+              </NavigationMenu>
             </SheetContent>
           </Sheet>
         </div>
 
         {/* Desktop Menu */}
-        <div className={`hidden lg:block`}>
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className={navigationMenuTriggerStyle()}
-                  asChild
-                >
-                  <Link href='/' className='text-orange-500'>
-                    NUS COLLEGE CLUB
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+        <NavigationMenu className='hidden w-full max-w-full lg:block'>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                className={navigationMenuTriggerStyle()}
+                asChild
+              >
+                <Link href='/' className='text-orange-500'>
+                  NUS COLLEGE CLUB
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
 
+            <NavigationMenuItem>
+              <CustomDropdown
+                label='STUDENT LIFE'
+                items={[
+                  { label: 'EVENTS', href: '/events' },
+                  { label: 'STUDENT GROUPS', href: '/groups' },
+                  { label: 'VENUE BOOKING', href: '/bookings' },
+                ]}
+              />
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                className={navigationMenuTriggerStyle()}
+                asChild
+              >
+                <Link href='/'>COURSE REVIEWS</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                className={navigationMenuTriggerStyle()}
+                asChild
+              >
+                <Link href='/'>NEWSLETTER</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            {/* Spacer pushes following items to the right */}
+            <div className='flex-1' />
+
+            {/* Right side buttons */}
+            {/* Admin dropdown for logged in users */}
+            {isLoggedIn && (
               <NavigationMenuItem>
                 <CustomDropdown
-                  label='STUDENT LIFE'
+                  label='ADMIN'
                   items={[
-                    { label: 'EVENTS', href: '/events' },
-                    { label: 'STUDENT GROUPS', href: '/groups' },
-                    { label: 'VENUE BOOKING', href: '/bookings' },
+                    { label: 'ORGANISATIONS', href: '/' },
+                    { label: 'USERS', href: '/' },
                   ]}
                 />
               </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className={navigationMenuTriggerStyle()}
-                  asChild
-                >
-                  <Link href='/'>COURSE REVIEWS</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className={navigationMenuTriggerStyle()}
-                  asChild
-                >
-                  <Link href='/'>NEWSLETTER</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-
-        {/* Right side buttons */}
-        <div className='flex items-center gap-4'>
-          {/* Admin dropdown for logged in users */}
-          <div className={`hidden lg:flex`}>
-            {isLoggedIn && (
-              <CustomDropdown
-                label='ADMIN'
-                items={[
-                  { label: 'ORGANISATIONS', href: '/' },
-                  { label: 'USERS', href: '/' },
-                ]}
-              />
             )}
-          </div>
-
-          {/* Login/Logout button */}
-          {isLoggedIn ? (
-            <Button
-              className='flex items-center gap-2'
-              onClick={() => {
-                Cookies.remove('auth');
-                window.location.reload();
-              }}
-              variant='ghost'
-            >
-              <Send className='h-4 w-4' />
-              LOGOUT
-            </Button>
-          ) : (
-            <LoginButton
-              botUsername={process.env.NEXT_PUBLIC_TELEGRAM_LOGIN_BOT!}
-              authCallbackUrl='/api/auth/callback'
-            />
-          )}
-        </div>
+          </NavigationMenuList>
+        </NavigationMenu>
+        {isLoggedIn ? (
+          <Button
+            onClick={() => {
+              Cookies.remove('auth');
+              window.location.reload();
+            }}
+            variant='ghost'
+          >
+            <Send className='h-4 w-4' />
+            LOGOUT
+          </Button>
+        ) : (
+          <LoginButton
+            botUsername={process.env.NEXT_PUBLIC_TELEGRAM_LOGIN_BOT!}
+            authCallbackUrl='/api/auth/callback'
+          />
+        )}
       </div>
     </header>
   );
