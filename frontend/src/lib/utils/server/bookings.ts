@@ -9,7 +9,7 @@ export const getBookings = async () =>
       end: true,
       venue: { select: { id: true, name: true } },
       bookedBy: { select: { org: { select: { id: true, name: true } } } },
-      isEvent: true,
+      event: true,
     },
   });
 

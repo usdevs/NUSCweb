@@ -31,6 +31,7 @@ model Organisation {
     description String      @default("An NUSC organisation")
     isAdminOrg  Boolean     @default(false)
     bookings    Booking[]
+    events      Event[]
     userOrg     UserOnOrg[]
     inviteToken String      @default(uuid())
     slug        String      @unique
@@ -46,6 +47,7 @@ model UserOnOrg {
     orgId      Int
     assignedAt DateTime     @default(now())
     bookings   Booking[]
+    events     Event[]
     deleted    Boolean      @default(false) // supports soft delete
     deletedAt  DateTime?
 
@@ -71,7 +73,24 @@ model Booking {
     start          DateTime
     end            DateTime
     bookedAt       DateTime     @default(now())
-    isEvent        Boolean      @default(false)
+    event          Event?
+    deleted        Boolean      @default(false) // supports soft delete
+    deletedAt      DateTime?
+}
+
+model Event {
+    id             Int          @id @default(autoincrement())
+    eventName      String
+    bookedBy       UserOnOrg    @relation(fields: [userId, userOrgId], references: [userId, orgId], onDelete: Cascade, onUpdate: Cascade)
+    userId         Int
+    userOrgId      Int
+    bookedForOrg   Organisation @relation(fields: [bookedForOrgId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    bookedForOrgId Int // this field will only be populated if a user (typically an admin user) has made a booking on behalf of another org
+    start          DateTime
+    end            DateTime
+    bookedAt       DateTime     @default(now())
+    booking        Booking?     @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    bookingId      Int?         @unique
     deleted        Boolean      @default(false) // supports soft delete
     deletedAt      DateTime?
 }

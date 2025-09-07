@@ -16,7 +16,7 @@ import {
   editBooking,
 } from '@/lib/actions/booking';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { NewBookingSchema } from '@/lib/schema/booking';
+import { NewBookingClientSchema } from '@/lib/schema/booking';
 import { getNext30Minutes } from '@/lib/utils/client/time';
 import type { BookingView } from '@/lib/utils/server/bookings';
 import type { VenueView } from '@/lib/utils/server/venues';
@@ -64,8 +64,8 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
   const [deleteBookingState, deleteBookingAction, deleteBookingPending] =
     useActionState(deleteBooking, null);
 
-  const form = useForm<z.input<typeof NewBookingSchema>>({
-    resolver: standardSchemaResolver(NewBookingSchema),
+  const form = useForm<z.input<typeof NewBookingClientSchema>>({
+    resolver: standardSchemaResolver(NewBookingClientSchema),
     defaultValues: {
       eventName: '',
       organizationId: 0,
@@ -78,7 +78,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
 
   // Check against existing bookings
   const hasClash = (
-    formData: z.input<typeof NewBookingSchema> & { id?: number },
+    formData: z.input<typeof NewBookingClientSchema> & { id?: number },
   ) =>
     bookings.some((booking) => {
       // Skip if not the same venue
@@ -96,7 +96,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
       );
     });
 
-  const handleCreateSubmit = (formData: z.input<typeof NewBookingSchema>) => {
+  const handleCreateSubmit = (formData: z.input<typeof NewBookingClientSchema>) => {
     if (hasClash(formData)) {
       toast.warning(
         'There is a clash in bookings. Please select a different venu or timing, and resubmit.',
@@ -116,7 +116,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
     setSelectedTimeRange(null);
   };
 
-  const handleEditSubmit = (formData: z.input<typeof NewBookingSchema>) => {
+  const handleEditSubmit = (formData: z.input<typeof NewBookingClientSchema>) => {
     if (!selectedBooking) return;
 
     if (hasClash({ ...formData, id: selectedBooking.id })) {
@@ -140,7 +140,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
     setSelectedBooking(null);
   };
 
-  const handleSubmit = (formData: z.input<typeof NewBookingSchema>) => {
+  const handleSubmit = (formData: z.input<typeof NewBookingClientSchema>) => {
     if (!isAuthenticated) {
       toast.error(
         selectedBooking === null
@@ -224,7 +224,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
           form.setValue('venueId', booking.venue.id);
           form.setValue('startTime', booking.start);
           form.setValue('endTime', booking.end);
-          form.setValue('addToCalendar', booking.isEvent);
+          form.setValue('addToCalendar', booking.event !== null);
         }}
         setSelectedTimeRange={setSelectedTimeRange}
         form={form}

@@ -40,7 +40,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { NewBookingSchema } from '@/lib/schema/booking';
+import { NewBookingClientSchema } from '@/lib/schema/booking';
 import { dateTimeFormatter } from '@/lib/utils/client/time';
 import type { BookingView } from '@/lib/utils/server/bookings';
 import type { VenueView } from '@/lib/utils/server/venues';
@@ -49,7 +49,7 @@ const formatTime = (d: Date) =>
   d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 
 interface BookingModalProps {
-  form: UseFormReturn<z.input<typeof NewBookingSchema>>;
+  form: UseFormReturn<z.input<typeof NewBookingClientSchema>>;
   selectedBooking: BookingView | null;
   isOpen: boolean;
   handleClose: () => void;
@@ -59,7 +59,7 @@ interface BookingModalProps {
     name: string;
   }[];
   handleDeleteBooking: (bookingId: number) => void;
-  handleSubmitBooking: (formData: z.input<typeof NewBookingSchema>) => void;
+  handleSubmitBooking: (formData: z.input<typeof NewBookingClientSchema>) => void;
 }
 
 export default function BookingModal({

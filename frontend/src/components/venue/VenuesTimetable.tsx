@@ -8,7 +8,7 @@ import { z } from 'zod/v4';
 import BookingCard from '@/components/booking/BookingCard';
 import CardPortal from '@/components/CardPortal';
 import { TIMETABLE_TIMESLOTS } from '@/lib/formOptions';
-import { NewBookingSchema } from '@/lib/schema/booking';
+import { NewBookingClientSchema } from '@/lib/schema/booking';
 import { timeToIndex } from '@/lib/utils/client';
 import { BookingView } from '@/lib/utils/server/bookings';
 import { VenueView } from '@/lib/utils/server/venues';
@@ -32,7 +32,7 @@ interface VenuesTimetableProps {
       endTime: Date;
     } | null>
   >;
-  form: UseFormReturn<z.input<typeof NewBookingSchema>>;
+  form: UseFormReturn<z.input<typeof NewBookingClientSchema>>;
 }
 
 export default function VenuesTimetable({

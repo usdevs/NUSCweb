@@ -7,8 +7,8 @@ import { getAuthCookie, hasOrgPerms } from '@/lib/auth/server';
 import prisma from '@/lib/prisma';
 import {
   DeleteBookingSchema,
-  EditBookingSchema,
-  NewBookingSchema,
+  EditBookingServerSchema,
+  NewBookingServerSchema,
 } from '@/lib/schema/booking';
 
 type CreateBookingState = {
@@ -32,7 +32,7 @@ export const createBooking = async (
 
   let data;
   try {
-    data = NewBookingSchema.parse(Object.fromEntries(formData));
+    data = NewBookingServerSchema.parse(Object.fromEntries(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -60,11 +60,24 @@ export const createBooking = async (
         eventName: data.eventName,
         venueId: data.venueId,
         userId: token.userId,
+        // TODO: userOrgId isn't technically correct right now
+        // especially if an admin is booking for another IG
         userOrgId: data.organizationId,
         bookedForOrgId: data.organizationId,
         start: data.startTime,
         end: data.endTime,
-        isEvent: data.addToCalendar,
+        event: {
+          create: {
+            eventName: data.eventName,
+            userId: token.userId,
+            // TODO: userOrgId isn't technically correct right now
+            // especially if an admin is booking for another IG
+            userOrgId: data.organizationId,
+            bookedForOrgId: data.organizationId,
+            start: data.startTime,
+            end: data.endTime,
+          },
+        },
       },
     });
   } catch (error) {
@@ -102,7 +115,7 @@ export const editBooking = async (
 
   let data;
   try {
-    data = EditBookingSchema.parse(Object.fromEntries(formData));
+    data = EditBookingServerSchema.parse(Object.fromEntries(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -149,11 +162,40 @@ export const editBooking = async (
         eventName: data.eventName,
         venueId: data.venueId,
         userId: token.userId,
+        // TODO: userOrgId isn't technically correct right now
+        // especially if an admin is booking for another IG
         userOrgId: data.organizationId,
         bookedForOrgId: data.organizationId,
         start: data.startTime,
         end: data.endTime,
-        isEvent: data.addToCalendar,
+        event: data.addToCalendar
+          ? {
+              upsert: {
+                create: {
+                  eventName: data.eventName,
+                  userId: token.userId,
+                  // TODO: userOrgId isn't technically correct right now
+                  // especially if an admin is booking for another IG
+                  userOrgId: data.organizationId,
+                  bookedForOrgId: data.organizationId,
+                  start: data.startTime,
+                  end: data.endTime,
+                },
+                update: {
+                  eventName: data.eventName,
+                  userId: token.userId,
+                  // TODO: userOrgId isn't technically correct right now
+                  // especially if an admin is booking for another IG
+                  userOrgId: data.organizationId,
+                  bookedForOrgId: data.organizationId,
+                  start: data.startTime,
+                  end: data.endTime,
+                },
+              },
+            }
+          : {
+              delete: true,
+            },
       },
     });
   } catch (error) {
@@ -226,6 +268,7 @@ export const deleteBooking = async (
     };
   }
 
+  // TODO: Change this to soft delete instead
   try {
     await prisma.booking.delete({
       where: { id: data.id },
