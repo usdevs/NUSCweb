@@ -5,8 +5,8 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { TIMETABLE_TIMESLOTS } from '@/lib/formOptions';
 import { timeToIndex } from '@/lib/utils/client';
-import type { BookingView } from '@/lib/utils/server/bookings';
-import type { VenueView } from '@/lib/utils/server/venues';
+import type { BookingView } from '@/lib/utils/server/booking';
+import type { VenueView } from '@/lib/utils/server/venue';
 
 import type { DragPosition } from './VenuesTimetable';
 

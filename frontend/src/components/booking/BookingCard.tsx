@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { Calendar, Clock, MapPin, User } from 'lucide-react';
 
-import type { BookingView } from '@/lib/utils/server/bookings';
+import type { BookingView } from '@/lib/utils/server/booking';
 
 interface BookingCardProps {
   booking: BookingView;

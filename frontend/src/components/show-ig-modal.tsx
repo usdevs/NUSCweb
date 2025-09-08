@@ -3,31 +3,14 @@
 import React, { useMemo, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import type { OrganisationView } from '@/lib/utils/server/organisation';
 
 import BaseModal from './base-modal';
-
-interface OrganisationWithIGHead {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  isInactive: boolean;
-  isInvisible: boolean;
-  userOrg: Array<{
-    isIGHead: boolean;
-    user: {
-      name: string;
-      telegramHandle?: string;
-    };
-  }>;
-  inviteLink?: string;
-  hasVerified?: boolean;
-}
 
 interface ShowIGModalProps {
   isOpen: boolean;
   onClose: () => void;
-  organisation: OrganisationWithIGHead | null;
+  organisation: OrganisationView | null;
 }
 
 export default function ShowIGModal({
@@ -43,12 +26,10 @@ export default function ShowIGModal({
   // Extract IG Heads from the organisation data
   const igHeads = useMemo(() => {
     return organisation
-      ? organisation.userOrg
-          .filter((userOrg) => userOrg.isIGHead)
-          .map((userOrg) => ({
-            name: userOrg.user.name,
-            telegramHandle: userOrg.user.telegramHandle,
-          }))
+      ? organisation.userOrg.map((userOrg) => ({
+          name: userOrg.user.name,
+          telegramUserName: userOrg.user.telegramUserName,
+        }))
       : [];
   }, [organisation]);
 
@@ -75,7 +56,7 @@ export default function ShowIGModal({
 
   const getSelectedIGHeadTelegram = () => {
     const selectedHead = igHeads.find((head) => head.name === selectedIGHead);
-    return selectedHead?.telegramHandle || '';
+    return selectedHead?.telegramUserName || '';
   };
 
   return (
@@ -156,56 +137,6 @@ export default function ShowIGModal({
                 className='px-3 py-2 text-xs'
               >
                 {copySuccess.telegram ? (
-                  <span className='text-green-600'>Copied!</span>
-                ) : (
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='16'
-                    height='16'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeWidth='2'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                  >
-                    <rect
-                      x='9'
-                      y='9'
-                      width='13'
-                      height='13'
-                      rx='2'
-                      ry='2'
-                    ></rect>
-                    <path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'></path>
-                  </svg>
-                )}
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Join IG Group Link */}
-        {organisation.inviteLink && (
-          <div>
-            <label className='mb-2 block text-sm font-medium text-gray-700'>
-              Group Link
-            </label>
-            <div className='flex items-center gap-2'>
-              <div className='flex-1 rounded-md border bg-gray-50 p-3'>
-                <p className='text-sm break-all text-gray-900'>
-                  {organisation.inviteLink}
-                </p>
-              </div>
-              <Button
-                size='sm'
-                variant='outline'
-                onClick={() =>
-                  copyToClipboard(organisation.inviteLink!, 'invite')
-                }
-                className='px-3 py-2 text-xs'
-              >
-                {copySuccess.invite ? (
                   <span className='text-green-600'>Copied!</span>
                 ) : (
                   <svg

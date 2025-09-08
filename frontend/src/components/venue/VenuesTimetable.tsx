@@ -10,8 +10,8 @@ import CardPortal from '@/components/CardPortal';
 import { TIMETABLE_TIMESLOTS } from '@/lib/formOptions';
 import { NewBookingClientSchema } from '@/lib/schema/booking';
 import { timeToIndex } from '@/lib/utils/client';
-import { BookingView } from '@/lib/utils/server/bookings';
-import { VenueView } from '@/lib/utils/server/venues';
+import { BookingView } from '@/lib/utils/server/booking';
+import { VenueView } from '@/lib/utils/server/venue';
 
 import VenueTimetable from './VenueTimetable';
 

@@ -42,8 +42,8 @@ import {
 } from '@/components/ui/select';
 import { NewBookingClientSchema } from '@/lib/schema/booking';
 import { dateTimeFormatter } from '@/lib/utils/client/time';
-import type { BookingView } from '@/lib/utils/server/bookings';
-import type { VenueView } from '@/lib/utils/server/venues';
+import type { BookingView } from '@/lib/utils/server/booking';
+import type { VenueView } from '@/lib/utils/server/venue';
 
 const formatTime = (d: Date) =>
   d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
