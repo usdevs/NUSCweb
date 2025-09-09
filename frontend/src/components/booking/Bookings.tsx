@@ -207,10 +207,11 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
           mode='single'
           selected={date}
           onSelect={(newDate) => {
-            const params = new URLSearchParams(searchParams.toString());
-            // TODO: Remove newDate!.toString()
-            params.set('date', newDate!.toDateString());
-            window.history.pushState(null, '', `?${params.toString()}`);
+            if (newDate) {
+              const params = new URLSearchParams(searchParams.toString());
+              params.set('date', newDate.toDateString());
+              window.history.pushState(null, '', `?${params.toString()}`);
+            }
           }}
           className='w-full rounded-md'
           showOutsideDays={false}

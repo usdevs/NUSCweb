@@ -103,7 +103,6 @@ export default function VenuesTimetable({
         {/* Scrollable container for room timetables */}
         <div className='flex-1 overflow-x-auto'>
           <div className='flex gap-1' onMouseUp={handleMouseUp}>
-            {/* TODO: Currently not really index */}
             {venues.map((venue) => (
               <VenueTimetable
                 key={venue.id}

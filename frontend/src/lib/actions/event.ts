@@ -141,7 +141,6 @@ export const editEvent = async (
   try {
     await prisma.event.update({
       where: { id: data.id },
-      // TODO: Stopped here
       data: {
         eventName: data.eventName,
         userId: token.userId,
