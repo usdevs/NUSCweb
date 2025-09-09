@@ -1,19 +1,4 @@
-export const BOOKING_VENUE_OPTIONS: string[] = [
-  'CTPH',
-  'Chatterbox',
-  'RC1 Student Lounge (Buttery Common Area)',
-  'RC1 Pantry (Buttery Cooking Area)',
-  'RC2 Student Lounge (Buttery Common Area)',
-  'RC2 Pantry (Buttery Cooking Area)',
-];
-
-export const BOOKING_ORGANIZATION_OPTIONS: string[] = [
-  'NUSC Floorball',
-  'Admin Team',
-  'Student Council',
-  'Interest Group',
-  'Others',
-];
+import { IGCategory } from '@prisma/client';
 
 export const TIMETABLE_TIMESLOTS: string[] = Array.from(
   { length: 24 },
@@ -25,34 +10,15 @@ export const TIMETABLE_TIMESLOTS: string[] = Array.from(
   },
 );
 
-export const EVENT_VENUE_OPTIONS: string[] = [
-  'CTPH',
-  'Chatterbox',
-  'RC1 Student Lounge (Buttery Common Area)',
-  'RC1 Pantry (Buttery Cooking Area)',
-  'RC2 Student Lounge (Buttery Common Area)',
-  'RC2 Pantry (Buttery Cooking Area)',
-  'ONLINE',
+export const EVENT_CATEGORIES: Array<{ name: IGCategory; bgColor: string }> = [
+  { name: IGCategory.Sports, bgColor: 'bg-blue-200' },
+  { name: IGCategory.SocioCultural, bgColor: 'bg-yellow-200' },
+  { name: IGCategory.Guips, bgColor: 'bg-green-200' },
+  { name: IGCategory.Welfare, bgColor: 'bg-[#FCDED6]' },
+  { name: IGCategory.Others, bgColor: 'bg-gray-200' },
 ];
 
-export const EVENT_ORGANIZATION_OPTIONS: string[] = [
-  'NUSCC Welfare',
-  'Residential Team',
-  'Sentinel House',
-  'Admin Team',
-  'Student Council',
-  'Interest Group',
-  'Others',
-];
-
-export const EVENT_CATEGORIES: Array<{ name: string; bgColor: string }> = [
-  { name: 'SPORTS', bgColor: 'bg-blue-200' },
-  { name: 'SOCIO-CULTURAL', bgColor: 'bg-yellow-200' },
-  { name: 'GROUND-UP INITIATIVES & PROJECTS', bgColor: 'bg-green-200' },
-  { name: 'WELFARE', bgColor: 'bg-[#FCDED6]' },
-  { name: 'OTHERS', bgColor: 'bg-gray-200' },
-];
-
-export const EVENT_CATEGORY_NAMES: string[] = EVENT_CATEGORIES.map(
-  (cat) => cat.name,
-);
+export const getCategoryBgColor = (category: string) => {
+  const categoryData = EVENT_CATEGORIES.find((cat) => cat.name === category);
+  return categoryData ? categoryData.bgColor : 'bg-gray-200';
+};

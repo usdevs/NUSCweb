@@ -1,43 +1,29 @@
-import {
-  eachDayOfInterval,
-  endOfMonth,
-  endOfWeek,
-  isSameDay,
-  startOfMonth,
-  startOfWeek,
-} from 'date-fns';
+import { isSameDay } from 'date-fns';
 
-import type { Event } from '@/app/events/page';
+import { getCategoryBgColor } from '@/lib/formOptions';
+import type { EventView } from '@/lib/utils/server/event';
+
+const DAY_OF_WEEKS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
 const today = new Date();
 
 interface MonthViewProps {
   currentDate: Date;
-  getFilteredEvents: (date: Date) => Event[];
+  calendarDays: Date[];
+  getFilteredEvents: (date: Date) => EventView[];
   handleEmptyDayClick: (date: Date) => void;
-  getCategoryBgColor: (category: string) => string;
-  handleEventClick: (event: Event) => void;
+  handleEventClick: (event: EventView) => void;
   handleShowMore: (date: Date) => void;
 }
 
 export default function MonthView({
   currentDate,
-  // TODO: Decide if the following need to be passed as props
+  calendarDays,
   getFilteredEvents,
   handleEmptyDayClick,
-  getCategoryBgColor,
   handleEventClick,
   handleShowMore,
 }: MonthViewProps) {
-  const monthStart = startOfMonth(currentDate);
-  const monthEnd = endOfMonth(currentDate);
-  const calendarStart = startOfWeek(monthStart, { weekStartsOn: 1 });
-  const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 1 });
-  const calendarDays = eachDayOfInterval({
-    start: calendarStart,
-    end: calendarEnd,
-  });
-
   const weeks = [];
   for (let i = 0; i < calendarDays.length; i += 7) {
     weeks.push(calendarDays.slice(i, i + 7));
@@ -47,7 +33,7 @@ export default function MonthView({
     <div className='overflow-hidden rounded-2xl bg-[#0C2C47]'>
       {/* Day headers */}
       <div className='grid grid-cols-7 gap-0.5 p-0.5 pt-0'>
-        {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((day) => (
+        {DAY_OF_WEEKS.map((day) => (
           <div
             key={day}
             className={`rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-base font-bold text-[#0C2C47]`}
@@ -105,20 +91,15 @@ export default function MonthView({
                 }}
               >
                 <div className='pointer-events-none'>
-                  {(() => {
-                    const isToday = isSameDay(day, today);
-                    return (
-                      <div
-                        className={`mb-2 text-base font-bold ${
-                          isToday
-                            ? `flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7D4E] text-white`
-                            : 'text-[#0C2C47]'
-                        }`}
-                      >
-                        {day.getDate()}
-                      </div>
-                    );
-                  })()}
+                  <div
+                    className={`mb-2 text-base font-bold ${
+                      isSameDay(day, today)
+                        ? `flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7D4E] text-white`
+                        : 'text-[#0C2C47]'
+                    }`}
+                  >
+                    {day.getDate()}
+                  </div>
                   <div className='pointer-events-auto space-y-1'>
                     {dayEvents.slice(0, maxEventsToShow).map((event) => (
                       <div
@@ -130,8 +111,8 @@ export default function MonthView({
                         }}
                       >
                         <div
-                          className={`h-2 w-2 rounded-full ${getCategoryBgColor(event.category)} shrink-0`}
-                        ></div>
+                          className={`h-2 w-2 rounded-full ${getCategoryBgColor(event.bookedForOrg.category)} shrink-0`}
+                        />
                         <span className='truncate font-medium text-[#0C2C47]'>
                           {event.eventName}
                         </span>

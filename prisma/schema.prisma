@@ -21,8 +21,9 @@ model User {
 enum IGCategory {
     Sports
     SocioCultural
-    Others
+    Welfare
     Guips
+    Others
 }
 
 model Organisation {

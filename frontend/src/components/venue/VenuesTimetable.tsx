@@ -129,14 +129,7 @@ export default function VenuesTimetable({
       {/* TODO: Use react-tooltip instead */}
       {hoveredBooking && (
         <CardPortal>
-          <div
-            style={{
-              position: 'fixed',
-              top: 'var(--mouse-y)',
-              left: 'var(--mouse-x)',
-              transform: 'translate(20px, -50%)',
-            }}
-          >
+          <div className='transform-[translate(20px, -50%)] fixed top-(--mouse-y) left-(--mouse-x)'>
             <BookingCard booking={hoveredBooking} />
           </div>
         </CardPortal>

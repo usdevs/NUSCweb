@@ -132,7 +132,7 @@ export default function VenueTimetable({
               >
                 <div className='text-xs text-gray-800'>
                   <div className='font-medium'>{booking.eventName}</div>
-                  <div>{booking.bookedBy.org.name}</div>
+                  <div>{booking.bookedForOrg.name}</div>
                   <div className='mt-1 text-[10px]'>
                     {`${format(booking.start, 'Ka')} - ${format(booking.end, 'Ka')}`}
                   </div>

@@ -6,23 +6,20 @@ import { z } from 'zod/v4';
 import { getAuthCookie, hasOrgPerms } from '@/lib/auth/server';
 import prisma from '@/lib/prisma';
 import {
-  DeleteBookingSchema,
-  EditBookingServerSchema,
-  NewBookingServerSchema,
-} from '@/lib/schema/booking';
+  DeleteEventSchema,
+  EditEventSchema,
+  NewEventSchema,
+} from '@/lib/schema/event';
 
-type CreateBookingState = {
+type CreateEventState = {
   success: boolean;
   message: string;
 } | null;
 
-// TODO: Check if organisations have exceeded their weekly limit in bookings
-// TODO: Check if there are clashes in bookings
-
-export const createBooking = async (
-  _prevState: CreateBookingState,
+export const createEvent = async (
+  _prevState: CreateEventState,
   formData: FormData,
-): Promise<CreateBookingState> => {
+): Promise<CreateEventState> => {
   const token = await getAuthCookie();
   if (!token) {
     return {
@@ -33,7 +30,7 @@ export const createBooking = async (
 
   let data;
   try {
-    data = NewBookingServerSchema.parse(Object.fromEntries(formData));
+    data = NewEventSchema.parse(Object.fromEntries(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -56,10 +53,9 @@ export const createBooking = async (
   }
 
   try {
-    await prisma.booking.create({
+    await prisma.event.create({
       data: {
         eventName: data.eventName,
-        venueId: data.venueId,
         userId: token.userId,
         // TODO: userOrgId isn't technically correct right now
         // especially if an admin is booking for another IG
@@ -67,45 +63,33 @@ export const createBooking = async (
         bookedForOrgId: data.organizationId,
         start: data.startTime,
         end: data.endTime,
-        event: {
-          create: {
-            eventName: data.eventName,
-            userId: token.userId,
-            // TODO: userOrgId isn't technically correct right now
-            // especially if an admin is booking for another IG
-            userOrgId: data.organizationId,
-            bookedForOrgId: data.organizationId,
-            start: data.startTime,
-            end: data.endTime,
-          },
-        },
       },
     });
   } catch (error) {
-    console.error('Error creating booking:', error);
+    console.error('Error creating event:', error);
     return {
       success: false,
-      message: 'Error creating booking!',
+      message: 'Error creating event!',
     };
   }
 
-  revalidatePath('/bookings');
+  revalidatePath('/events');
 
   return {
     success: true,
-    message: 'Successfully created booking!',
+    message: 'Successfully created event!',
   };
 };
 
-type EditBookingState = {
+type EditEventState = {
   success: boolean;
   message: string;
 } | null;
 
-export const editBooking = async (
-  _prevState: EditBookingState,
+export const editEvent = async (
+  _prevState: EditEventState,
   formData: FormData,
-): Promise<EditBookingState> => {
+): Promise<EditEventState> => {
   const token = await getAuthCookie();
   if (!token) {
     return {
@@ -116,7 +100,7 @@ export const editBooking = async (
 
   let data;
   try {
-    data = EditBookingServerSchema.parse(Object.fromEntries(formData));
+    data = EditEventSchema.parse(Object.fromEntries(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -130,23 +114,23 @@ export const editBooking = async (
     };
   }
 
-  const origBooking = await prisma.booking.findUnique({
+  const origEvent = await prisma.event.findUnique({
     where: {
       id: data.id,
     },
   });
 
-  if (!origBooking) {
+  if (!origEvent) {
     return {
       success: false,
       message: 'Invalid booking!',
     };
   }
 
-  // Ensure user has the permissions for the corresponding organisation
+  // Ensure user has the permissions for the corresponding organisations
   if (
     !hasOrgPerms(token, data.organizationId) ||
-    !hasOrgPerms(token, origBooking.bookedForOrgId)
+    !hasOrgPerms(token, origEvent.bookedForOrgId)
   ) {
     return {
       success: false,
@@ -155,11 +139,11 @@ export const editBooking = async (
   }
 
   try {
-    await prisma.booking.update({
+    await prisma.event.update({
       where: { id: data.id },
+      // TODO: Stopped here
       data: {
         eventName: data.eventName,
-        venueId: data.venueId,
         userId: token.userId,
         // TODO: userOrgId isn't technically correct right now
         // especially if an admin is booking for another IG
@@ -167,61 +151,33 @@ export const editBooking = async (
         bookedForOrgId: data.organizationId,
         start: data.startTime,
         end: data.endTime,
-        event: data.addToCalendar
-          ? {
-              upsert: {
-                create: {
-                  eventName: data.eventName,
-                  userId: token.userId,
-                  // TODO: userOrgId isn't technically correct right now
-                  // especially if an admin is booking for another IG
-                  userOrgId: data.organizationId,
-                  bookedForOrgId: data.organizationId,
-                  start: data.startTime,
-                  end: data.endTime,
-                },
-                update: {
-                  eventName: data.eventName,
-                  userId: token.userId,
-                  // TODO: userOrgId isn't technically correct right now
-                  // especially if an admin is booking for another IG
-                  userOrgId: data.organizationId,
-                  bookedForOrgId: data.organizationId,
-                  start: data.startTime,
-                  end: data.endTime,
-                },
-              },
-            }
-          : {
-              delete: true,
-            },
       },
     });
   } catch (error) {
-    console.error('Error editing booking:', error);
+    console.error('Error editing event:', error);
     return {
       success: false,
-      message: 'Error editing booking!',
+      message: 'Error editing event!',
     };
   }
 
-  revalidatePath('/bookings');
+  revalidatePath('/events');
 
   return {
     success: true,
-    message: 'Successfully edited booking!',
+    message: 'Successfully edited event!',
   };
 };
 
-type DeleteBookingState = {
+type DeleteEventState = {
   success: boolean;
   message: string;
 } | null;
 
-export const deleteBooking = async (
-  _prevState: DeleteBookingState,
+export const deleteEvent = async (
+  _prevState: DeleteEventState,
   formData: FormData,
-): Promise<DeleteBookingState> => {
+): Promise<DeleteEventState> => {
   const token = await getAuthCookie();
   if (!token) {
     return {
@@ -232,7 +188,7 @@ export const deleteBooking = async (
 
   let data;
   try {
-    data = DeleteBookingSchema.parse(Object.fromEntries(formData));
+    data = DeleteEventSchema.parse(Object.fromEntries(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -246,21 +202,19 @@ export const deleteBooking = async (
     };
   }
 
-  const origBooking = await prisma.booking.findUnique({
-    where: {
-      id: data.id,
-    },
+  const origEvent = await prisma.event.findUnique({
+    where: { id: data.id },
   });
 
-  if (!origBooking) {
+  if (!origEvent) {
     return {
       success: false,
-      message: 'Invalid booking!',
+      message: 'Invalid event!',
     };
   }
 
   // Ensure user has the permissions for the corresponding organisation
-  if (!hasOrgPerms(token, origBooking.bookedForOrgId)) {
+  if (!hasOrgPerms(token, origEvent.bookedForOrgId)) {
     return {
       success: false,
       message: 'You do not belong to the organisation!',
@@ -269,21 +223,21 @@ export const deleteBooking = async (
 
   // TODO: Change this to soft delete instead
   try {
-    await prisma.booking.delete({
+    await prisma.event.delete({
       where: { id: data.id },
     });
   } catch (error) {
-    console.error('Error deleting booking:', error);
+    console.error('Error deleting event:', error);
     return {
       success: false,
-      message: 'Error deleting booking!',
+      message: 'Error deleting event!',
     };
   }
 
-  revalidatePath('/bookings');
+  revalidatePath('/events');
 
   return {
     success: true,
-    message: 'Successfully deleted booking!',
+    message: 'Successfully deleted event!',
   };
 };

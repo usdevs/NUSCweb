@@ -93,7 +93,7 @@ export default function Header() {
                           EVENTS
                         </Link>
                         <Link
-                          href='/'
+                          href='/groups'
                           className='block py-1 text-sm'
                           onClick={() => setIsSidebarOpen(false)}
                         >

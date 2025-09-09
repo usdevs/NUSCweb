@@ -96,7 +96,9 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
       );
     });
 
-  const handleCreateSubmit = (formData: z.input<typeof NewBookingClientSchema>) => {
+  const handleCreateSubmit = (
+    formData: z.input<typeof NewBookingClientSchema>,
+  ) => {
     if (hasClash(formData)) {
       toast.warning(
         'There is a clash in bookings. Please select a different venu or timing, and resubmit.',
@@ -116,7 +118,9 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
     setSelectedTimeRange(null);
   };
 
-  const handleEditSubmit = (formData: z.input<typeof NewBookingClientSchema>) => {
+  const handleEditSubmit = (
+    formData: z.input<typeof NewBookingClientSchema>,
+  ) => {
     if (!selectedBooking) return;
 
     if (hasClash({ ...formData, id: selectedBooking.id })) {
@@ -220,7 +224,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
         handleBookingClick={(booking) => {
           setSelectedBooking(booking);
           form.setValue('eventName', booking.eventName);
-          form.setValue('organizationId', booking.bookedBy.org.id);
+          form.setValue('organizationId', booking.bookedForOrg.id);
           form.setValue('venueId', booking.venue.id);
           form.setValue('startTime', booking.start);
           form.setValue('endTime', booking.end);

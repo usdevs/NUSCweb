@@ -24,12 +24,13 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking }) => {
       <div className='space-y-2 p-3'>
         <div className='flex items-center gap-2'>
           <User className='h-4 w-4 shrink-0 text-gray-700' />
-          <span className='truncate text-sm'>{booking.bookedBy.org.name}</span>
+          <span className='truncate text-sm'>{booking.bookedForOrg.name}</span>
         </div>
 
         <div className='flex items-center gap-2'>
           <Clock className='h-4 w-4 shrink-0 text-gray-700' />
           <div>
+            {/* TODO: Align both start and end timings vertically */}
             <div className='text-sm'>
               Start: {format(booking.start, 'd MMMM p')}
             </div>

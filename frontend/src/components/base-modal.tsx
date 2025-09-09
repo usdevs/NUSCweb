@@ -35,7 +35,7 @@ export default function BaseModal({
     <div className='fixed inset-0 z-50 overflow-y-auto'>
       {/* Backdrop overlay */}
       <div
-        className='bg-opacity-50 fixed inset-0 bg-black'
+        className='fixed inset-0 bg-black/50'
         onClick={onClose}
       ></div>
 

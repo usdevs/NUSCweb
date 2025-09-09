@@ -4,11 +4,9 @@ import { cookies } from 'next/headers';
 import type AuthCookie from '@/lib/schema/auth';
 import { validateCookie } from '@/lib/utils/server/jwt';
 
-export const isOverallAdmin = (authCookie: AuthCookie) =>
-  authCookie.isOverallAdmin;
-
 export const hasOrgPerms = (authCookie: AuthCookie, orgId: number) =>
-  authCookie.userOrgs.some((userOrg) => userOrg.id === orgId);
+  authCookie.userOrgs.some((userOrg) => userOrg.id === orgId) ||
+  authCookie.isOverallAdmin;
 
 export const getAuthCookie = async (): Promise<
   (AuthCookie & JwtPayload) | undefined

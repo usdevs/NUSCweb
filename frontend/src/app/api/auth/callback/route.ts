@@ -44,8 +44,7 @@ export async function GET(req: Request) {
 
   try {
     userCredentials = await validator.validate(data);
-  } catch (error) {
-    console.error(error);
+  } catch {
     return Response.json(
       'Failed to check user credentials against those obtained from the bot!',
       { status: StatusCodes.UNAUTHORIZED },

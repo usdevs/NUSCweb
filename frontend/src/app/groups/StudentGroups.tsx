@@ -12,11 +12,11 @@ import type { OrganisationView } from '@/lib/utils/server/organisation';
 
 const DEFAULT_FILTERS: string[] = ['Sports', 'SocioCultural', 'Others'];
 
-interface StudentGroupsPageProps {
+interface StudentGroupsProps {
   orgs: OrganisationView[];
 }
 
-export default function StudentGroupsPage({ orgs }: StudentGroupsPageProps) {
+export default function StudentGroups({ orgs }: StudentGroupsProps) {
   const [igCardsToDisplay, setIgCardsToDisplay] = useState<OrganisationView[]>(
     [],
   );

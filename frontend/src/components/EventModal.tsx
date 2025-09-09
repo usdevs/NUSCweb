@@ -7,7 +7,6 @@ import z from 'zod/v4';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogClose,
@@ -19,11 +18,9 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
@@ -40,40 +37,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { NewBookingClientSchema } from '@/lib/schema/booking';
+import { NewEventSchema } from '@/lib/schema/event';
 import { dateTimeFormatter } from '@/lib/utils/client/time';
-import type { BookingView } from '@/lib/utils/server/booking';
-import type { VenueView } from '@/lib/utils/server/venue';
+import type { EventView } from '@/lib/utils/server/event';
 
 const formatTime = (d: Date) =>
   d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 
-interface BookingModalProps {
-  form: UseFormReturn<z.input<typeof NewBookingClientSchema>>;
-  selectedBooking: BookingView | null;
+interface EventModalProps {
+  form: UseFormReturn<z.input<typeof NewEventSchema>>;
+  selectedEvent: EventView | null;
   isOpen: boolean;
-  handleClose: () => void;
-  venues: VenueView[];
   userOrgs: {
     id: number;
     name: string;
   }[];
-  handleDeleteBooking: (bookingId: number) => void;
-  handleSubmitBooking: (
-    formData: z.input<typeof NewBookingClientSchema>,
-  ) => void;
+  handleDeleteEvent: (eventId: number) => void;
+  handleSubmitEvent: (formData: z.input<typeof NewEventSchema>) => void;
+  handleClose: () => void;
 }
 
-export default function BookingModal({
+export default function EventModal({
   form,
   isOpen,
-  handleClose,
-  selectedBooking,
+  selectedEvent,
   userOrgs,
-  venues,
-  handleDeleteBooking,
-  handleSubmitBooking,
-}: BookingModalProps) {
+  handleDeleteEvent,
+  handleSubmitEvent,
+  handleClose,
+}: EventModalProps) {
   const [selectStartDayOpen, setSelectStartDayOpen] = useState(false);
   const [selectEndDayOpen, setSelectEndDayOpen] = useState(false);
 
@@ -87,14 +79,12 @@ export default function BookingModal({
       >
         <DialogContent aria-describedby={undefined}>
           <form
-            onSubmit={form.handleSubmit(handleSubmitBooking)}
+            onSubmit={form.handleSubmit(handleSubmitEvent)}
             className={`flex flex-col gap-3 sm:max-w-md`}
           >
             <DialogHeader className='bg-[#0C2C47] text-white'>
               <DialogTitle>
-                {selectedBooking === null
-                  ? 'CREATE A NEW BOOKING'
-                  : 'EDIT BOOKING'}
+                {selectedEvent === null ? 'CREATE A NEW EVENT' : 'EDIT EVENT'}
               </DialogTitle>
             </DialogHeader>
             <FormField
@@ -147,45 +137,6 @@ export default function BookingModal({
                           <SelectLabel>No organisations found</SelectLabel>
                         ) : (
                           userOrgs.map(({ id, name }) => (
-                            <SelectItem key={id} value={id.toString()}>
-                              {name}
-                            </SelectItem>
-                          ))
-                        )}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='venueId'
-              render={({ field }) => (
-                <FormItem
-                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
-                >
-                  <FormLabel>VENUE</FormLabel>
-                  <Select
-                    value={
-                      field.value === 0 ? undefined : field.value.toString()
-                    }
-                    defaultValue={''}
-                    onValueChange={(value) =>
-                      field.onChange(Number.parseInt(value))
-                    }
-                  >
-                    <FormControl>
-                      <SelectTrigger className='[margin-block-end:0]'>
-                        <SelectValue placeholder='Select venue' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className='bg-background'>
-                      <SelectGroup>
-                        {venues.length === 0 ? (
-                          <SelectLabel>No venues found</SelectLabel>
-                        ) : (
-                          venues.map(({ id, name }) => (
                             <SelectItem key={id} value={id.toString()}>
                               {name}
                             </SelectItem>
@@ -319,35 +270,14 @@ export default function BookingModal({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name='addToCalendar'
-              render={({ field }) => (
-                <FormItem>
-                  <div className='flex items-center gap-3'>
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={(checked) => {
-                          field.onChange(checked);
-                        }}
-                      />
-                    </FormControl>
-                    <FormLabel>ADD TO EVENTS CALENDAR</FormLabel>
-                  </div>
-                  <FormDescription />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <DialogFooter className='sm:justify-between'>
-              {selectedBooking !== null && (
+              {selectedEvent !== null && (
                 <Button
                   variant='destructive'
                   size='icon'
                   className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
                   onClick={(e) => {
-                    handleDeleteBooking(selectedBooking.id);
+                    handleDeleteEvent(selectedEvent.id);
                     e.preventDefault();
                   }}
                 >
