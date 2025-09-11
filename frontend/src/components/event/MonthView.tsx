@@ -121,10 +121,7 @@ export default function MonthView({
                     {hasMoreEvents && (
                       <button
                         className={`w-full rounded bg-gray-300 px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-400`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleShowMore(day);
-                        }}
+                        onClick={() => handleShowMore(day)}
                       >
                         SHOW MORE
                       </button>

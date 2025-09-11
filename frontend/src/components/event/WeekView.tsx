@@ -1,11 +1,17 @@
-import { format, isSameDay } from 'date-fns';
+import {
+  eachDayOfInterval,
+  endOfWeek,
+  format,
+  isSameDay,
+  startOfWeek,
+} from 'date-fns';
 import { Clock, MapPin, User } from 'lucide-react';
 
 import { getCategoryBgColor } from '@/lib/formOptions';
 import type { EventView } from '@/lib/utils/server/event';
 
 interface WeekViewProps {
-  calendarDays: Date[];
+  currentDate: Date;
   getFilteredEvents: (date: Date) => EventView[];
   handleEmptyDayClick: (date: Date) => void;
   handleEventClick: (event: EventView) => void;
@@ -14,11 +20,18 @@ interface WeekViewProps {
 const today = new Date();
 
 export default function WeekView({
-  calendarDays,
+  currentDate,
   getFilteredEvents,
   handleEmptyDayClick,
   handleEventClick,
 }: WeekViewProps) {
+  const calendarStart = startOfWeek(currentDate, { weekStartsOn: 1 });
+  const calendarEnd = endOfWeek(currentDate, { weekStartsOn: 1 });
+  const calendarDays = eachDayOfInterval({
+    start: calendarStart,
+    end: calendarEnd,
+  });
+
   return (
     <div className='overflow-hidden rounded-2xl bg-[#0C2C47]'>
       {/* Day headers */}

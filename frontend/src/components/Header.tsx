@@ -93,7 +93,7 @@ export default function Header() {
                           EVENTS
                         </Link>
                         <Link
-                          href='/groups'
+                          href='/student-groups'
                           className='block py-1 text-sm'
                           onClick={() => setIsSidebarOpen(false)}
                         >
@@ -188,7 +188,7 @@ export default function Header() {
                 label='STUDENT LIFE'
                 items={[
                   { label: 'EVENTS', href: '/events' },
-                  { label: 'STUDENT GROUPS', href: '/groups' },
+                  { label: 'STUDENT GROUPS', href: '/student-groups' },
                   { label: 'VENUE BOOKING', href: '/bookings' },
                 ]}
               />

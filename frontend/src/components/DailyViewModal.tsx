@@ -16,7 +16,6 @@ import type { EventView } from '@/lib/utils/server/event';
 interface DailyViewModalProps {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  onClose: () => void;
   date: Date;
   events: EventView[];
   onEventClick: (event: EventView) => void;
@@ -25,7 +24,6 @@ interface DailyViewModalProps {
 export default function DailyViewModal({
   isOpen,
   setIsOpen,
-  onClose,
   date,
   events,
   onEventClick,
@@ -49,10 +47,7 @@ export default function DailyViewModal({
               <div
                 key={event.id}
                 className={`cursor-pointer rounded-xl p-3 ${getCategoryBgColor(event.bookedForOrg.category)}`}
-                onClick={() => {
-                  onEventClick(event);
-                  onClose();
-                }}
+                onClick={() => onEventClick(event)}
               >
                 <h3 className='mb-2 text-sm font-semibold text-[#0C2C47]'>
                   {event.eventName}

@@ -202,14 +202,8 @@ export default function Events({ events, userOrgs }: EventsProps) {
       viewMode === 'MONTH' ? addMonths(prev, 1) : addWeeks(prev, 1),
     );
 
-  const calendarStart =
-    viewMode === 'MONTH'
-      ? startOfWeek(startOfMonth(currentDate))
-      : startOfWeek(currentDate, { weekStartsOn: 1 });
-  const calendarEnd =
-    viewMode === 'MONTH'
-      ? endOfWeek(endOfMonth(currentDate))
-      : endOfWeek(currentDate, { weekStartsOn: 1 });
+  const calendarStart = startOfWeek(startOfMonth(currentDate));
+  const calendarEnd = endOfWeek(endOfMonth(currentDate));
   const calendarDays = eachDayOfInterval({
     start: calendarStart,
     end: calendarEnd,
@@ -312,6 +306,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
                   currentDate={currentDate}
                   setCurrentDate={setCurrentDate}
                   viewMode={viewMode}
+                  // TODO: This is problematic
                   calendarDays={calendarDays}
                 />
               </div>
@@ -404,7 +399,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
           />
         ) : (
           <WeekView
-            calendarDays={calendarDays}
+            currentDate={currentDate}
             getFilteredEvents={getFilteredEvents}
             handleEmptyDayClick={handleEmptyDayClick}
             handleEventClick={handleEventClick}
@@ -425,10 +420,9 @@ export default function Events({ events, userOrgs }: EventsProps) {
       <DailyViewModal
         isOpen={isDailyViewOpen}
         setIsOpen={setIsDailyViewOpen}
-        onClose={() => setIsDailyViewOpen(false)}
         date={selectedDate}
         events={selectedDate ? getFilteredEvents(selectedDate) : []}
-        onEventClick={setSelectedEvent}
+        onEventClick={handleEventClick}
       />
     </div>
   );

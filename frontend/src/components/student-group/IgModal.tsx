@@ -78,6 +78,8 @@ export default function ShowIGModal({ organisation }: ShowIGModalProps) {
             </div>
           </div>
 
+          {/* TODO: Redo this IG section */}
+          {/* TODO: Add the telegram group chat link as well */}
           {/* IG Head Selection */}
           <div>
             <label className='mb-2 block text-sm font-medium text-gray-700'>

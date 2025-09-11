@@ -126,6 +126,7 @@ export default function VenuesTimetable({
 
       {/* Hover card portal */}
       {/* TODO: Use react-tooltip instead */}
+      {/* TODO: Disable tooltip on mobile */}
       {hoveredBooking && (
         <CardPortal>
           <div className='transform-[translate(20px, -50%)] fixed top-(--mouse-y) left-(--mouse-x)'>
