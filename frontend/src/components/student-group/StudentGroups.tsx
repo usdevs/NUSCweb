@@ -211,7 +211,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
                     }
 
                     return (
-                      <PaginationItem>
+                      <PaginationItem key={i}>
                         <PaginationLink
                           aria-label='Go to previous page'
                           size='default'
