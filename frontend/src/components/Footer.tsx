@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 
 export default function Footer() {
   return (
-    <footer className='bg-[#0C2C47] px-8 py-4 text-white'>
+    <footer className='sticky bottom-0 bg-[#0C2C47] px-8 py-4 text-white'>
       <div className='mx-auto flex items-center justify-between'>
         <div className='flex space-x-4'>
           <Button variant='ghost' size='icon' className='p-0' asChild>

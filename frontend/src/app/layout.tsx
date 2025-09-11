@@ -25,9 +25,7 @@ export default function RootLayout({
           <Header />
           <main>{children}</main>
           <Toaster richColors position='bottom-center' />
-          <div className='mt-auto'>
-            <Footer />
-          </div>
+          <Footer />
         </div>
       </body>
     </html>
