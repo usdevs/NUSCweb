@@ -90,7 +90,11 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
           <Button
             className={`ml-3 rounded-md bg-[#FF7D4E] p-6 text-sm text-white hover:bg-[#FF7D4E]/90`}
           >
-            <Link href='https://t.me/+Mm3qL3aL7c0zNDE1'>
+            <Link
+              href='https://t.me/+Mm3qL3aL7c0zNDE1'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               STUDENT GROUP
               <br />
               TELEGRAM CHAT
