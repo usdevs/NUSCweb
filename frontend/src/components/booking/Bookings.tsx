@@ -107,7 +107,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
     }
 
     const newBooking = new FormData();
-    newBooking.set('eventName', formData.bookingName);
+    newBooking.set('bookingName', formData.bookingName);
     newBooking.set('organizationId', formData.organizationId.toString());
     newBooking.set('venueId', formData.venueId.toString());
     newBooking.set('startTime', formData.startTime.toISOString());
@@ -132,7 +132,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
 
     const editBooking = new FormData();
     editBooking.set('id', selectedBooking.id.toString());
-    editBooking.set('eventName', formData.bookingName);
+    editBooking.set('bookingName', formData.bookingName);
     editBooking.set('organizationId', formData.organizationId.toString());
     editBooking.set('venueId', formData.venueId.toString());
     editBooking.set('startTime', formData.startTime.toISOString());

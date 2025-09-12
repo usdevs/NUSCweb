@@ -105,7 +105,7 @@ export default function VenueTimetable({
             );
 
           // Check if this is the first cell of a booking
-          const isFirstCell = booking && format(booking.start, 'Ka') === time;
+          const isFirstCell = booking && format(booking.start, 'ha') === time;
 
           // Calculate span for booking
           // TODO: Test for events spanning from day 1, 11pm to day 2, 1am

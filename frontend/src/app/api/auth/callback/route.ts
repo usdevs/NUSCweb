@@ -53,7 +53,7 @@ export async function GET(req: Request) {
   }
 
   const user = await prisma.user.findUnique({
-    where: { telegramId: userCredentials.id },
+    where: { telegramId: userCredentials.id.toString() },
   });
 
   if (user === null) {

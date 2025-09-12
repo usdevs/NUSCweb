@@ -11,7 +11,7 @@ datasource db {
 model User {
     id               Int         @id @default(autoincrement())
     name             String
-    telegramId       Int         @unique @map("telegram_id")
+    telegramId       String      @unique @map("telegram_id")
     telegramUserName String      @map("telegram_user_name")
     userOrgs         UserOnOrg[]
     deleted          Boolean     @default(false) // supports soft delete

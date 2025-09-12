@@ -5,7 +5,7 @@ CREATE TYPE "public"."IGCategory" AS ENUM ('Sports', 'SocioCultural', 'Welfare',
 CREATE TABLE "public"."users" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "telegram_id" INTEGER NOT NULL,
+    "telegram_id" TEXT NOT NULL,
     "telegram_user_name" TEXT NOT NULL,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "deleted_at" TIMESTAMP(3),
