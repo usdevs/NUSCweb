@@ -4,7 +4,7 @@ export const getBookings = async () =>
   prisma.booking.findMany({
     select: {
       id: true,
-      eventName: true,
+      bookingName: true,
       start: true,
       end: true,
       venue: { select: { id: true, name: true } },

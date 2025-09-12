@@ -1,8 +1,7 @@
+import Events from '@/components/event/Events';
 import { getAuthCookie } from '@/lib/auth/server';
 import prisma from '@/lib/prisma';
 import { getEvents } from '@/lib/utils/server/event';
-
-import Events from '../../components/event/Events';
 
 export default async function EventsPage() {
   const [authCookie, events] = await Promise.all([

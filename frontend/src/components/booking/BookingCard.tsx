@@ -16,7 +16,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking }) => {
       <div className='flex items-start gap-3 bg-[#0C2C47] p-3 text-white'>
         <Calendar className='mt-1 h-5 w-5 shrink-0' />
         <h3 className='line-clamp-2 text-base font-semibold'>
-          {booking.eventName}
+          {booking.bookingName}
         </h3>
       </div>
 

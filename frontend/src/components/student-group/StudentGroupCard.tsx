@@ -37,7 +37,7 @@ export default function StudentGroupCard({
 
       <p className='mb-4 text-sm text-gray-500'>
         Headed by{' '}
-        {organisation.userOrg.map((igHead) => igHead.user.name).join(', ')}
+        {organisation.userOrgs.map((igHead) => igHead.user.name).join(', ')}
       </p>
 
       <ShowIGModal organisation={organisation} />

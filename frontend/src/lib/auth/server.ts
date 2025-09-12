@@ -6,7 +6,7 @@ import { validateCookie } from '@/lib/utils/server/jwt';
 
 export const hasOrgPerms = (authCookie: AuthCookie, orgId: number) =>
   authCookie.userOrgs.some((userOrg) => userOrg.id === orgId) ||
-  authCookie.isOverallAdmin;
+  authCookie.isAdmin;
 
 export const getAuthCookie = async (): Promise<
   (AuthCookie & JwtPayload) | undefined

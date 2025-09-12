@@ -58,7 +58,7 @@ export const createBooking = async (
   try {
     await prisma.booking.create({
       data: {
-        eventName: data.eventName,
+        bookingName: data.bookingName,
         venueId: data.venueId,
         userId: token.userId,
         // TODO: userOrgId isn't technically correct right now
@@ -69,7 +69,7 @@ export const createBooking = async (
         end: data.endTime,
         event: {
           create: {
-            eventName: data.eventName,
+            eventName: data.bookingName,
             userId: token.userId,
             // TODO: userOrgId isn't technically correct right now
             // especially if an admin is booking for another IG
@@ -158,7 +158,7 @@ export const editBooking = async (
     await prisma.booking.update({
       where: { id: data.id },
       data: {
-        eventName: data.eventName,
+        bookingName: data.bookingName,
         venueId: data.venueId,
         userId: token.userId,
         // TODO: userOrgId isn't technically correct right now
@@ -171,7 +171,7 @@ export const editBooking = async (
           ? {
               upsert: {
                 create: {
-                  eventName: data.eventName,
+                  eventName: data.bookingName,
                   userId: token.userId,
                   // TODO: userOrgId isn't technically correct right now
                   // especially if an admin is booking for another IG
@@ -181,7 +181,7 @@ export const editBooking = async (
                   end: data.endTime,
                 },
                 update: {
-                  eventName: data.eventName,
+                  eventName: data.bookingName,
                   userId: token.userId,
                   // TODO: userOrgId isn't technically correct right now
                   // especially if an admin is booking for another IG

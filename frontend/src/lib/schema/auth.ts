@@ -8,5 +8,5 @@ export default interface AuthCookie {
     name: string;
     isAdminOrg: boolean;
   }[];
-  isOverallAdmin: boolean;
+  isAdmin: boolean;
 }

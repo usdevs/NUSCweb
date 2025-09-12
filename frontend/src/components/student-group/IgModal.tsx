@@ -19,13 +19,13 @@ interface ShowIGModalProps {
 
 export default function ShowIGModal({ organisation }: ShowIGModalProps) {
   const [selectedIGHead, setSelectedIGHead] = useState(
-    organisation?.userOrg[0]?.user.name ?? '',
+    organisation?.userOrgs[0]?.user.name ?? '',
   );
 
   // Extract IG Heads from the organisation data
   const igHeads = useMemo(() => {
     return organisation
-      ? organisation.userOrg.map((userOrg) => ({
+      ? organisation.userOrgs.map((userOrg) => ({
           name: userOrg.user.name,
           telegramUserName: userOrg.user.telegramUserName,
         }))

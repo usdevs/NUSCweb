@@ -3,19 +3,21 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    // directUrl = env("DIRECT_URL")
 }
 
 model User {
     id               Int         @id @default(autoincrement())
     name             String
-    telegramId       String?     @unique
-    telegramUserName String
-    telegramDpUrl    String?
-    userOrg          UserOnOrg[]
+    telegramId       Int         @unique @map("telegram_id")
+    telegramUserName String      @map("telegram_user_name")
+    userOrgs         UserOnOrg[]
     deleted          Boolean     @default(false) // supports soft delete
-    deletedAt        DateTime?
+    deletedAt        DateTime?   @map("deleted_at")
+
+    @@map("users")
 }
 
 enum IGCategory {
@@ -30,117 +32,77 @@ model Organisation {
     id          Int         @id @default(autoincrement())
     name        String
     description String      @default("An NUSC organisation")
-    isAdminOrg  Boolean     @default(false)
+    isAdminOrg  Boolean     @default(false) @map("is_admin_org")
     bookings    Booking[]
     events      Event[]
-    userOrg     UserOnOrg[]
-    inviteToken String      @default(uuid())
+    userOrgs    UserOnOrg[]
+    inviteToken String      @default(uuid()) @map("invite_token")
     slug        String      @unique
     category    IGCategory
-    isInactive  Boolean     @default(false)
-    isInvisible Boolean     @default(false) // is not displayed on the website
+    isInactive  Boolean     @default(false) @map("is_inactive")
+    isInvisible Boolean     @default(false) @map("is_invisible") // is not displayed on the website
+
+    @@map("organisations")
 }
 
 model UserOnOrg {
     user       User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    userId     Int
+    userId     Int          @map("user_id")
     org        Organisation @relation(fields: [orgId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    orgId      Int
-    assignedAt DateTime     @default(now())
+    orgId      Int          @map("org_id")
+    assignedAt DateTime     @default(now()) @map("assigned_at")
     bookings   Booking[]
     events     Event[]
     deleted    Boolean      @default(false) // supports soft delete
-    deletedAt  DateTime?
+    deletedAt  DateTime?    @map("deleted_at")
 
     @@id([userId, orgId])
+    @@map("user_on_org")
 }
 
 model Venue {
-    id      Int       @id @default(autoincrement())
-    name    String
-    booking Booking[]
+    id       Int       @id @default(autoincrement())
+    name     String
+    bookings Booking[]
+
+    @@map("venues")
 }
 
 model Booking {
     id             Int          @id @default(autoincrement())
-    eventName      String
+    bookingName    String       @map("booking_name")
     venue          Venue        @relation(fields: [venueId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    venueId        Int
+    venueId        Int          @map("venue_id")
     bookedBy       UserOnOrg    @relation(fields: [userId, userOrgId], references: [userId, orgId], onDelete: Cascade, onUpdate: Cascade)
-    userId         Int
-    userOrgId      Int
+    userId         Int          @map("user_id")
+    userOrgId      Int          @map("user_org_id")
     bookedForOrg   Organisation @relation(fields: [bookedForOrgId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    bookedForOrgId Int // this field will only be populated if a user (typically an admin user) has made a booking on behalf of another org
+    bookedForOrgId Int          @map("booked_for_org_id")
     start          DateTime
     end            DateTime
-    bookedAt       DateTime     @default(now())
+    bookedAt       DateTime     @default(now()) @map("booked_at")
     event          Event?
     deleted        Boolean      @default(false) // supports soft delete
-    deletedAt      DateTime?
+    deletedAt      DateTime?    @map("deleted_at")
+
+    @@map("bookings")
 }
 
 model Event {
     id             Int          @id @default(autoincrement())
-    eventName      String
+    eventName      String       @map("event_name")
     bookedBy       UserOnOrg    @relation(fields: [userId, userOrgId], references: [userId, orgId], onDelete: Cascade, onUpdate: Cascade)
-    userId         Int
-    userOrgId      Int
+    userId         Int          @map("user_id")
+    userOrgId      Int          @map("user_org_id")
     bookedForOrg   Organisation @relation(fields: [bookedForOrgId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    bookedForOrgId Int // this field will only be populated if a user (typically an admin user) has made a booking on behalf of another org
+    bookedForOrgId Int          @map("booked_for_org_id")
     start          DateTime
     end            DateTime
-    bookedAt       DateTime     @default(now())
+    bookedAt       DateTime     @default(now()) @map("booked_at")
     booking        Booking?     @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    bookingId      Int?         @unique
+    bookingId      Int?         @unique @map("booking_id")
     deleted        Boolean      @default(false) // supports soft delete
-    deletedAt      DateTime?
-}
+    deletedAt      DateTime?    @map("deleted_at")
 
-model Course {
-    code            String           @id
-    name            String
-    courseOfferings CourseOffering[]
-}
-
-model Professor {
-    id              Int              @id @default(autoincrement())
-    name            String           @unique
-    courseOfferings CourseOffering[]
-}
-
-enum Semester {
-    Semester1
-    Semester2
-}
-
-model CourseOffering {
-    id           Int          @id @default(autoincrement())
-    course       Course       @relation(fields: [courseCode], references: [code], onDelete: Cascade, onUpdate: Cascade)
-    courseCode   String
-    professor    Professor    @relation(fields: [professorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    professorId  Int
-    semester     Semester
-    academicYear Int
-    submissions  Submission[]
-
-    @@unique([courseCode, professorId, semester, academicYear])
-}
-
-model Student {
-    id              Int          @id @default(autoincrement())
-    matriculationNo String       @unique
-    name            String
-    submissions     Submission[]
-}
-
-model Submission {
-    id               Int            @id @default(autoincrement())
-    title            String
-    text             String
-    lastUpdated      DateTime       @default(now())
-    isPublished      Boolean        @default(false)
-    student          Student        @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    studentId        Int
-    courseOffering   CourseOffering @relation(fields: [courseOfferingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    courseOfferingId Int
+    @@map("events")
 }

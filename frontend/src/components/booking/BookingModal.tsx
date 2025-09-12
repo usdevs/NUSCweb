@@ -99,7 +99,7 @@ export default function BookingModal({
             </DialogHeader>
             <FormField
               control={form.control}
-              name='eventName'
+              name='bookingName'
               render={({ field }) => (
                 <FormItem>
                   <div className='grid grid-cols-[1fr_2fr] items-center gap-3'>

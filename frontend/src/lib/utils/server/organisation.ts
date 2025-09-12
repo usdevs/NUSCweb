@@ -11,7 +11,7 @@ export const getOrganisations = async () =>
       description: true,
       category: true,
       isInactive: true,
-      userOrg: {
+      userOrgs: {
         select: {
           user: {
             select: {

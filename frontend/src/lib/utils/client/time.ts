@@ -1,6 +1,10 @@
+import { roundToNearestMinutes } from 'date-fns';
+
 export const dateTimeFormatter = Intl.DateTimeFormat('en-SG');
 
 export const getNext30Minutes = () => {
-  const ms = 1000 * 60 * 30;
-  return new Date(Math.ceil(new Date().getTime() / ms) * ms);
+  return roundToNearestMinutes(new Date(), {
+    nearestTo: 30,
+    roundingMethod: 'ceil',
+  });
 };

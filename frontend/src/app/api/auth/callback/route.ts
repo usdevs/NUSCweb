@@ -1,5 +1,6 @@
 import { AuthDataValidator } from '@telegram-auth/server';
 import { urlStrToAuthDataMap } from '@telegram-auth/server/utils';
+import { addHours } from 'date-fns';
 import { StatusCodes } from 'http-status-codes';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -28,12 +29,12 @@ const generatePermissions = async (userId: number) => {
     },
   });
 
-  const isOverallAdmin = userRoles.some((userRole) => userRole.org.isAdminOrg);
+  const isAdmin = userRoles.some((userRole) => userRole.org.isAdminOrg);
   const userOrgs = userRoles.map((userRole) => userRole.org);
 
   return {
     userOrgs,
-    isOverallAdmin,
+    isAdmin,
   };
 };
 
@@ -52,35 +53,15 @@ export async function GET(req: Request) {
   }
 
   const user = await prisma.user.findUnique({
-    where: {
-      telegramId: userCredentials.id.toString(),
-    },
+    where: { telegramId: userCredentials.id },
   });
 
-  let userId;
   if (user === null) {
     return Response.json(NO_MATCHING_USER_MESSAGE, {
       status: StatusCodes.UNAUTHORIZED,
     });
-  } else {
-    // Update telegram details in the database
-    // When the user was initially created, we did not have their telegramId
-    userId = user.id;
-    let name = `${userCredentials.first_name}`;
-    // because last name is optional on Tele
-    if (userCredentials.last_name) {
-      name += ` ${userCredentials.last_name}`;
-    }
-
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        name: name,
-        telegramId: userCredentials.id.toString(),
-        telegramUserName: userCredentials.username,
-      },
-    });
   }
+  const userId = user.id;
 
   const cookieStore = await cookies();
   const permissions = await generatePermissions(userId);
@@ -91,14 +72,13 @@ export async function GET(req: Request) {
   };
   const token = generateToken(authObject);
 
-  const in1hour = new Date();
-  in1hour.setTime(in1hour.getTime() + 60 * 60 * 1000);
+  const in1hour = addHours(new Date(), 1);
 
   cookieStore.set('auth', token, {
     expires: in1hour,
   });
 
   const headersList = await headers();
-  const redirectUrl = headersList.get('Referer');
-  redirect(redirectUrl || '/');
+  const redirectUrl = headersList.get('Referer') || '/';
+  redirect(redirectUrl);
 }
