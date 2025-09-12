@@ -1,10 +1,14 @@
 'use client';
 
 import { format } from 'date-fns';
-import { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 
 import { TIMETABLE_TIMESLOTS } from '@/lib/formOptions';
-import { timeToIndex } from '@/lib/utils/client';
+import {
+  dateToHalfHourIndex,
+  getTimeSpanInHalfHours,
+  timeToIndex,
+} from '@/lib/utils/client';
 import type { BookingView } from '@/lib/utils/server/booking';
 import type { VenueView } from '@/lib/utils/server/venue';
 
@@ -34,15 +38,12 @@ export default function VenueTimetable({
   const getCellBooking = (time: string) => {
     const timeIndex = timeToIndex(time);
 
-    // Find a booking that:
-    // 1. Matches the room
-    // 2. Is on the current selected date
-    // 3. The time falls within the booking's start and end times
-    return bookings.find(
-      (booking) =>
-        timeIndex >= booking.start.getHours() &&
-        timeIndex < booking.end.getHours(),
-    );
+    // Find a booking that overlaps with this 30-minute slot
+    return bookings.find((booking) => {
+      const startIndex = dateToHalfHourIndex(booking.start);
+      const endIndex = dateToHalfHourIndex(booking.end);
+      return timeIndex >= startIndex && timeIndex < endIndex;
+    });
   };
 
   const handleMouseDown = (time: string) => {
@@ -70,12 +71,7 @@ export default function VenueTimetable({
       {/* Time cells */}
       <div className='divide-y bg-white'>
         {TIMETABLE_TIMESLOTS.map((time) => {
-          // Find if there's a booking for this time and room
-          const booking = bookings.find(
-            (booking) =>
-              timeToIndex(time) >= booking.start.getHours() &&
-              timeToIndex(time) < booking.end.getHours(),
-          );
+          const booking = getCellBooking(time);
 
           // Check if this cell is in drag selection
           const isSelected =
@@ -98,22 +94,21 @@ export default function VenueTimetable({
             return (
               <div
                 key={`${venue.id}-${time}`}
-                className={`relative h-12 cursor-cell p-2 ${isSelected ? `bg-blue-200` : `bg-white`}`}
-                onMouseDown={() => handleMouseDown(time)}
-                onMouseMove={() => handleMouseMove(time)}
+                className={`relative h-6 cursor-cell p-1 ${isSelected ? `bg-blue-200` : `bg-white`}`}
+                onMouseDown={() => handleMouseDown(time.toUpperCase())}
+                onMouseMove={() => handleMouseMove(time.toUpperCase())}
               />
             );
 
-          // Check if this is the first cell of a booking
-          const isFirstCell = booking && format(booking.start, 'ha') === time;
+          const bookingStartTime = format(booking.start, 'p')
+            .toLowerCase()
+            .replace(/\s/g, '');
+          const normalizedTime = time.toLowerCase().replace(/\s/g, '');
+          const isFirstCell = bookingStartTime === normalizedTime;
 
-          // Calculate span for booking
-          // TODO: Test for events spanning from day 1, 11pm to day 2, 1am
           const getSpan = () => {
             if (!booking || !isFirstCell) return 1;
-            const startIndex = booking.start.getHours();
-            const endIndex = booking.end.getHours();
-            return endIndex - startIndex;
+            return getTimeSpanInHalfHours(booking.start, booking.end);
           };
 
           const span = getSpan();
@@ -124,7 +119,7 @@ export default function VenueTimetable({
                 key={`${venue.id}-${time}`}
                 className='relative cursor-pointer rounded-xl bg-[#FFD6CC] p-2'
                 style={{
-                  height: `${span * 3}rem`,
+                  height: `${span * 1.5}rem`,
                 }}
                 onClick={() => handleBookingClick(booking)}
                 onMouseEnter={() => setHoveredBooking(booking)}
@@ -134,7 +129,7 @@ export default function VenueTimetable({
                   <div className='font-medium'>{booking.bookingName}</div>
                   <div>{booking.bookedForOrg.name}</div>
                   <div className='mt-1 text-[10px]'>
-                    {`${format(booking.start, 'Ka')} - ${format(booking.end, 'Ka')}`}
+                    {`${format(booking.start, 'p')} - ${format(booking.end, 'h:mma')}`}
                   </div>
                 </div>
               </div>

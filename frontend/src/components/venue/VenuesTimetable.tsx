@@ -60,10 +60,12 @@ export default function VenuesTimetable({
         Math.max(timeToIndex(dragStart.time), timeToIndex(dragEnd.time)) + 1;
 
       const startTime = new Date(date);
-      startTime.setHours(startIndex, 0);
+      startTime.setHours(Math.floor(startIndex / 2), 0);
+      if (startIndex % 2 === 1) startTime.setMinutes(30);
 
       const endTime = new Date(date);
-      endTime.setHours(endIndex, 0);
+      endTime.setHours(Math.floor(endIndex / 2), 0);
+      if (endIndex % 2 === 1) startTime.setMinutes(30);
 
       setSelectedTimeRange({
         // Use the room from dragStart (column where user started dragging)
@@ -82,22 +84,31 @@ export default function VenuesTimetable({
   };
 
   return (
-    <div className={`mt-10 flex-1 overflow-auto px-2 lg:ml-8 lg:px-0`}>
+    <div className={`mt-10 flex-1 overflow-auto px-2 lg:ml-4 lg:px-0`}>
       {/* Timetable - Full width on mobile */}
       <div className='flex'>
         {/* Time labels column */}
-        <div className={`flex w-10 flex-col text-right lg:w-14`}>
+        <div className={`flex w-16 flex-col text-right lg:w-18`}>
           <div className='h-8' />
-          {TIMETABLE_TIMESLOTS.map((time) => (
-            <div
-              key={time}
-              className={`relative flex h-12 items-center justify-end pr-2 text-xs text-white lg:text-sm`}
-            >
-              {time}
-              {/* White connecting line */}
-              <div className='absolute top-1/2 right-0 h-px w-2 bg-white'></div>
-            </div>
-          ))}
+          {TIMETABLE_TIMESLOTS.map((time, index) =>
+            index % 2 === 0 ? (
+              <div
+                key={time}
+                className={`relative flex h-12 items-center justify-end pr-2 text-xs text-white lg:text-sm`}
+              >
+                {time}
+                {/* White connecting line */}
+                <div className='absolute top-1/2 right-0 h-px w-2 bg-white'></div>
+              </div>
+            ) : null,
+          )}
+          <div
+            className={`relative flex h-12 items-center justify-end pr-2 text-xs text-white lg:text-sm`}
+          >
+            12:00 am
+            {/* White connecting line */}
+            <div className='absolute top-1/2 right-0 h-px w-2 bg-white'></div>
+          </div>
         </div>
 
         {/* Scrollable container for room timetables */}
