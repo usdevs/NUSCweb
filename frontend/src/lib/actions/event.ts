@@ -45,7 +45,7 @@ export const createEvent = async (
   }
 
   // Ensure user has the permissions for the corresponding organisation
-  if (!hasOrgPerms(token, data.organizationId)) {
+  if (!hasOrgPerms(token, data.organisationId)) {
     return {
       success: false,
       message: 'You do not belong to the organisation!',
@@ -59,8 +59,8 @@ export const createEvent = async (
         userId: token.userId,
         // TODO: userOrgId isn't technically correct right now
         // especially if an admin is booking for another IG
-        userOrgId: data.organizationId,
-        bookedForOrgId: data.organizationId,
+        userOrgId: data.organisationId,
+        bookedForOrgId: data.organisationId,
         start: data.startTime,
         end: data.endTime,
       },
@@ -129,7 +129,7 @@ export const editEvent = async (
 
   // Ensure user has the permissions for the corresponding organisations
   if (
-    !hasOrgPerms(token, data.organizationId) ||
+    !hasOrgPerms(token, data.organisationId) ||
     !hasOrgPerms(token, origEvent.bookedForOrgId)
   ) {
     return {
@@ -146,8 +146,8 @@ export const editEvent = async (
         userId: token.userId,
         // TODO: userOrgId isn't technically correct right now
         // especially if an admin is booking for another IG
-        userOrgId: data.organizationId,
-        bookedForOrgId: data.organizationId,
+        userOrgId: data.organisationId,
+        bookedForOrgId: data.organisationId,
         start: data.startTime,
         end: data.endTime,
       },

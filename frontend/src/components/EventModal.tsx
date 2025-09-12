@@ -111,7 +111,7 @@ export default function EventModal({
             />
             <FormField
               control={form.control}
-              name='organizationId'
+              name='organisationId'
               render={({ field }) => (
                 <FormItem
                   className={`grid grid-cols-[1fr_2fr] items-center gap-3`}

@@ -2,7 +2,7 @@ import { z } from 'zod/v4';
 
 export const NewEventSchema = z.object({
   eventName: z.string().nonempty(),
-  organizationId: z.coerce.number<number>().int().positive(),
+  organisationId: z.coerce.number<number>().int().positive(),
   startTime: z.coerce.date<Date>(),
   endTime: z.coerce.date<Date>(),
 });

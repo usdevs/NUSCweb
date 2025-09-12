@@ -83,7 +83,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
     resolver: standardSchemaResolver(NewEventSchema),
     defaultValues: {
       eventName: '',
-      organizationId: 0,
+      organisationId: 0,
       startTime: today,
       endTime: addHours(today, 2),
     },
@@ -119,7 +119,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
   const handleCreateSubmit = (formData: z.input<typeof NewEventSchema>) => {
     const newEvent = new FormData();
     newEvent.set('eventName', formData.eventName);
-    newEvent.set('organizationId', formData.organizationId.toString());
+    newEvent.set('organisationId', formData.organisationId.toString());
     newEvent.set('startTime', formData.startTime.toISOString());
     newEvent.set('endTime', formData.endTime.toISOString());
 
@@ -134,7 +134,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
     const editEvent = new FormData();
     editEvent.set('id', selectedEvent.id.toString());
     editEvent.set('eventName', formData.eventName);
-    editEvent.set('organizationId', formData.organizationId.toString());
+    editEvent.set('organisationId', formData.organisationId.toString());
     editEvent.set('startTime', formData.startTime.toISOString());
     editEvent.set('endTime', formData.endTime.toISOString());
 
@@ -175,7 +175,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
 
     form.reset({
       eventName: '',
-      organizationId: 0,
+      organisationId: 0,
       startTime: today,
       endTime: addHours(today, 2),
     });
@@ -212,7 +212,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
   const handleEventClick = (event: EventView) => {
     setSelectedEvent(event);
     form.setValue('eventName', event.eventName);
-    form.setValue('organizationId', event.bookedForOrg.id);
+    form.setValue('organisationId', event.bookedForOrg.id);
     form.setValue('startTime', event.start);
     form.setValue('endTime', event.end);
   };

@@ -68,7 +68,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
     resolver: standardSchemaResolver(NewBookingClientSchema),
     defaultValues: {
       bookingName: '',
-      organizationId: 0,
+      organisationId: 0,
       venueId: 0,
       startTime: today,
       endTime: addHours(today, 2),
@@ -108,7 +108,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
 
     const newBooking = new FormData();
     newBooking.set('bookingName', formData.bookingName);
-    newBooking.set('organizationId', formData.organizationId.toString());
+    newBooking.set('organisationId', formData.organisationId.toString());
     newBooking.set('venueId', formData.venueId.toString());
     newBooking.set('startTime', formData.startTime.toISOString());
     newBooking.set('endTime', formData.endTime.toISOString());
@@ -133,7 +133,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
     const editBooking = new FormData();
     editBooking.set('id', selectedBooking.id.toString());
     editBooking.set('bookingName', formData.bookingName);
-    editBooking.set('organizationId', formData.organizationId.toString());
+    editBooking.set('organisationId', formData.organisationId.toString());
     editBooking.set('venueId', formData.venueId.toString());
     editBooking.set('startTime', formData.startTime.toISOString());
     editBooking.set('endTime', formData.endTime.toISOString());
@@ -176,7 +176,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
 
     form.reset({
       bookingName: '',
-      organizationId: 0,
+      organisationId: 0,
       venueId: 0,
       startTime: today,
       endTime: addHours(today, 2),
@@ -225,7 +225,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
         handleBookingClick={(booking) => {
           setSelectedBooking(booking);
           form.setValue('bookingName', booking.bookingName);
-          form.setValue('organizationId', booking.bookedForOrg.id);
+          form.setValue('organisationId', booking.bookedForOrg.id);
           form.setValue('venueId', booking.venue.id);
           form.setValue('startTime', booking.start);
           form.setValue('endTime', booking.end);

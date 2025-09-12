@@ -2,7 +2,7 @@ import { z } from 'zod/v4';
 
 export const NewBookingClientSchema = z.object({
   bookingName: z.string().nonempty(),
-  organizationId: z.coerce.number<number>().int().positive(),
+  organisationId: z.coerce.number<number>().int().positive(),
   venueId: z.coerce.number<number>().int().positive(),
   startTime: z.coerce.date<Date>(),
   endTime: z.coerce.date<Date>(),

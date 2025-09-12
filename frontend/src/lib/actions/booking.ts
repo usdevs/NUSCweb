@@ -48,7 +48,7 @@ export const createBooking = async (
   }
 
   // Ensure user has the permissions for the corresponding organisation
-  if (!hasOrgPerms(token, data.organizationId)) {
+  if (!hasOrgPerms(token, data.organisationId)) {
     return {
       success: false,
       message: 'You do not belong to the organisation!',
@@ -63,8 +63,8 @@ export const createBooking = async (
         userId: token.userId,
         // TODO: userOrgId isn't technically correct right now
         // especially if an admin is booking for another IG
-        userOrgId: data.organizationId,
-        bookedForOrgId: data.organizationId,
+        userOrgId: data.organisationId,
+        bookedForOrgId: data.organisationId,
         start: data.startTime,
         end: data.endTime,
         event: {
@@ -73,8 +73,8 @@ export const createBooking = async (
             userId: token.userId,
             // TODO: userOrgId isn't technically correct right now
             // especially if an admin is booking for another IG
-            userOrgId: data.organizationId,
-            bookedForOrgId: data.organizationId,
+            userOrgId: data.organisationId,
+            bookedForOrgId: data.organisationId,
             start: data.startTime,
             end: data.endTime,
           },
@@ -145,7 +145,7 @@ export const editBooking = async (
 
   // Ensure user has the permissions for the corresponding organisation
   if (
-    !hasOrgPerms(token, data.organizationId) ||
+    !hasOrgPerms(token, data.organisationId) ||
     !hasOrgPerms(token, origBooking.bookedForOrgId)
   ) {
     return {
@@ -163,8 +163,8 @@ export const editBooking = async (
         userId: token.userId,
         // TODO: userOrgId isn't technically correct right now
         // especially if an admin is booking for another IG
-        userOrgId: data.organizationId,
-        bookedForOrgId: data.organizationId,
+        userOrgId: data.organisationId,
+        bookedForOrgId: data.organisationId,
         start: data.startTime,
         end: data.endTime,
         event: data.addToCalendar
@@ -175,8 +175,8 @@ export const editBooking = async (
                   userId: token.userId,
                   // TODO: userOrgId isn't technically correct right now
                   // especially if an admin is booking for another IG
-                  userOrgId: data.organizationId,
-                  bookedForOrgId: data.organizationId,
+                  userOrgId: data.organisationId,
+                  bookedForOrgId: data.organisationId,
                   start: data.startTime,
                   end: data.endTime,
                 },
@@ -185,8 +185,8 @@ export const editBooking = async (
                   userId: token.userId,
                   // TODO: userOrgId isn't technically correct right now
                   // especially if an admin is booking for another IG
-                  userOrgId: data.organizationId,
-                  bookedForOrgId: data.organizationId,
+                  userOrgId: data.organisationId,
+                  bookedForOrgId: data.organisationId,
                   start: data.startTime,
                   end: data.endTime,
                 },
