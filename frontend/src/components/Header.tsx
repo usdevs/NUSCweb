@@ -156,13 +156,15 @@ export default function Header() {
                             >
                               ORGANISATIONS
                             </Link>
-                            <Link
-                              href='/'
-                              className='block py-1 text-sm'
-                              onClick={() => setIsSidebarOpen(false)}
-                            >
-                              USERS
-                            </Link>
+                            {isAuthenticated.isAdmin && (
+                              <Link
+                                href='/admin/users'
+                                className='block py-1 text-sm'
+                                onClick={() => setIsSidebarOpen(false)}
+                              >
+                                USERS
+                              </Link>
+                            )}
                           </div>
                         )}
                       </div>
@@ -225,10 +227,22 @@ export default function Header() {
               <NavigationMenuItem>
                 <CustomDropdown
                   label='ADMIN'
-                  items={[
-                    { label: 'ORGANISATIONS', href: '/admin/organisations' },
-                    { label: 'USERS', href: '/' },
-                  ]}
+                  items={
+                    isAuthenticated.isAdmin
+                      ? [
+                          {
+                            label: 'ORGANISATIONS',
+                            href: '/admin/organisations',
+                          },
+                          { label: 'USERS', href: '/admin/users' },
+                        ]
+                      : [
+                          {
+                            label: 'ORGANISATIONS',
+                            href: '/admin/organisations',
+                          },
+                        ]
+                  }
                 />
               </NavigationMenuItem>
             )}

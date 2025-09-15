@@ -1,9 +1,8 @@
 import { redirect } from 'next/navigation';
 
+import OrganisationsPage from '@/components/admin/Organisations';
 import { getAuthCookie } from '@/lib/auth/server';
 import prisma from '@/lib/prisma';
-
-import OrganisationsPage from './component';
 
 export default async function OrganisationAdminPage() {
   const authCookie = await getAuthCookie();

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import CopyButton from '@/components/CopyButton';
 import {
   Dialog,
   DialogContent,
@@ -10,8 +11,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import type { OrganisationView } from '@/lib/utils/server/organisation';
-
-import CopyButton from '../CopyButton';
 
 interface ShowIGModalProps {
   organisation: OrganisationView | null;

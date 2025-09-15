@@ -2,11 +2,20 @@
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { IGCategory, type Organisation } from '@prisma/client';
-import { EditIcon, SearchIcon, Trash2Icon } from 'lucide-react';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronsLeftIcon,
+  ChevronsRightIcon,
+  EditIcon,
+  SearchIcon,
+  Trash2Icon,
+} from 'lucide-react';
 import { useActionState, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod/v4';
 
+import OrganisationModal from '@/components/admin/OrganisationModal';
 import CopyButton from '@/components/CopyButton';
 import {
   AlertDialog,
@@ -27,8 +36,6 @@ import {
   PaginationContent,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from '@/components/ui/pagination';
 import {
   Select,
@@ -44,7 +51,7 @@ import {
 } from '@/lib/actions/organisation';
 import { NewOrganisationClientSchema } from '@/lib/schema/organisation';
 
-import OrganisationModal from './OrganisationModal';
+const PAGE_SIZE = 9;
 
 interface OrganisationsPageProps {
   organisations: Organisation[];
@@ -162,6 +169,19 @@ export default function OrganisationsPage({
     return matchesSearch && matchesCategory;
   });
 
+  // Pagination
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.ceil(filteredOrganisations.length / PAGE_SIZE);
+
+  // Pagination logic
+  const paginateArray = (pageNumber: number) => {
+    return filteredOrganisations.slice(
+      (pageNumber - 1) * PAGE_SIZE,
+      pageNumber * PAGE_SIZE,
+    );
+  };
+
   return (
     <div className='container mx-auto px-4 py-8'>
       {/* Header */}
@@ -239,7 +259,7 @@ export default function OrganisationsPage({
 
         {/* Table Body */}
         <div className='divide-y divide-gray-200'>
-          {filteredOrganisations.map((org) => (
+          {paginateArray(page).map((org) => (
             <div
               key={org.id}
               className='px-6 py-4 transition-colors hover:bg-gray-50'
@@ -318,29 +338,84 @@ export default function OrganisationsPage({
       </div>
 
       {/* Pagination */}
-      <div className='mt-8'>
+      {totalPages > 1 && (
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href='#' />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href='#' isActive>
-                1
+              <PaginationLink
+                aria-label='Go to first page'
+                size='default'
+                className='px-2.5 text-white hover:bg-white/10 hover:text-white/80'
+                onClick={() => setPage(1)}
+              >
+                <ChevronsLeftIcon className='h-4 w-4' />
               </PaginationLink>
             </PaginationItem>
+
             <PaginationItem>
-              <PaginationLink href='#'>2</PaginationLink>
+              <PaginationLink
+                aria-label='Go to previous page'
+                size='default'
+                className='px-2.5 text-white hover:bg-white/10 hover:text-white/80'
+                onClick={() => setPage((page) => Math.max(1, page - 1))}
+              >
+                <ChevronLeftIcon className='h-4 w-4' />
+              </PaginationLink>
             </PaginationItem>
+
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              let pageNumber;
+              if (totalPages <= 5) {
+                pageNumber = i + 1;
+              } else if (page <= 3) {
+                pageNumber = i + 1;
+              } else if (page >= totalPages - 2) {
+                pageNumber = totalPages - 4 + i;
+              } else {
+                pageNumber = page - 2 + i;
+              }
+
+              return (
+                <PaginationItem key={i}>
+                  <PaginationLink
+                    aria-label='Go to previous page'
+                    size='default'
+                    className={`px-2.5 text-white hover:bg-white/10 hover:text-white/80 ${page === pageNumber ? 'text-black' : ''}`}
+                    onClick={() => setPage(pageNumber)}
+                    isActive={page === pageNumber}
+                  >
+                    {pageNumber}
+                  </PaginationLink>
+                </PaginationItem>
+              );
+            })}
+
             <PaginationItem>
-              <PaginationLink href='#'>3</PaginationLink>
+              <PaginationLink
+                aria-label='Go to next page'
+                size='default'
+                className='px-2.5 text-white hover:bg-white/10 hover:text-white/80'
+                onClick={() =>
+                  setPage((page) => Math.min(totalPages, page + 1))
+                }
+              >
+                <ChevronRightIcon className='h-4 w-4' />
+              </PaginationLink>
             </PaginationItem>
+
             <PaginationItem>
-              <PaginationNext href='#' />
+              <PaginationLink
+                aria-label='Go to last page'
+                size='default'
+                className='px-2.5 text-white hover:bg-white/10 hover:text-white/80'
+                onClick={() => setPage(totalPages)}
+              >
+                <ChevronsRightIcon className='h-4 w-4' />
+              </PaginationLink>
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-      </div>
+      )}
     </div>
   );
 }
