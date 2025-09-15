@@ -1,4 +1,4 @@
-import { Copy } from 'lucide-react';
+import { CopyIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -32,7 +32,7 @@ export default function CopyButton({ text, labelText }: CopyButtonProps) {
         <span className='text-green-600'>Copied!</span>
       ) : (
         <>
-          <Copy className='h-4 w-4' />
+          <CopyIcon className='h-4 w-4' />
           {labelText}
         </>
       )}

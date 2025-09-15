@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Calendar, Clock, MapPin, User } from 'lucide-react';
+import { CalendarIcon, ClockIcon, MapPinIcon, UserIcon } from 'lucide-react';
 
 import type { BookingView } from '@/lib/utils/server/booking';
 
@@ -14,7 +14,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking }) => {
     >
       {/* Card Header */}
       <div className='flex items-start gap-3 bg-[#0C2C47] p-3 text-white'>
-        <Calendar className='mt-1 h-5 w-5 shrink-0' />
+        <CalendarIcon className='mt-1 h-5 w-5 shrink-0' />
         <h3 className='line-clamp-2 text-base font-semibold'>
           {booking.bookingName}
         </h3>
@@ -23,12 +23,12 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking }) => {
       {/* Card Content */}
       <div className='space-y-2 p-3'>
         <div className='flex items-center gap-2'>
-          <User className='h-4 w-4 shrink-0 text-gray-700' />
+          <UserIcon className='h-4 w-4 shrink-0 text-gray-700' />
           <span className='truncate text-sm'>{booking.bookedForOrg.name}</span>
         </div>
 
         <div className='flex items-center gap-2'>
-          <Clock className='h-4 w-4 shrink-0 text-gray-700' />
+          <ClockIcon className='h-4 w-4 shrink-0 text-gray-700' />
           <div>
             {/* TODO: Align both start and end timings vertically */}
             <div className='text-sm'>
@@ -41,7 +41,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking }) => {
         </div>
 
         <div className='flex items-center gap-2'>
-          <MapPin className='h-4 w-4 shrink-0 text-gray-700' />
+          <MapPinIcon className='h-4 w-4 shrink-0 text-gray-700' />
           <span className='truncate text-sm'>{booking.venue.name}</span>
         </div>
       </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { format } from 'date-fns';
-import { Clock, MapPin, User } from 'lucide-react';
+import { ClockIcon, MapPinIcon, UserIcon } from 'lucide-react';
 import type { Dispatch, SetStateAction } from 'react';
 
 import {
@@ -55,12 +55,12 @@ export default function DailyViewModal({
 
                 <div className='space-y-1 text-xs text-[#0C2C47]'>
                   <div className='flex items-center gap-2'>
-                    <User className='h-4 w-4 fill-[#0C2C47]' />
+                    <UserIcon className='h-4 w-4 fill-[#0C2C47]' />
                     <span>{event.bookedForOrg.name}</span>
                   </div>
 
                   <div className='flex items-center gap-2'>
-                    <Clock className='h-4 w-4' />
+                    <ClockIcon className='h-4 w-4' />
                     <span>
                       {format(event.start, 'p')} - {format(event.end, 'p')}
                     </span>
@@ -68,7 +68,7 @@ export default function DailyViewModal({
 
                   {event.booking && (
                     <div className='flex items-center gap-2'>
-                      <MapPin className='h-4 w-4' />
+                      <MapPinIcon className='h-4 w-4' />
                       <span>{event.booking.venue.name}</span>
                     </div>
                   )}

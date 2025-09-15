@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDown } from 'lucide-react';
+import { ChevronDownIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
@@ -56,7 +56,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ label, items }) => {
         onClick={handleClick}
       >
         {label}
-        <ChevronDown
+        <ChevronDownIcon
           className={`h-4 w-4 transition-transform duration-300 ${isOpen ? `rotate-180` : ''}`}
         />
       </button>

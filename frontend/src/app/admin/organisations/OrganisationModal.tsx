@@ -1,11 +1,22 @@
 'use client';
 
 import { IGCategory, Organisation } from '@prisma/client';
-import { Plus, Trash2Icon } from 'lucide-react';
+import { PlusIcon, Trash2Icon } from 'lucide-react';
 import type { Dispatch, SetStateAction } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import z from 'zod/v4';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -73,7 +84,7 @@ export default function OrganisationModal({
         <DialogTrigger asChild>
           {authToken?.isAdmin && (
             <Button className='bg-orange-500 text-white hover:bg-orange-600'>
-              <Plus className='mr-2 h-4 w-4' />
+              <PlusIcon className='mr-2 h-4 w-4' />
               CREATE NEW ORGANISATION
             </Button>
           )}
@@ -208,17 +219,39 @@ export default function OrganisationModal({
             />
             <DialogFooter className='sm:justify-between'>
               {selectedOrganisation !== null && (
-                <Button
-                  variant='destructive'
-                  size='icon'
-                  className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
-                  onClick={(e) => {
-                    handleDeleteOrganisation(selectedOrganisation.id);
-                    e.preventDefault();
-                  }}
-                >
-                  <Trash2Icon />
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant='destructive'
+                      size='icon'
+                      className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
+                    >
+                      <Trash2Icon />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete the organisation "{selectedOrganisation.name}".
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={(e) => {
+                          handleDeleteOrganisation(selectedOrganisation.id);
+                          e.preventDefault();
+                        }}
+                      >
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               )}
 
               <div className='ml-auto flex gap-2'>

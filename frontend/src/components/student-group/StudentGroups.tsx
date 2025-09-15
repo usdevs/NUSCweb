@@ -2,10 +2,10 @@
 
 import { IGCategory } from '@prisma/client';
 import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronsLeftIcon,
+  ChevronsRightIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -187,7 +187,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
                       className='px-2.5 text-white hover:bg-white/10 hover:text-white/80'
                       onClick={() => setPage(1)}
                     >
-                      <ChevronsLeft className='h-4 w-4' />
+                      <ChevronsLeftIcon className='h-4 w-4' />
                     </PaginationLink>
                   </PaginationItem>
 
@@ -198,7 +198,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
                       className='px-2.5 text-white hover:bg-white/10 hover:text-white/80'
                       onClick={() => setPage((page) => Math.max(1, page - 1))}
                     >
-                      <ChevronLeft className='h-4 w-4' />
+                      <ChevronLeftIcon className='h-4 w-4' />
                     </PaginationLink>
                   </PaginationItem>
 
@@ -238,7 +238,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
                         setPage((page) => Math.min(totalPages, page + 1))
                       }
                     >
-                      <ChevronRight className='h-4 w-4' />
+                      <ChevronRightIcon className='h-4 w-4' />
                     </PaginationLink>
                   </PaginationItem>
 
@@ -249,7 +249,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
                       className='px-2.5 text-white hover:bg-white/10 hover:text-white/80'
                       onClick={() => setPage(totalPages)}
                     >
-                      <ChevronsRight className='h-4 w-4' />
+                      <ChevronsRightIcon className='h-4 w-4' />
                     </PaginationLink>
                   </PaginationItem>
                 </PaginationContent>

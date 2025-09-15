@@ -15,7 +15,7 @@ import {
   subMonths,
   subWeeks,
 } from 'date-fns';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useActionState, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -265,7 +265,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
                 className={`h-6 w-6 text-[#0C2C47] hover:bg-gray-100`}
                 onClick={handlePrevious}
               >
-                <ChevronLeft className='h-4 w-4' />
+                <ChevronLeftIcon className='h-4 w-4' />
               </Button>
               <Button
                 variant='ghost'
@@ -273,7 +273,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
                 className={`h-6 w-6 text-[#0C2C47] hover:bg-gray-100`}
                 onClick={handleNext}
               >
-                <ChevronRight className='h-4 w-4' />
+                <ChevronRightIcon className='h-4 w-4' />
               </Button>
             </div>
           </div>
@@ -368,7 +368,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
               className={`h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90`}
               onClick={handlePrevious}
             >
-              <ChevronLeft className='h-4 w-4' />
+              <ChevronLeftIcon className='h-4 w-4' />
             </Button>
             <Button
               variant='ghost'
@@ -376,7 +376,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
               className={`h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90`}
               onClick={handleNext}
             >
-              <ChevronRight className='h-4 w-4' />
+              <ChevronRightIcon className='h-4 w-4' />
             </Button>
           </div>
           <h1 className='text-[40px] font-bold text-white'>

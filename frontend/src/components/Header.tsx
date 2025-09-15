@@ -2,7 +2,12 @@
 
 import { LoginButton } from '@telegram-auth/react';
 import Cookies from 'js-cookie';
-import { ChevronDown, ChevronRight, Menu, Send } from 'lucide-react';
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  MenuIcon,
+  SendIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -40,12 +45,12 @@ export default function Header() {
       }`}
     >
       <div className='flex items-center justify-between px-4 py-2'>
-        {/* Mobile Menu */}
+        {/* Mobile MenuIcon */}
         <div className='lg:hidden'>
           <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
             <SheetTrigger asChild>
               <Button variant='ghost' size='icon'>
-                <Menu className='h-6 w-6' />
+                <MenuIcon className='h-6 w-6' />
               </Button>
             </SheetTrigger>
             <SheetContent side='left'>
@@ -78,9 +83,9 @@ export default function Header() {
                     >
                       <span>STUDENT LIFE</span>
                       {mobileSubmenuOpen ? (
-                        <ChevronDown className='h-4 w-4' />
+                        <ChevronDownIcon className='h-4 w-4' />
                       ) : (
-                        <ChevronRight className='h-4 w-4' />
+                        <ChevronRightIcon className='h-4 w-4' />
                       )}
                     </button>
                     {mobileSubmenuOpen && (
@@ -136,9 +141,9 @@ export default function Header() {
                       >
                         <span>ADMIN</span>
                         {adminSubmenuOpen ? (
-                          <ChevronDown className='h-4 w-4' />
+                          <ChevronDownIcon className='h-4 w-4' />
                         ) : (
-                          <ChevronRight className='h-4 w-4' />
+                          <ChevronRightIcon className='h-4 w-4' />
                         )}
                       </button>
                       <div>
@@ -169,7 +174,7 @@ export default function Header() {
           </Sheet>
         </div>
 
-        {/* Desktop Menu */}
+        {/* Desktop MenuIcon */}
         <NavigationMenu className='hidden w-full max-w-full lg:block'>
           <NavigationMenuList>
             <NavigationMenuItem>
@@ -237,7 +242,7 @@ export default function Header() {
             }}
             variant='ghost'
           >
-            <Send className='h-4 w-4' />
+            <SendIcon className='h-4 w-4' />
             LOGOUT
           </Button>
         ) : (

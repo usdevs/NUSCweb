@@ -5,7 +5,7 @@ import {
   isSameDay,
   startOfWeek,
 } from 'date-fns';
-import { Clock, MapPin, User } from 'lucide-react';
+import { ClockIcon, MapPinIcon, UserIcon } from 'lucide-react';
 
 import { getCategoryBgColor } from '@/lib/formOptions';
 import type { EventView } from '@/lib/utils/server/event';
@@ -99,18 +99,18 @@ export default function WeekView({
                     >
                       <div className='font-medium'>{event.eventName}</div>
                       <div className='flex items-center gap-1 text-gray-600'>
-                        <User className='h-4 w-4 fill-[#0C2C47]' />
+                        <UserIcon className='h-4 w-4 fill-[#0C2C47]' />
                         <span>{event.bookedForOrg.name}</span>
                       </div>
                       <div className='flex items-center gap-1 text-gray-600'>
-                        <Clock className='h-4 w-4' />
+                        <ClockIcon className='h-4 w-4' />
                         <span>
                           {format(event.start, 'p')} - {format(event.end, 'p')}
                         </span>
                       </div>
                       {event.booking && (
                         <div className='flex items-center gap-1 text-gray-600'>
-                          <MapPin className='h-4 w-4' />
+                          <MapPinIcon className='h-4 w-4' />
                           <span>{event.booking.venue.name}</span>
                         </div>
                       )}

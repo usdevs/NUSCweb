@@ -2,12 +2,23 @@
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { IGCategory, type Organisation } from '@prisma/client';
-import { Edit, Search, Trash2 } from 'lucide-react';
+import { EditIcon, SearchIcon, Trash2Icon } from 'lucide-react';
 import { useActionState, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod/v4';
 
 import CopyButton from '@/components/CopyButton';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -170,7 +181,7 @@ export default function OrganisationsPage({
         />
       </div>
 
-      {/* Search and Filter */}
+      {/* SearchIcon and Filter */}
       <div className='mb-6 flex flex-col gap-4 sm:flex-row'>
         <div className='flex-1'>
           <Label
@@ -180,11 +191,11 @@ export default function OrganisationsPage({
             SEARCH
           </Label>
           <div className='relative'>
-            <Search className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400' />
+            <SearchIcon className='absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400' />
             <Input
               id='search'
               type='text'
-              placeholder='Search organisations...'
+              placeholder='SearchIcon organisations...'
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className='pl-10'
@@ -265,18 +276,40 @@ export default function OrganisationsPage({
                     }}
                     className='text-gray-600 hover:text-gray-800'
                   >
-                    <Edit className='mr-1 h-4 w-4' />
+                    <EditIcon className='mr-1 h-4 w-4' />
                     EDIT
                   </Button>
-                  <Button
-                    variant='outline'
-                    size='sm'
-                    onClick={() => handleDeleteSubmit(org.id)}
-                    className='border-orange-200 text-orange-600 hover:border-orange-300 hover:text-orange-800'
-                  >
-                    <Trash2 className='mr-1 h-4 w-4' />
-                    DELETE
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant='outline'
+                        size='sm'
+                        className='border-orange-200 text-orange-600 hover:border-orange-300 hover:text-orange-800'
+                      >
+                        <Trash2Icon className='mr-1 h-4 w-4' />
+                        DELETE
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete the organisation "{org.name}".
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDeleteSubmit(org.id)}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { Instagram } from 'lucide-react';
+import { InstagramIcon } from 'lucide-react';
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
@@ -33,7 +33,7 @@ export default function Footer() {
               target='_blank'
               rel='noopener noreferrer'
             >
-              <Instagram className='h-8 w-8' />
+              <InstagramIcon className='h-8 w-8' />
             </a>
           </Button>
         </div>
