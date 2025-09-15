@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-    provider  = "postgresql"
-    url       = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
     // directUrl = env("DIRECT_URL")
 }
 
@@ -37,7 +37,7 @@ model Organisation {
     events      Event[]
     userOrgs    UserOnOrg[]
     inviteToken String      @default(uuid()) @map("invite_token")
-    slug        String      @unique
+    telegramUrl String?     @map("telegram_url")
     category    IGCategory
     isInactive  Boolean     @default(false) @map("is_inactive")
     isInvisible Boolean     @default(false) @map("is_invisible") // is not displayed on the website

@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod/v4';
 
+import type { ServerActionState } from '@/lib/actions';
 import { getAuthCookie, hasOrgPerms } from '@/lib/auth/server';
 import prisma from '@/lib/prisma';
 import {
@@ -11,15 +12,10 @@ import {
   NewEventSchema,
 } from '@/lib/schema/event';
 
-type CreateEventState = {
-  success: boolean;
-  message: string;
-} | null;
-
 export const createEvent = async (
-  _prevState: CreateEventState,
+  _prevState: ServerActionState,
   formData: FormData,
-): Promise<CreateEventState> => {
+): Promise<ServerActionState> => {
   const token = await getAuthCookie();
   if (!token) {
     return {
@@ -81,15 +77,10 @@ export const createEvent = async (
   };
 };
 
-type EditEventState = {
-  success: boolean;
-  message: string;
-} | null;
-
 export const editEvent = async (
-  _prevState: EditEventState,
+  _prevState: ServerActionState,
   formData: FormData,
-): Promise<EditEventState> => {
+): Promise<ServerActionState> => {
   const token = await getAuthCookie();
   if (!token) {
     return {
@@ -168,15 +159,10 @@ export const editEvent = async (
   };
 };
 
-type DeleteEventState = {
-  success: boolean;
-  message: string;
-} | null;
-
 export const deleteEvent = async (
-  _prevState: DeleteEventState,
+  _prevState: ServerActionState,
   formData: FormData,
-): Promise<DeleteEventState> => {
+): Promise<ServerActionState> => {
   const token = await getAuthCookie();
   if (!token) {
     return {

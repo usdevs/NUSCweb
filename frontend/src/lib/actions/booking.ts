@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod/v4';
 
+import type { ServerActionState } from '@/lib/actions';
 import { getAuthCookie, hasOrgPerms } from '@/lib/auth/server';
 import prisma from '@/lib/prisma';
 import {
@@ -11,18 +12,13 @@ import {
   NewBookingServerSchema,
 } from '@/lib/schema/booking';
 
-type CreateBookingState = {
-  success: boolean;
-  message: string;
-} | null;
-
 // TODO: Check if organisations have exceeded their weekly limit in bookings
 // TODO: Check if there are clashes in bookings
 
 export const createBooking = async (
-  _prevState: CreateBookingState,
+  _prevState: ServerActionState,
   formData: FormData,
-): Promise<CreateBookingState> => {
+): Promise<ServerActionState> => {
   const token = await getAuthCookie();
   if (!token) {
     return {
@@ -97,15 +93,10 @@ export const createBooking = async (
   };
 };
 
-type EditBookingState = {
-  success: boolean;
-  message: string;
-} | null;
-
 export const editBooking = async (
-  _prevState: EditBookingState,
+  _prevState: ServerActionState,
   formData: FormData,
-): Promise<EditBookingState> => {
+): Promise<ServerActionState> => {
   const token = await getAuthCookie();
   if (!token) {
     return {
@@ -213,15 +204,10 @@ export const editBooking = async (
   };
 };
 
-type DeleteBookingState = {
-  success: boolean;
-  message: string;
-} | null;
-
 export const deleteBooking = async (
-  _prevState: DeleteBookingState,
+  _prevState: ServerActionState,
   formData: FormData,
-): Promise<DeleteBookingState> => {
+): Promise<ServerActionState> => {
   const token = await getAuthCookie();
   if (!token) {
     return {

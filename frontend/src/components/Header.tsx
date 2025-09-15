@@ -31,7 +31,7 @@ export default function Header() {
   const [adminSubmenuOpen, setAdminSubmenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const isLoggedIn = useAuth();
+  const isAuthenticated = useAuth();
 
   return (
     <header
@@ -127,7 +127,7 @@ export default function Header() {
                   </NavigationMenuItem>
 
                   {/* Admin menu for logged in users */}
-                  {isLoggedIn && (
+                  {isAuthenticated && (
                     <NavigationMenuItem className='w-full'>
                       {/* Student Life */}
                       <button
@@ -145,7 +145,7 @@ export default function Header() {
                         {adminSubmenuOpen && (
                           <div className='pl-4'>
                             <Link
-                              href='/'
+                              href='/admin/organisations'
                               className='block py-1 text-sm'
                               onClick={() => setIsSidebarOpen(false)}
                             >
@@ -216,12 +216,12 @@ export default function Header() {
 
             {/* Right side buttons */}
             {/* Admin dropdown for logged in users */}
-            {isLoggedIn && (
+            {isAuthenticated && (
               <NavigationMenuItem>
                 <CustomDropdown
                   label='ADMIN'
                   items={[
-                    { label: 'ORGANISATIONS', href: '/' },
+                    { label: 'ORGANISATIONS', href: '/admin/organisations' },
                     { label: 'USERS', href: '/' },
                   ]}
                 />
@@ -229,7 +229,7 @@ export default function Header() {
             )}
           </NavigationMenuList>
         </NavigationMenu>
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <Button
             onClick={() => {
               Cookies.remove('auth');
