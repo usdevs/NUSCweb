@@ -11,10 +11,6 @@ import { generateToken } from '@/lib/utils/server/jwt';
 
 const validator = new AuthDataValidator({ botToken: process.env.BOT_TOKEN });
 
-const NO_MATCHING_USER_MESSAGE = `You are not authorized to access the NUSC website!
-Note: this may be an issue if you have recently changed your Telegram username without actually having logged into the NUSC website.
-If so, please add your new username via the Admin tab.`;
-
 const generatePermissions = async (userId: number) => {
   const userRoles = await prisma.userOnOrg.findMany({
     where: { userId },
@@ -52,15 +48,25 @@ export async function GET(req: Request) {
     );
   }
 
-  const user = await prisma.user.findUnique({
+  let user = await prisma.user.findUnique({
     where: { telegramId: userCredentials.id.toString() },
   });
 
   if (user === null) {
-    return Response.json(NO_MATCHING_USER_MESSAGE, {
-      status: StatusCodes.UNAUTHORIZED,
+    let name = `${userCredentials.first_name}`;
+    if (userCredentials.last_name) {
+      name += ` ${userCredentials.last_name}`;
+    }
+
+    user = await prisma.user.create({
+      data: {
+        name: name,
+        telegramId: userCredentials.id.toString(),
+        telegramUserName: userCredentials.username!,
+      },
     });
   }
+
   const userId = user.id;
 
   const cookieStore = await cookies();
