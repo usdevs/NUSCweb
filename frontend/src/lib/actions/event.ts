@@ -11,6 +11,7 @@ import {
   EditEventSchema,
   NewEventSchema,
 } from '@/lib/schema/event';
+import { formDataToObject } from '@/lib/utils';
 
 export const createEvent = async (
   _prevState: ServerActionState,
@@ -26,7 +27,7 @@ export const createEvent = async (
 
   let data;
   try {
-    data = NewEventSchema.parse(Object.fromEntries(formData));
+    data = NewEventSchema.parse(formDataToObject(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -91,7 +92,7 @@ export const editEvent = async (
 
   let data;
   try {
-    data = EditEventSchema.parse(Object.fromEntries(formData));
+    data = EditEventSchema.parse(formDataToObject(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -173,7 +174,7 @@ export const deleteEvent = async (
 
   let data;
   try {
-    data = DeleteEventSchema.parse(Object.fromEntries(formData));
+    data = DeleteEventSchema.parse(formDataToObject(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {

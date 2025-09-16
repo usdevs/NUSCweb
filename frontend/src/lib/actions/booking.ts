@@ -11,6 +11,7 @@ import {
   EditBookingServerSchema,
   NewBookingServerSchema,
 } from '@/lib/schema/booking';
+import { formDataToObject } from '@/lib/utils';
 
 // TODO: Check if organisations have exceeded their weekly limit in bookings
 // TODO: Check if there are clashes in bookings
@@ -29,7 +30,7 @@ export const createBooking = async (
 
   let data;
   try {
-    data = NewBookingServerSchema.parse(Object.fromEntries(formData));
+    data = NewBookingServerSchema.parse(formDataToObject(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -107,7 +108,7 @@ export const editBooking = async (
 
   let data;
   try {
-    data = EditBookingServerSchema.parse(Object.fromEntries(formData));
+    data = EditBookingServerSchema.parse(formDataToObject(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -218,7 +219,7 @@ export const deleteBooking = async (
 
   let data;
   try {
-    data = DeleteBookingSchema.parse(Object.fromEntries(formData));
+    data = DeleteBookingSchema.parse(formDataToObject(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {

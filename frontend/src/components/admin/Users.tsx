@@ -1,7 +1,7 @@
 'use client';
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
-import { IGCategory, type Organisation } from '@prisma/client';
+import type { Organisation } from '@prisma/client';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -15,8 +15,7 @@ import { useActionState, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod/v4';
 
-import OrganisationModal from '@/components/admin/OrganisationModal';
-import CopyButton from '@/components/CopyButton';
+import UserModal from '@/components/admin/UserModal';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -37,146 +36,81 @@ import {
   PaginationItem,
   PaginationLink,
 } from '@/components/ui/pagination';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  createOrganisation,
-  deleteOrganisation,
-  editOrganisation,
-} from '@/lib/actions/organisation';
-import { NewOrganisationClientSchema } from '@/lib/schema/organisation';
+import { deleteUser, editUser } from '@/lib/actions/user';
+import { UpdateUserSchema } from '@/lib/schema/user';
+import { UserView } from '@/lib/utils/server/user';
 
 const PAGE_SIZE = 9;
 
-interface OrganisationsPageProps {
+interface UsersPageProps {
+  users: UserView[];
   organisations: Organisation[];
 }
 
-export default function OrganisationsPage({
-  organisations,
-}: OrganisationsPageProps) {
+export default function UsersPage({ users, organisations }: UsersPageProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('All categories');
 
-  const [selectedOrganisation, setSelectedOrganisation] =
-    useState<Organisation | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserView | null>(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editUserState, editUserAction, editUserPending] = useActionState(
+    editUser,
+    null,
+  );
+  const [deleteUserState, deleteUserAction, deleteUserPending] = useActionState(
+    deleteUser,
+    null,
+  );
 
-  const [
-    createOrganisationState,
-    createOrganisationAction,
-    createOrganisationPending,
-  ] = useActionState(createOrganisation, null);
-  const [
-    editOrganisationState,
-    editOrganisationAction,
-    editOrganisationPending,
-  ] = useActionState(editOrganisation, null);
-  const [
-    deleteOrganisationState,
-    deleteOrganisationAction,
-    deleteOrganisationPending,
-  ] = useActionState(deleteOrganisation, null);
-
-  const form = useForm<z.input<typeof NewOrganisationClientSchema>>({
-    resolver: standardSchemaResolver(NewOrganisationClientSchema),
+  const form = useForm<z.input<typeof UpdateUserSchema>>({
+    resolver: standardSchemaResolver(UpdateUserSchema),
     defaultValues: {
-      name: '',
-      description: '',
-      isAdminOrg: false,
-      telegramUrl: '',
-      category: IGCategory.Others,
+      organisationIds: [],
     },
   });
 
-  const handleCreateSubmit = (
-    formData: z.input<typeof NewOrganisationClientSchema>,
-  ) => {
-    const newOrganisation = new FormData();
-    newOrganisation.set('name', formData.name);
-    if (formData.description)
-      newOrganisation.set('description', formData.description);
-    newOrganisation.set('isAdminOrg', formData.isAdminOrg.toString());
-    if (formData.telegramUrl)
-      newOrganisation.set('telegramUrl', formData.telegramUrl);
-    newOrganisation.set('category', formData.category);
-
-    createOrganisationAction(newOrganisation);
-    setIsModalOpen(false);
-  };
-
-  const handleEditSubmit = (
-    formData: z.input<typeof NewOrganisationClientSchema>,
-  ) => {
-    if (!selectedOrganisation) return;
+  const handleEditSubmit = (formData: z.input<typeof UpdateUserSchema>) => {
+    if (!selectedUser) return;
 
     const editOrganisation = new FormData();
-    editOrganisation.set('id', selectedOrganisation.id.toString());
-    editOrganisation.set('name', formData.name);
-    if (formData.description)
-      editOrganisation.set('description', formData.description);
-    editOrganisation.set('isAdminOrg', formData.isAdminOrg.toString());
-    if (formData.telegramUrl)
-      editOrganisation.set('telegramUrl', formData.telegramUrl);
-    editOrganisation.set('category', formData.category);
+    editOrganisation.set('id', selectedUser.id.toString());
+    formData.organisationIds.forEach((orgId) =>
+      editOrganisation.append('organisationIds', orgId.toString()),
+    );
 
-    editOrganisationAction(editOrganisation);
-    setSelectedOrganisation(null);
-    setIsModalOpen(false);
+    editUserAction(editOrganisation);
+    setSelectedUser(null);
   };
 
-  const handleSubmit = (
-    formData: z.input<typeof NewOrganisationClientSchema>,
-  ) => {
-    const handle =
-      selectedOrganisation === null ? handleCreateSubmit : handleEditSubmit;
-    handle(formData);
-  };
-
-  const handleDeleteSubmit = (organisationId: number) => {
-    const deleteOrganisation = new FormData();
-    deleteOrganisation.set('id', organisationId.toString());
-    deleteOrganisationAction(deleteOrganisation);
-    setSelectedOrganisation(null);
-    setIsModalOpen(false);
+  const handleDeleteSubmit = (userId: number) => {
+    const deleteUser = new FormData();
+    deleteUser.set('id', userId.toString());
+    deleteUserAction(deleteUser);
+    setSelectedUser(null);
   };
 
   const handleCloseModal = () => {
-    setSelectedOrganisation(null);
+    setSelectedUser(null);
 
     form.reset({
-      name: '',
-      description: '',
-      isAdminOrg: false,
-      telegramUrl: '',
-      category: IGCategory.Others,
+      organisationIds: [],
     });
   };
 
   // Filter organizations based on search and category
-  const filteredOrganisations = organisations.filter((org) => {
-    const matchesSearch = org.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      categoryFilter === 'All categories' || org.category === categoryFilter;
-    return matchesSearch && matchesCategory;
-  });
+  const filtedUsers = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.telegramUserName.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   // Pagination
   const [page, setPage] = useState(1);
 
-  const totalPages = Math.ceil(filteredOrganisations.length / PAGE_SIZE);
+  const totalPages = Math.ceil(filtedUsers.length / PAGE_SIZE);
 
   // Pagination logic
   const paginateArray = (pageNumber: number) => {
-    return filteredOrganisations.slice(
+    return filtedUsers.slice(
       (pageNumber - 1) * PAGE_SIZE,
       pageNumber * PAGE_SIZE,
     );
@@ -190,14 +124,13 @@ export default function OrganisationsPage({
           Manage Organisations
         </h1>
 
-        <OrganisationModal
+        <UserModal
           form={form}
-          isOpen={isModalOpen}
-          setIsOpen={setIsModalOpen}
+          selectedUser={selectedUser}
           handleClose={handleCloseModal}
-          selectedOrganisation={selectedOrganisation}
-          handleDeleteOrganisation={handleDeleteSubmit}
-          handleSubmitOrganisation={handleSubmit}
+          handleDeleteUser={handleDeleteSubmit}
+          handleEditUser={handleEditSubmit}
+          organisations={organisations}
         />
       </div>
 
@@ -215,34 +148,12 @@ export default function OrganisationsPage({
             <Input
               id='search'
               type='text'
-              placeholder='Search organisations...'
+              placeholder='Search users...'
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className='pl-10'
             />
           </div>
-        </div>
-
-        <div className='sm:w-64'>
-          <Label
-            htmlFor='category-filter'
-            className='mb-2 block text-sm font-medium text-gray-700'
-          >
-            FILTER BY CATEGORY
-          </Label>
-          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-            <SelectTrigger id='category-filter'>
-              <SelectValue placeholder='All categories' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='All categories'>All categories</SelectItem>
-              {Object.keys(IGCategory).map((category) => (
-                <SelectItem key={category} value={category}>
-                  {category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
       </div>
 
@@ -252,47 +163,47 @@ export default function OrganisationsPage({
         <div className='bg-slate-800 px-6 py-4 text-white'>
           <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
             <div className='font-medium'>NAME</div>
-            <div className='hidden font-medium md:block'>CATEGORY</div>
+            <div className='hidden font-medium md:block'>TELE HANDLE</div>
+            <div className='hidden font-medium md:block'>ORGANISATIONS</div>
             <div className='text-right font-medium'>ACTIONS</div>
           </div>
         </div>
 
         {/* Table Body */}
         <div className='divide-y divide-gray-200'>
-          {paginateArray(page).map((org) => (
+          {paginateArray(page).map((user) => (
             <div
-              key={org.id}
+              key={user.id}
               className='px-6 py-4 transition-colors hover:bg-gray-50'
             >
               <div className='grid grid-cols-1 items-center gap-4 md:grid-cols-3'>
                 <div className='font-medium text-gray-900'>
-                  {org.name}
+                  {user.name}
                   <div className='mt-1 text-sm text-gray-500 md:hidden'>
-                    {org.category}
+                    {user.telegramUserName}
+                  </div>
+                  <div className='mt-1 text-sm text-gray-500 md:hidden'>
+                    {user.userOrgs
+                      .map((userOrg) => userOrg.org.name)
+                      .join(', ')}
                   </div>
                 </div>
                 <div className='hidden text-gray-600 md:block'>
-                  {org.category}
+                  {user.telegramUserName}
+                </div>
+                <div className='hidden text-gray-600 md:block'>
+                  {user.userOrgs.map((userOrg) => userOrg.org.name).join(', ')}
                 </div>
                 <div className='flex justify-end gap-2'>
-                  {org.telegramUrl && (
-                    <CopyButton
-                      text={org.telegramUrl}
-                      labelText='COPY TELEGRAM URL'
-                    />
-                  )}
                   <Button
                     variant='outline'
                     size='sm'
                     onClick={() => {
-                      setSelectedOrganisation(org);
-                      form.setValue('name', org.name);
-                      form.setValue('description', org.description);
-                      form.setValue('category', org.category);
-                      if (org.telegramUrl)
-                        form.setValue('telegramUrl', org.telegramUrl);
-                      form.setValue('isAdminOrg', org.isAdminOrg);
-                      setIsModalOpen(true);
+                      setSelectedUser(user);
+                      form.setValue(
+                        'organisationIds',
+                        user.userOrgs.map((userOrg) => userOrg.org.id),
+                      );
                     }}
                     className='text-gray-600 hover:text-gray-800'
                   >
@@ -317,13 +228,13 @@ export default function OrganisationsPage({
                         </AlertDialogTitle>
                         <AlertDialogDescription>
                           This action cannot be undone. This will permanently
-                          delete the organisation "{org.name}".
+                          delete the user "{user.name}".
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          onClick={() => handleDeleteSubmit(org.id)}
+                          onClick={() => handleDeleteSubmit(user.id)}
                         >
                           Continue
                         </AlertDialogAction>

@@ -11,6 +11,7 @@ import {
   EditOrganisationServerSchema,
   NewOrganisationServerSchema,
 } from '@/lib/schema/organisation';
+import { formDataToObject } from '@/lib/utils';
 
 export const createOrganisation = async (
   _prevState: ServerActionState,
@@ -34,7 +35,7 @@ export const createOrganisation = async (
 
   let data;
   try {
-    data = NewOrganisationServerSchema.parse(Object.fromEntries(formData));
+    data = NewOrganisationServerSchema.parse(formDataToObject(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -80,7 +81,7 @@ export const editOrganisation = async (
 
   let data;
   try {
-    data = EditOrganisationServerSchema.parse(Object.fromEntries(formData));
+    data = EditOrganisationServerSchema.parse(formDataToObject(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -144,7 +145,7 @@ export const deleteOrganisation = async (
 
   let data;
   try {
-    data = DeleteOrganisationSchema.parse(Object.fromEntries(formData));
+    data = DeleteOrganisationSchema.parse(formDataToObject(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
