@@ -1,5 +1,6 @@
 import { InstagramIcon } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 
@@ -40,8 +41,11 @@ export default function Footer() {
         <Button
           variant='outline'
           className={`rounded-[5px] border-[#FF7D4E] bg-[#FF7D4E] text-white hover:border-[#FF7D4E]/90 hover:bg-[#FF7D4E]/90 hover:text-white/90`}
+          asChild
         >
-          REPORT A BUG
+          <Link href='https://forms.gle/PbmJa9SDVMYxhaFYA' target='_blank'>
+            REPORT A BUG
+          </Link>
         </Button>
       </div>
     </footer>
