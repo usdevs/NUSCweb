@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const formDataToObject = (formData: FormData) => {
-  const obj: Record<string, any> = {};
+  const obj: Record<string, FormDataEntryValue | FormDataEntryValue[]> = {};
   for (const [key, value] of formData.entries()) {
     if (obj[key] === undefined) {
       obj[key] = value;

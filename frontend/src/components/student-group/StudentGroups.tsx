@@ -126,7 +126,9 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
                   }
                 />
                 <label htmlFor={category} className='text-sm text-gray-700'>
-                  {IGCategory[category].toUpperCase()}
+                  {IGCategory[
+                    category as keyof typeof IGCategory
+                  ].toUpperCase()}
                 </label>
               </div>
             ))}

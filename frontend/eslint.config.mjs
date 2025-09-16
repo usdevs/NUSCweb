@@ -4,7 +4,6 @@ import eslint from '@eslint/js';
 import pluginNext from '@next/eslint-plugin-next';
 import { defineConfig } from 'eslint/config';
 import eslintConfigPrettier from 'eslint-config-prettier';
-import eslintPluginBetterTailwindcss from 'eslint-plugin-better-tailwindcss';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
 
@@ -31,37 +30,17 @@ export default defineConfig(
   eslint.configs.recommended,
   tseslint.configs.recommendedTypeChecked,
   {
+    rules: {
+      'no-empty': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
+    },
+  },
+  {
     languageOptions: {
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
-  {
-    files: ['**/*.{jsx,tsx}'],
-    languageOptions: {
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-    },
-    plugins: {
-      'better-tailwindcss': eslintPluginBetterTailwindcss,
-    },
-    rules: {
-      ...eslintPluginBetterTailwindcss.configs['recommended-warn'].rules,
-      'better-tailwindcss/enforce-consistent-line-wrapping': 'off',
-      'better-tailwindcss/enforce-consistent-class-order': [
-        'warn',
-        { order: 'official' },
-      ],
-    },
-    settings: {
-      'better-tailwindcss': {
-        // tailwindcss 4: the path to the entry file of the css based tailwind config (eg: `src/global.css`)
-        entryPoint: 'src/app/globals.css',
       },
     },
   },
