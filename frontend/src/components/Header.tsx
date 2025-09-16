@@ -117,7 +117,10 @@ export default function Header() {
 
                   <NavigationMenuItem>
                     <NavigationMenuLink asChild>
-                      <Link href='/' onClick={() => setIsSidebarOpen(false)}>
+                      <Link
+                        href='https://sites.google.com/view/nuscc-academics-site/home'
+                        target='_blank'
+                      >
                         COURSE REVIEWS
                       </Link>
                     </NavigationMenuLink>
@@ -206,7 +209,12 @@ export default function Header() {
                 className={navigationMenuTriggerStyle()}
                 asChild
               >
-                <Link href='/'>COURSE REVIEWS</Link>
+                <Link
+                  href='https://sites.google.com/view/nuscc-academics-site/home'
+                  target='_blank'
+                >
+                  COURSE REVIEWS
+                </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
