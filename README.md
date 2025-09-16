@@ -21,21 +21,21 @@ The frontend for the NUSCC Website.
 
 1. Clone the repository:
 
-```bash
+\`\`\`bash
 git clone https://github.com/your-username/nusc-website.git
 cd nusc-website
-```
+\`\`\`
 
 2. Install dependencies:
 
-```bash
+\`\`\`bash
 pnpm install
-```
+\`\`\`
 
 3. Run the development server:
 
-```bash
+\`\`\`bash
 pnpm dev
-```
+\`\`\`
 
 4. Open <http://localhost:3000> in your browser to see the frontend.
