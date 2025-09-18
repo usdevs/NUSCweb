@@ -6,7 +6,7 @@ import { z } from 'zod/v4';
 import type { ServerActionState } from '@/lib/actions';
 import { getAuthCookie } from '@/lib/auth/server';
 import prisma from '@/lib/prisma';
-import { DeleteUserSchema, EditUserSchema } from '@/lib/schema/user';
+import { DeleteUserSchema, EditUserServerSchema } from '@/lib/schema/user';
 import { formDataToObject } from '@/lib/utils';
 
 export const editUser = async (
@@ -29,9 +29,9 @@ export const editUser = async (
     };
   }
 
-  let data: z.output<typeof EditUserSchema>;
+  let data: z.output<typeof EditUserServerSchema>;
   try {
-    data = EditUserSchema.parse(formDataToObject(formData));
+    data = EditUserServerSchema.parse(formDataToObject(formData));
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -46,9 +46,29 @@ export const editUser = async (
   }
 
   try {
-    await prisma.userOnOrg.createMany({
-      data: data.organisationIds.map((orgId) => ({ userId: data.id, orgId })),
-      skipDuplicates: true,
+    await prisma.$transaction(async (tx) => {
+      const user = await tx.user.findUniqueOrThrow({
+        where: { id: data.id },
+        select: { userOrgs: true },
+      });
+
+      const currentOrgIds = user.userOrgs.map((userOrg) => userOrg.orgId);
+
+      const toAdd = data.organisationIds.filter(
+        (orgId) => !currentOrgIds.includes(orgId),
+      );
+      const toRemove = currentOrgIds.filter(
+        (orgId) => !data.organisationIds.includes(orgId),
+      );
+
+      await Promise.all([
+        tx.userOnOrg.createMany({
+          data: toAdd.map((orgId) => ({ userId: data.id, orgId })),
+        }),
+        tx.userOnOrg.deleteMany({
+          where: { userId: data.id, orgId: { in: toRemove } },
+        }),
+      ]);
     });
   } catch (error) {
     console.error('Error editing user:', error);
