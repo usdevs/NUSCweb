@@ -106,7 +106,9 @@ export default function HomePage() {
                 variant='outline'
                 className={`w-fit rounded-[5px] border-[#FF7D4E] bg-[#FF7D4E] text-white hover:border-[#FF7D4E]/90 hover:bg-[#FF7D4E]/90 hover:text-white/90`}
               >
-                VIEW ALL
+              <Link href='https://sites.google.com/view/nuscc-academics-site/home' passHref>
+                  VIEW ALL
+              </Link>
               </Button>
             </div>
           </div>
