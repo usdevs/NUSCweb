@@ -25,6 +25,8 @@ export function dateToHalfHourIndex(date: Date): number {
 
 export function getTimeSpanInHalfHours(startDate: Date, endDate: Date): number {
   const startIndex = dateToHalfHourIndex(startDate);
-  const endIndex = dateToHalfHourIndex(endDate);
+  let endIndex = dateToHalfHourIndex(endDate);
+  // Account for bookings ending at midnight
+  if (endIndex === 0) endIndex = 48;
   return Math.max(1, endIndex - startIndex);
 }

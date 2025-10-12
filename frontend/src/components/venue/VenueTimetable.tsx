@@ -41,7 +41,9 @@ export default function VenueTimetable({
     // Find a booking that overlaps with this 30-minute slot
     return bookings.find((booking) => {
       const startIndex = dateToHalfHourIndex(booking.start);
-      const endIndex = dateToHalfHourIndex(booking.end);
+      let endIndex = dateToHalfHourIndex(booking.end);
+      // Account for bookings ending at midnight
+      if (endIndex === 0) endIndex = 48;
       return timeIndex >= startIndex && timeIndex < endIndex;
     });
   };
