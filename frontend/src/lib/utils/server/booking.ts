@@ -11,6 +11,9 @@ export const getBookings = async () =>
       bookedForOrg: { select: { id: true, name: true } },
       event: true,
     },
+    where: {
+      deleted: false,
+    },
   });
 
 export type BookingView = Awaited<ReturnType<typeof getBookings>>[number];
