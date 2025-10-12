@@ -20,6 +20,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from '@/components/ui/pagination';
+import { Spinner } from '@/components/ui/spinner';
 import type { OrganisationView } from '@/lib/utils/server/organisation';
 
 const DEFAULT_FILTERS: string[] = [
@@ -82,7 +83,14 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
   const totalPages = Math.ceil(igCardsToDisplay.length / PAGE_SIZE);
 
   return (
-    <div className='flex min-h-[calc(100vh-80px)]'>
+    <div className='relative flex min-h-[calc(100vh-80px)]'>
+      {orgs.length === 0 && (
+        <div className='bg-opacity-60 absolute inset-0 z-50 flex items-center justify-center bg-white'>
+          <div className='h-24 w-24'>
+            <Spinner />
+          </div>
+        </div>
+      )}
       {/* Sidebar */}
       <div className='w-72 border-r bg-white px-8 py-8'>
         <div className='mb-6 rounded-md bg-[#F5F5F5] p-4'>

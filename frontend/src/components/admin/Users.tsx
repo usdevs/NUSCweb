@@ -36,6 +36,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from '@/components/ui/pagination';
+import { Spinner } from '@/components/ui/spinner';
 import { deleteUser, editUser } from '@/lib/actions/user';
 import { UpdateUserSchema } from '@/lib/schema/user';
 import type { UserView } from '@/lib/utils/server/user';
@@ -117,7 +118,14 @@ export default function UsersPage({ users, organisations }: UsersPageProps) {
   };
 
   return (
-    <div className='container mx-auto px-4 py-8'>
+    <div className='relative container mx-auto px-4 py-8'>
+      {(editUserPending || deleteUserPending) && (
+        <div className='bg-opacity-60 absolute inset-0 z-50 flex items-center justify-center bg-white'>
+          <div className='h-24 w-24'>
+            <Spinner />
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
         <h1 className='text-3xl font-bold text-slate-800'>Manage Users</h1>

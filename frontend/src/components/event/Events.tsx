@@ -29,6 +29,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Spinner } from '@/components/ui/spinner';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { createEvent, deleteEvent, editEvent } from '@/lib/actions/event';
 import { EVENT_CATEGORIES } from '@/lib/formOptions';
@@ -218,7 +219,14 @@ export default function Events({ events, userOrgs }: EventsProps) {
   };
 
   return (
-    <div className='flex bg-[#0C2C47]'>
+    <div className='relative flex bg-[#0C2C47]'>
+      {(createEventPending || editEventPending || deleteEventPending) && (
+        <div className='bg-opacity-60 absolute inset-0 z-50 flex items-center justify-center bg-white'>
+          <div className='h-24 w-24'>
+            <Spinner />
+          </div>
+        </div>
+      )}
       {/* Sidebar */}
       <div className='min-h-screen w-72 bg-white px-8 py-4'>
         {/* View Toggle */}

@@ -44,6 +44,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
 import {
   createOrganisation,
   deleteOrganisation,
@@ -183,7 +184,16 @@ export default function OrganisationsPage({
   };
 
   return (
-    <div className='container mx-auto px-4 py-8'>
+    <div className='relative container mx-auto px-4 py-8'>
+      {(createOrganisationPending ||
+        editOrganisationPending ||
+        deleteOrganisationPending) && (
+        <div className='bg-opacity-60 absolute inset-0 z-50 flex items-center justify-center bg-white'>
+          <div className='h-24 w-24'>
+            <Spinner />
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
         <h1 className='text-3xl font-bold text-slate-800'>

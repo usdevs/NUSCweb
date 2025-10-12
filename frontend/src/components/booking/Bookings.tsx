@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { z } from 'zod/v4';
 
 import { Calendar } from '@/components/ui/calendar';
+import { Spinner } from '@/components/ui/spinner';
 import VenuesTimetable from '@/components/venue/VenuesTimetable';
 import {
   createBooking,
@@ -199,7 +200,14 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
   }, []);
 
   return (
-    <div className={`flex flex-col bg-[#0C2C47] lg:flex-row`}>
+    <div className={`relative flex flex-col bg-[#0C2C47] lg:flex-row`}>
+      {(createBookingPending || editBookingPending || deleteBookingPending) && (
+        <div className='bg-opacity-60 absolute inset-0 z-50 flex items-center justify-center bg-white'>
+          <div className='h-24 w-24'>
+            <Spinner />
+          </div>
+        </div>
+      )}
       {/* Calendar - Hidden on mobile */}
       {/* TODO: How do mobile people select dates? */}
       <div className={`hidden w-72 rounded-lg bg-white p-4 lg:block`}>
