@@ -36,7 +36,7 @@ model Organisation {
     bookings    Booking[]
     events      Event[]
     userOrgs    UserOnOrg[]
-    inviteToken String      @default(uuid()) @map("invite_token")
+    inviteToken String      @unique @default(uuid()) @map("invite_token")
     telegramUrl String?     @map("telegram_url")
     category    IGCategory
     isInactive  Boolean     @default(false) @map("is_inactive")
