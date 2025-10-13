@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 
 export const getEvents = async () =>
   prisma.event.findMany({
+    where: { deleted: false },
     select: {
       id: true,
       eventName: true,
