@@ -9,7 +9,8 @@ import {
   SendIcon,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import posthog from 'posthog-js';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -37,6 +38,15 @@ export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const isAuthenticated = useAuth();
+
+  useEffect(() => {
+    if (!isAuthenticated) posthog.reset();
+    else
+      posthog.identify(isAuthenticated.userId.toString(), {
+        telegramUserId: isAuthenticated.userCredentials.id,
+        telegramUserName: isAuthenticated.userCredentials.username,
+      });
+  }, [isAuthenticated]);
 
   return (
     <header
