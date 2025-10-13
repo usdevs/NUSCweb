@@ -65,7 +65,7 @@ export default function VenuesTimetable({
 
       const endTime = new Date(date);
       endTime.setHours(Math.floor(endIndex / 2), 0);
-      if (endIndex % 2 === 1) startTime.setMinutes(30);
+      if (endIndex % 2 === 1) endTime.setMinutes(30);
 
       setSelectedTimeRange({
         // Use the room from dragStart (column where user started dragging)
