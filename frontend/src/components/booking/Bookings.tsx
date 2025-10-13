@@ -93,7 +93,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
       }
 
       return (
-        booking.start <= formData.endTime && formData.startTime <= booking.end
+        booking.start < formData.endTime && formData.startTime < booking.end
       );
     });
 

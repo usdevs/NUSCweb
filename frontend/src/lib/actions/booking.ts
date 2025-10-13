@@ -54,7 +54,9 @@ export const createBooking = async (
   const overlapping = await prisma.booking.findFirst({
     where: {
       venueId: data.venueId,
-      AND: [{ start: { lt: data.endTime } }, { end: { gt: data.startTime } }],
+      start: { lt: data.endTime },
+      end: { gt: data.startTime },
+      deleted: false,
     },
   });
   if (overlapping) {
@@ -161,7 +163,9 @@ export const editBooking = async (
   const overlapping = await prisma.booking.findFirst({
     where: {
       venueId: data.venueId,
-      AND: [{ start: { lt: data.endTime } }, { end: { gt: data.startTime } }],
+      start: { lt: data.endTime },
+      end: { gt: data.startTime },
+      deleted: false,
     },
   });
   if (overlapping) {
