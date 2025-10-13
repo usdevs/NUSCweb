@@ -156,7 +156,11 @@ export default function UsersPage({ users, organisations }: UsersPageProps) {
               type='text'
               placeholder='Search users...'
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                // Reset page on search
+                setPage(1);
+              }}
               className='pl-10'
             />
           </div>

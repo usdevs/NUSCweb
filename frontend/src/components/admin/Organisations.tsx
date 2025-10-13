@@ -227,7 +227,11 @@ export default function OrganisationsPage({
               type='text'
               placeholder='Search organisations...'
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                // Reset page on search
+                setPage(1);
+              }}
               className='pl-10'
             />
           </div>
