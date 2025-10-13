@@ -102,6 +102,13 @@ export const editOrganisation = async (
     };
   }
 
+  if (!token.isAdmin && data.isAdminOrg) {
+    return {
+      success: false,
+      message: 'You cannot promote your organisation to an admin organisation!',
+    };
+  }
+
   try {
     await prisma.organisation.update({
       where: { id: data.id },
