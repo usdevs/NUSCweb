@@ -78,18 +78,20 @@ export const createBooking = async (
         bookedForOrgId: data.organisationId,
         start: data.startTime,
         end: data.endTime,
-        event: {
-          create: {
-            eventName: data.bookingName,
-            userId: token.userId,
-            // TODO: userOrgId isn't technically correct right now
-            // especially if an admin is booking for another IG
-            userOrgId: data.organisationId,
-            bookedForOrgId: data.organisationId,
-            start: data.startTime,
-            end: data.endTime,
-          },
-        },
+        event: data.addToCalendar
+          ? {
+              create: {
+                eventName: data.bookingName,
+                userId: token.userId,
+                // TODO: userOrgId isn't technically correct right now
+                // especially if an admin is booking for another IG
+                userOrgId: data.organisationId,
+                bookedForOrgId: data.organisationId,
+                start: data.startTime,
+                end: data.endTime,
+              },
+            }
+          : undefined,
       },
     });
   } catch (error) {
