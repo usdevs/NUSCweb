@@ -355,7 +355,7 @@ export default function OrganisationsPage({
               <PaginationLink
                 aria-label='Go to first page'
                 size='default'
-                className='px-2.5 text-white hover:bg-white/10 hover:text-white/80'
+                className='px-2.5 text-gray-600 hover:bg-white/10 hover:text-white/80'
                 onClick={() => setPage(1)}
               >
                 <ChevronsLeftIcon className='h-4 w-4' />
@@ -366,7 +366,7 @@ export default function OrganisationsPage({
               <PaginationLink
                 aria-label='Go to previous page'
                 size='default'
-                className='px-2.5 text-white hover:bg-white/10 hover:text-white/80'
+                className='px-2.5 text-gray-600 hover:bg-gray-100 hover:text-gray-800'
                 onClick={() => setPage((page) => Math.max(1, page - 1))}
               >
                 <ChevronLeftIcon className='h-4 w-4' />
@@ -388,9 +388,13 @@ export default function OrganisationsPage({
               return (
                 <PaginationItem key={i}>
                   <PaginationLink
-                    aria-label='Go to previous page'
+                    aria-label={`Go to page ${pageNumber}`}
                     size='default'
-                    className={`px-2.5 text-white hover:bg-white/10 hover:text-white/80 ${page === pageNumber ? 'text-black' : ''}`}
+                    className={`px-2.5 ${
+                      page === pageNumber
+                        ? 'bg-slate-800 text-white hover:bg-slate-700'
+                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+                    }`}
                     onClick={() => setPage(pageNumber)}
                     isActive={page === pageNumber}
                   >
@@ -404,7 +408,7 @@ export default function OrganisationsPage({
               <PaginationLink
                 aria-label='Go to next page'
                 size='default'
-                className='px-2.5 text-white hover:bg-white/10 hover:text-white/80'
+                className='px-2.5 text-gray-600 hover:bg-gray-100 hover:text-gray-800'
                 onClick={() =>
                   setPage((page) => Math.min(totalPages, page + 1))
                 }
@@ -417,7 +421,7 @@ export default function OrganisationsPage({
               <PaginationLink
                 aria-label='Go to last page'
                 size='default'
-                className='px-2.5 text-white hover:bg-white/10 hover:text-white/80'
+                className='px-2.5 text-gray-600 hover:bg-gray-100 hover:text-gray-800'
                 onClick={() => setPage(totalPages)}
               >
                 <ChevronsRightIcon className='h-4 w-4' />
