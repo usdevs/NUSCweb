@@ -14,7 +14,6 @@ import {
 import { formDataToObject } from '@/lib/utils';
 
 // TODO: Check if organisations have exceeded their weekly limit in bookings
-// TODO: Check if there are clashes in bookings
 
 export const createBooking = async (
   _prevState: ServerActionState,
@@ -49,6 +48,19 @@ export const createBooking = async (
     return {
       success: false,
       message: 'You do not belong to the organisation!',
+    };
+  }
+
+  const overlapping = await prisma.booking.findFirst({
+    where: {
+      venueId: data.venueId,
+      AND: [{ start: { lt: data.endTime } }, { end: { gt: data.startTime } }],
+    },
+  });
+  if (overlapping) {
+    return {
+      success: false,
+      message: 'There is an overlapping booking!',
     };
   }
 
@@ -143,6 +155,19 @@ export const editBooking = async (
     return {
       success: false,
       message: 'You do not belong to the organisation!',
+    };
+  }
+
+  const overlapping = await prisma.booking.findFirst({
+    where: {
+      venueId: data.venueId,
+      AND: [{ start: { lt: data.endTime } }, { end: { gt: data.startTime } }],
+    },
+  });
+  if (overlapping) {
+    return {
+      success: false,
+      message: 'There is an overlapping booking!',
     };
   }
 
