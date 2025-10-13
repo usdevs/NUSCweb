@@ -13,13 +13,6 @@ export default function StudentGroupCard({
       key={organisation.id}
       className='relative flex flex-col rounded-lg bg-white p-6'
     >
-      {/* TODO: What is the point of this? */}
-      <div
-        className={`absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-purple-600`}
-      >
-        <span className='text-sm font-bold text-white'>V</span>
-      </div>
-
       {organisation.isInactive && (
         <div
           className={`absolute top-2 left-2 rounded bg-gray-500 px-2 py-1 text-xs text-white`}

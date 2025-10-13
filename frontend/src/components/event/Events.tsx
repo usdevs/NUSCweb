@@ -228,7 +228,8 @@ export default function Events({ events, userOrgs }: EventsProps) {
         </div>
       )}
       {/* Sidebar */}
-      <div className='min-h-screen w-72 bg-white px-8 py-4'>
+      {/* TODO: How do mobile people select dates? */}
+      <div className='hidden min-h-screen w-72 bg-white px-8 py-4 lg:block'>
         {/* View Toggle */}
         <ToggleGroup
           type='single'

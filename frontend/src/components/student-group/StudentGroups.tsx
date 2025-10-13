@@ -83,7 +83,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
   const totalPages = Math.ceil(igCardsToDisplay.length / PAGE_SIZE);
 
   return (
-    <div className='relative flex min-h-[calc(100vh-80px)]'>
+    <div className='relative flex'>
       {orgs.length === 0 && (
         <div className='bg-opacity-60 absolute inset-0 z-50 flex items-center justify-center bg-white'>
           <div className='h-24 w-24'>
@@ -91,8 +91,9 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
           </div>
         </div>
       )}
+      {/* TODO: How do mobile people view the sidebar? */}
       {/* Sidebar */}
-      <div className='w-72 border-r bg-white px-8 py-8'>
+      <div className='hidden w-72 border-r bg-white px-8 py-8 lg:block'>
         <div className='mb-6 rounded-md bg-[#F5F5F5] p-4'>
           <h3 className='mb-3 font-semibold text-gray-900'>Join the...</h3>
           <Button
@@ -161,7 +162,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
       </div>
 
       {/* Main Content */}
-      <div className='flex-1 bg-[#0C2C47] px-16 py-8'>
+      <div className='flex-1 bg-[#0C2C47] p-8'>
         <div className='mb-8'>
           <h1 className='mb-2 text-4xl font-bold text-white'>Student Groups</h1>
           <p className='text-white/80'>{igCardsToDisplay.length} RESULTS</p>
