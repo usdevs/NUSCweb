@@ -118,6 +118,11 @@ export default function Events({ events, userOrgs }: EventsProps) {
   };
 
   const handleCreateSubmit = (formData: z.input<typeof NewEventSchema>) => {
+    if (formData.startTime > formData.endTime) {
+      toast.warning('Start time cannot be later then end time!');
+      return;
+    }
+
     const newEvent = new FormData();
     newEvent.set('eventName', formData.eventName);
     newEvent.set('organisationId', formData.organisationId.toString());

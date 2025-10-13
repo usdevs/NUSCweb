@@ -107,6 +107,11 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
       return;
     }
 
+    if (formData.startTime > formData.endTime) {
+      toast.warning('Start time cannot be later then end time!');
+      return;
+    }
+
     const newBooking = new FormData();
     newBooking.set('bookingName', formData.bookingName);
     newBooking.set('organisationId', formData.organisationId.toString());
