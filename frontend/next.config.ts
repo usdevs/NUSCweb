@@ -1,3 +1,7 @@
 import type { NextConfig } from 'next';
 
-export default {} satisfies NextConfig;
+export default {
+  experimental: {
+    reactCompiler: true,
+  },
+} satisfies NextConfig;
