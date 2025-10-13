@@ -423,6 +423,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
         userOrgs={userOrgs}
         handleDeleteEvent={handleDeleteSubmit}
         handleSubmitEvent={handleSubmit}
+        isPending={createEventPending || editEventPending || deleteEventPending}
       />
 
       <DailyViewModal

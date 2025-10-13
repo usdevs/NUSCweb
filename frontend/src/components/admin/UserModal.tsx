@@ -43,6 +43,7 @@ interface UserModalProps {
   handleDeleteUser: (userId: number) => void;
   handleEditUser: (formData: z.input<typeof UpdateUserSchema>) => void;
   organisations: Organisation[];
+  isPending: boolean;
 }
 
 export default function UserModal({
@@ -52,6 +53,7 @@ export default function UserModal({
   handleDeleteUser,
   handleEditUser,
   organisations,
+  isPending,
 }: UserModalProps) {
   const groupedOrganisations = Object.groupBy(
     organisations,
@@ -117,6 +119,7 @@ export default function UserModal({
                     variant='destructive'
                     size='icon'
                     className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
+                    disabled={isPending}
                   >
                     <Trash2Icon />
                   </Button>
@@ -151,6 +154,7 @@ export default function UserModal({
                 <Button
                   type='submit'
                   className={`rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90`}
+                  disabled={isPending}
                 >
                   Submit
                 </Button>

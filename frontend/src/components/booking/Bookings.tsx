@@ -253,6 +253,9 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
         form={form}
         selectedBooking={selectedBooking}
         handleClose={handleCloseModal}
+        isPending={
+          createBookingPending || editBookingPending || deleteBookingPending
+        }
       />
     </div>
   );

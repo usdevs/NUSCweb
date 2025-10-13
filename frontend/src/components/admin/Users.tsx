@@ -137,6 +137,7 @@ export default function UsersPage({ users, organisations }: UsersPageProps) {
           handleDeleteUser={handleDeleteSubmit}
           handleEditUser={handleEditSubmit}
           organisations={organisations}
+          isPending={editUserPending || deleteUserPending}
         />
       </div>
 

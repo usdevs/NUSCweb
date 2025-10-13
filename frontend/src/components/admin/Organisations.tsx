@@ -208,6 +208,11 @@ export default function OrganisationsPage({
           selectedOrganisation={selectedOrganisation}
           handleDeleteOrganisation={handleDeleteSubmit}
           handleSubmitOrganisation={handleSubmit}
+          isPending={
+            createOrganisationPending ||
+            editOrganisationPending ||
+            deleteOrganisationPending
+          }
         />
       </div>
 

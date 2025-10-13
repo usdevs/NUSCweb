@@ -73,6 +73,7 @@ interface BookingModalProps {
   handleSubmitBooking: (
     formData: z.input<typeof NewBookingClientSchema>,
   ) => void;
+  isPending: boolean;
 }
 
 export default function BookingModal({
@@ -84,6 +85,7 @@ export default function BookingModal({
   venues,
   handleDeleteBooking,
   handleSubmitBooking,
+  isPending,
 }: BookingModalProps) {
   const [selectStartDayOpen, setSelectStartDayOpen] = useState(false);
   const [selectEndDayOpen, setSelectEndDayOpen] = useState(false);
@@ -359,6 +361,7 @@ export default function BookingModal({
                       variant='destructive'
                       size='icon'
                       className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
+                      disabled={isPending}
                     >
                       <Trash2Icon />
                     </Button>
@@ -395,6 +398,7 @@ export default function BookingModal({
                 <Button
                   type='submit'
                   className={`rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90`}
+                  disabled={isPending}
                 >
                   Submit
                 </Button>

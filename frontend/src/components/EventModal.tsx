@@ -66,6 +66,7 @@ interface EventModalProps {
   handleDeleteEvent: (eventId: number) => void;
   handleSubmitEvent: (formData: z.input<typeof NewEventSchema>) => void;
   handleClose: () => void;
+  isPending: boolean;
 }
 
 export default function EventModal({
@@ -76,6 +77,7 @@ export default function EventModal({
   handleDeleteEvent,
   handleSubmitEvent,
   handleClose,
+  isPending,
 }: EventModalProps) {
   const [selectStartDayOpen, setSelectStartDayOpen] = useState(false);
   const [selectEndDayOpen, setSelectEndDayOpen] = useState(false);
@@ -289,6 +291,7 @@ export default function EventModal({
                       variant='destructive'
                       size='icon'
                       className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
+                      disabled={isPending}
                     >
                       <Trash2Icon />
                     </Button>
@@ -325,6 +328,7 @@ export default function EventModal({
                 <Button
                   type='submit'
                   className={`rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90`}
+                  disabled={isPending}
                 >
                   Submit
                 </Button>

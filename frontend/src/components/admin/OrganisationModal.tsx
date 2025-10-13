@@ -59,6 +59,7 @@ interface OrganisationModalProps {
   handleSubmitOrganisation: (
     formData: z.input<typeof NewOrganisationClientSchema>,
   ) => void;
+  isPending: boolean;
 }
 
 export default function OrganisationModal({
@@ -69,6 +70,7 @@ export default function OrganisationModal({
   selectedOrganisation,
   handleDeleteOrganisation,
   handleSubmitOrganisation,
+  isPending,
 }: OrganisationModalProps) {
   const authToken = useAuth();
 
@@ -225,6 +227,7 @@ export default function OrganisationModal({
                       variant='destructive'
                       size='icon'
                       className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
+                      disabled={isPending}
                     >
                       <Trash2Icon />
                     </Button>
@@ -261,6 +264,7 @@ export default function OrganisationModal({
                 <Button
                   type='submit'
                   className={`rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90`}
+                  disabled={isPending}
                 >
                   Submit
                 </Button>
