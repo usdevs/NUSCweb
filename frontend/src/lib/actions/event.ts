@@ -131,18 +131,35 @@ export const editEvent = async (
   }
 
   try {
-    await prisma.event.update({
-      where: { id: data.id },
-      data: {
-        eventName: data.eventName,
-        userId: token.userId,
-        // TODO: userOrgId isn't technically correct right now
-        // especially if an admin is booking for another IG
-        userOrgId: data.organisationId,
-        bookedForOrgId: data.organisationId,
-        start: data.startTime,
-        end: data.endTime,
-      },
+    await prisma.$transaction(async (tx) => {
+      const { booking } = await tx.event.update({
+        where: { id: data.id },
+        data: {
+          eventName: data.eventName,
+          userId: token.userId,
+          // TODO: userOrgId isn't technically correct right now
+          // especially if an admin is booking for another IG
+          userOrgId: data.organisationId,
+          bookedForOrgId: data.organisationId,
+          start: data.startTime,
+          end: data.endTime,
+        },
+        include: { booking: true },
+      });
+      if (booking)
+        await tx.booking.update({
+          where: { id: booking.id },
+          data: {
+            bookingName: data.eventName,
+            userId: token.userId,
+            // TODO: userOrgId isn't technically correct right now
+            // especially if an admin is booking for another IG
+            userOrgId: data.organisationId,
+            bookedForOrgId: data.organisationId,
+            start: data.startTime,
+            end: data.endTime,
+          },
+        });
     });
   } catch (error) {
     console.error('Error editing event:', error);
@@ -209,8 +226,15 @@ export const deleteEvent = async (
 
   // TODO: Change this to soft delete instead
   try {
-    await prisma.event.delete({
-      where: { id: data.id },
+    await prisma.$transaction(async (tx) => {
+      const { booking } = await tx.event.delete({
+        where: { id: data.id },
+        select: { booking: { select: { id: true } } },
+      });
+      if (booking)
+        await tx.booking.delete({
+          where: { id: booking.id },
+        });
     });
   } catch (error) {
     console.error('Error deleting event:', error);
