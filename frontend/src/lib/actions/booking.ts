@@ -168,6 +168,7 @@ export const editBooking = async (
       start: { lt: data.endTime },
       end: { gt: data.startTime },
       deleted: false,
+      id: { not: data.id },
     },
   });
   if (overlapping) {
@@ -215,9 +216,7 @@ export const editBooking = async (
                 },
               },
             }
-          : {
-              delete: true,
-            },
+          : { delete: true },
       },
     });
   } catch (error) {
