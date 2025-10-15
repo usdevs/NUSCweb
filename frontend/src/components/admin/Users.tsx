@@ -130,15 +130,17 @@ export default function UsersPage({ users, organisations }: UsersPageProps) {
       <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
         <h1 className='text-3xl font-bold text-slate-800'>Manage Users</h1>
 
-        <UserModal
-          form={form}
-          selectedUser={selectedUser}
-          handleClose={handleCloseModal}
-          handleDeleteUser={handleDeleteSubmit}
-          handleEditUser={handleEditSubmit}
-          organisations={organisations}
-          isPending={editUserPending || deleteUserPending}
-        />
+        {selectedUser && (
+          <UserModal
+            form={form}
+            selectedUser={selectedUser}
+            handleClose={handleCloseModal}
+            handleDeleteUser={handleDeleteSubmit}
+            handleEditUser={handleEditSubmit}
+            organisations={organisations}
+            isPending={editUserPending || deleteUserPending}
+          />
+        )}
       </div>
 
       {/* Search and Filter */}

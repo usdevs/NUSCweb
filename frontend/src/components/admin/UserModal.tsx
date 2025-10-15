@@ -38,7 +38,7 @@ import type { UserView } from '@/lib/utils/server/user';
 
 interface UserModalProps {
   form: UseFormReturn<z.input<typeof UpdateUserSchema>>;
-  selectedUser: UserView | null;
+  selectedUser: UserView;
   handleClose: () => void;
   handleDeleteUser: (userId: number) => void;
   handleEditUser: (formData: z.input<typeof UpdateUserSchema>) => void;
@@ -78,11 +78,11 @@ export default function UserModal({
             </DialogHeader>
             <div className='grid grid-cols-[1fr_2fr] items-center gap-3'>
               <div>NAME</div>
-              <div>{selectedUser?.name}</div>
+              <div>{selectedUser.name}</div>
             </div>
             <div className='grid grid-cols-[1fr_2fr] items-center gap-3'>
               <div>TELEGRAM USERNAME</div>
-              <div>{selectedUser?.telegramUserName}</div>
+              <div>{selectedUser.telegramUserName}</div>
             </div>
             <FormField
               control={form.control}
@@ -131,14 +131,14 @@ export default function UserModal({
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                       This action cannot be undone. This will permanently delete
-                      the user "{selectedUser?.name}".
+                      the user "{selectedUser.name}".
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={(e) => {
-                        handleDeleteUser(selectedUser!.id);
+                        handleDeleteUser(selectedUser.id);
                         e.preventDefault();
                       }}
                     >
