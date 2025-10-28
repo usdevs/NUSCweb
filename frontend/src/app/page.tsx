@@ -107,9 +107,12 @@ export default function HomePage() {
                 className={`w-fit rounded-[5px] border-[#FF7D4E] bg-[#FF7D4E] text-white hover:border-[#FF7D4E]/90 hover:bg-[#FF7D4E]/90 hover:text-white/90`}
                 asChild
               >
-              <Link href='https://sites.google.com/view/nuscc-academics-site/home' passHref>
+                <Link
+                  href='https://sites.google.com/view/nuscc-academics-site/home'
+                  target='_blank'
+                >
                   VIEW ALL
-              </Link>
+                </Link>
               </Button>
             </div>
           </div>
