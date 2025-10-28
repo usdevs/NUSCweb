@@ -208,8 +208,10 @@ export default function Events({ events, userOrgs }: EventsProps) {
       viewMode === 'MONTH' ? addMonths(prev, 1) : addWeeks(prev, 1),
     );
 
-  const calendarStart = startOfWeek(startOfMonth(currentDate));
-  const calendarEnd = endOfWeek(endOfMonth(currentDate));
+  const calendarStart = startOfWeek(startOfMonth(currentDate), {
+    weekStartsOn: 1,
+  });
+  const calendarEnd = endOfWeek(endOfMonth(currentDate), { weekStartsOn: 1 });
   const calendarDays = eachDayOfInterval({
     start: calendarStart,
     end: calendarEnd,
