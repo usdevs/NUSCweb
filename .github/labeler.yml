@@ -1,0 +1,15 @@
+frontend:
+- changed-files:
+  - any-glob-to-any-file:
+    - frontend/**/*
+
+prisma:
+- changed-files:
+  - any-glob-to-any-file:
+    - prisma/**/*
+
+dependencies:
+- changed-files:
+  - any-glob-to-any-file:
+    - pnpm-lock.yaml
+    - pnpm-workspace.yaml
