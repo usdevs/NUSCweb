@@ -16,6 +16,7 @@ export default async function OrganisationAdminPage() {
             userOrgs: {
               some: {
                 userId: authCookie.userId,
+                deleted: false,
               },
             },
           },
