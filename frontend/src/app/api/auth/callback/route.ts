@@ -13,7 +13,10 @@ const validator = new AuthDataValidator({ botToken: process.env.BOT_TOKEN });
 
 const generatePermissions = async (userId: number) => {
   const userRoles = await prisma.userOnOrg.findMany({
-    where: { userId },
+    where: {
+      userId,
+      deleted: false,
+    },
     select: {
       org: {
         select: {
