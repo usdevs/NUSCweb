@@ -1,10 +1,11 @@
 import 'dotenv/config';
+
 import type { PrismaConfig } from 'prisma/config';
 
 export default {
-  schema: 'schema.prisma',
+  schema: 'prisma/schema.prisma',
   migrations: {
-    path: 'migrations',
-    seed: 'ts-node seed.ts',
+    path: 'prisma/migrations',
+    seed: 'ts-node prisma/seed.ts',
   },
 } satisfies PrismaConfig;

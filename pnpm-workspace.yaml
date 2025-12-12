@@ -1,12 +1,9 @@
-packages:
-  - frontend/
-  - prisma/
-
 onlyBuiltDependencies:
   - '@prisma/client'
   - '@prisma/engines'
   - '@tailwindcss/oxide'
   - '@vercel/speed-insights'
+  - core-js
   - prisma
   - sharp
   - unrs-resolver
