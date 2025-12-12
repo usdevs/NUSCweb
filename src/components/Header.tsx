@@ -138,7 +138,10 @@ export default function Header() {
 
                   <NavigationMenuItem>
                     <NavigationMenuLink asChild>
-                      <Link href='/' onClick={() => setIsSidebarOpen(false)}>
+                      <Link
+                        href='https://sites.google.com/view/nusc-wiki-2425/home'
+                        target='_blank'
+                      >
                         NEWSLETTER
                       </Link>
                     </NavigationMenuLink>
@@ -232,7 +235,12 @@ export default function Header() {
                 className={navigationMenuTriggerStyle()}
                 asChild
               >
-                <Link href='/'>NEWSLETTER</Link>
+                <Link
+                  href='/https://sites.google.com/view/nusc-wiki-2425/home'
+                  target='_blank'
+                >
+                  NEWSLETTER
+                </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
 
