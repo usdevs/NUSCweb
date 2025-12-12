@@ -14,28 +14,30 @@ The frontend for the NUSCC Website.
 
 ### Prerequisites
 
-- Node.js (v16+)
+- Node.js (v20+)
 - pnpm
 
 ### Installation
 
 1. Clone the repository:
 
-\`\`\`bash
-git clone https://github.com/your-username/nusc-website.git
-cd nusc-website
-\`\`\`
+```bash
+git clone https://github.com/usdevs/NUSCweb
+cd NUSCweb
+```
 
-2. Install dependencies:
+1. Install dependencies:
 
-\`\`\`bash
+```bash
 pnpm install
-\`\`\`
+```
 
-3. Run the development server:
+1. Setup your environment variables in `.env` file
 
-\`\`\`bash
+1. Run the development server:
+
+```bash
 pnpm dev
-\`\`\`
+```
 
-4. Open <http://localhost:3000> in your browser to see the frontend.
+1. Open <http://localhost:3000> in your browser to see the frontend.
