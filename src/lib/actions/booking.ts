@@ -51,6 +51,22 @@ export const createBooking = async (
     };
   }
 
+  // check booking deadline (one week or more in advance)
+  // unless user is admin 
+  if (token.isAdmin === false) {
+    const now = new Date();
+    const bookingDate = new Date(data.startTime);
+    const daysUntilBooking = Math.floor(
+      (bookingDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+    );
+    if (daysUntilBooking < 7) {
+      return {
+        success: false,
+        message: 'Bookings must be made at least one week in advance.',
+      };
+    }
+  }
+
   const overlapping = await prisma.booking.findFirst({
     where: {
       venueId: data.venueId,
