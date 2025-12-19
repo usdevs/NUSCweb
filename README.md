@@ -54,7 +54,7 @@ If first time, For BOT_TOKEN; SECRET KEY; NEXT_PUBLIC_TELEGRAM_LOGIN_BOT
 5. NEXT_PUBLIC_TELEGRAM_LOGIN_BOT= "nuscc_web"
 6. SECRET_KEY="your_super_secret_random_string_here_12345"
 ```
-4. Go to https://dashboard.ngrok.com/get-started/your-authtoken and copy your authtoken 
+4. Go to https://dashboard.ngrok.com/get-started/your-authtoken and copy your authtoken.
 In terminal, run:
 ```
 ngrok config add-authtoken YOUR_AUTHTOKEN_HERE
