@@ -32,10 +32,10 @@ pnpm install
 3. Setup your environment variables in .env file, with the .env.example file as reference
 ```
 # Connect to Supabase via connection pooling
-DATABASE_URL="your_database_url"
+DATABASE_URL=<your_database_url>
 
 # Direct connection to the database. Used for migrations
-DIRECT_URL="direct_url"
+DIRECT_URL=<direct_url>
 
 BOT_TOKEN= 
 SECRET_KEY=
