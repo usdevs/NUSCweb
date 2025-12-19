@@ -52,8 +52,8 @@ export const createBooking = async (
   }
 
   // check booking deadline (one week or more in advance)
-  // unless user is admin 
-  if (token.isAdmin === false) {
+  // unless user is admin
+  if (!token.isAdmin) {
     const now = new Date();
     const bookingDate = new Date(data.startTime);
     const daysUntilBooking = Math.floor(
