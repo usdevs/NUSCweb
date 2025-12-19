@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getEvents } from '@/lib/utils/server/event';
+import { EventQuerySchema } from '@/lib/schema/event';
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
 
-    let events = await getEvents({
-      eventName: searchParams.get('eventName') ?? undefined,
-      organisation: searchParams.get('organisation') ?? undefined,
-      venue: searchParams.get('venue') ?? undefined,
-      start: searchParams.get('start')
-        ? new Date(searchParams.get('start')!)
-        : undefined,
-      end: searchParams.get('end')
-        ? new Date(searchParams.get('end')!)
-        : undefined,
-    });
+    const rawParams = Object.fromEntries(searchParams.entries());
+    const parsed = EventQuerySchema.parse(rawParams);
+    let events = await getEvents(parsed);
 
     events = events.map(({ id, bookedForOrg, venue, ...rest }: any) => ({
         ...rest,
