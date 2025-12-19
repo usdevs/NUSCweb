@@ -3,15 +3,25 @@ import { getBookings } from '@/lib/utils/server/booking';
 
 export async function GET(request: NextRequest) {
   try {
-    const url = new URL(request.url);
+    const searchParams = request.nextUrl.searchParams;
 
-    const bookingName = url.searchParams.get('bookingName');
-    const start = url.searchParams.get('start');
-    const end = url.searchParams.get('end');
-    const venue = url.searchParams.get('venue');
-    const organisation = url.searchParams.get('organisation');
+    const bookingName = searchParams.get('bookingName');
+    const start = searchParams.get('start');
+    const end = searchParams.get('end');
+    const venue = searchParams.get('venue');
+    const organisation = searchParams.get('organisation');
 
-    let bookings = await getBookings();
+    let bookings = await getBookings({
+      bookingName: searchParams.get('bookingName') ?? undefined,
+      organisation: searchParams.get('organisation') ?? undefined,
+      venue: searchParams.get('venue') ?? undefined,
+      start: searchParams.get('start')
+        ? new Date(searchParams.get('start')!)
+        : undefined,
+      end: searchParams.get('end')
+        ? new Date(searchParams.get('end')!)
+        : undefined,
+    });
 
     if (bookingName) {
       bookings = bookings.filter(
