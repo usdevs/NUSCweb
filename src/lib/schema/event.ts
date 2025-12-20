@@ -24,7 +24,7 @@ export const EventQuerySchema = z
     start: z.coerce.date().optional(),
     end: z.coerce.date().optional(),
   })
-  .refine(
-    (d) => !d.start || !d.end || d.start <= d.end,
-    { message: 'start must be before end', path: ['start'] }
-  );
+  .refine((d) => !d.start || !d.end || d.start <= d.end, {
+    message: 'start must be before end',
+    path: ['start'],
+  });

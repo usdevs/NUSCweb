@@ -35,11 +35,7 @@ export const BookingQuerySchema = z
     start: z.coerce.date().optional(),
     end: z.coerce.date().optional(),
   })
-  .refine(
-    (data) =>
-      !data.start || !data.end || data.start <= data.end,
-    {
-      message: 'start must be before end',
-      path: ['start'],
-    }
-  );
+  .refine((data) => !data.start || !data.end || data.start <= data.end, {
+    message: 'start must be before end',
+    path: ['start'],
+  });

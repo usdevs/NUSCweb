@@ -20,7 +20,9 @@ export const getEvents = async (params: GetEventsParams = {}) => {
   }
 
   if (organisation) {
-    where.bookedForOrg = { name: { contains: organisation, mode: 'insensitive' } };
+    where.bookedForOrg = {
+      name: { contains: organisation, mode: 'insensitive' },
+    };
   }
 
   if (start) {
@@ -59,6 +61,7 @@ export const getEvents = async (params: GetEventsParams = {}) => {
       start: true,
       end: true,
     },
-  })};
+  });
+};
 
 export type EventView = Awaited<ReturnType<typeof getEvents>>[number];

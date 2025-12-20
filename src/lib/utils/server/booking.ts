@@ -32,7 +32,9 @@ export const getBookings = async (params: GetBookingsParams = {}) => {
   }
 
   if (organisation) {
-    where.bookedForOrg = { name: { contains: organisation, mode: 'insensitive' } };
+    where.bookedForOrg = {
+      name: { contains: organisation, mode: 'insensitive' },
+    };
   }
 
   return prisma.booking.findMany({
@@ -49,6 +51,6 @@ export const getBookings = async (params: GetBookingsParams = {}) => {
       deleted: false,
     },
   });
-}
+};
 
-export type BookingView = Awaited<ReturnType<typeof getBookings>>[number]
+export type BookingView = Awaited<ReturnType<typeof getBookings>>[number];
