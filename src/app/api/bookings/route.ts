@@ -7,17 +7,18 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
 
-    const rawParams = Object.fromEntries(searchParams.entries());
-    const parsed = BookingQuerySchema.parse(rawParams);
-    let bookings = await getBookings(parsed);
+    const parsed = BookingQuerySchema.parse(
+      Object.fromEntries(searchParams.entries()),
+    );
+    const bookings = await getBookings(parsed);
 
-    bookings = bookings.map(({ id, bookedForOrg, venue, ...rest }: any) => ({
-      ...rest,
-      venue: venue?.name ?? null,
-      bookedForOrg: bookedForOrg ? { name: bookedForOrg.name } : null,
-    }));
-
-    return NextResponse.json(bookings);
+    return NextResponse.json(
+      bookings.map(({ id, bookedForOrg, venue, ...rest }) => ({
+        ...rest,
+        venue: venue?.name ?? null,
+        bookedForOrg: bookedForOrg ? bookedForOrg.name : null,
+      })),
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json(

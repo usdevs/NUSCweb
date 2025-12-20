@@ -8,37 +8,28 @@ export type GetEventsParams = {
   venue?: string;
 };
 
-export const getEvents = async (params: GetEventsParams = {}) => {
-  const { eventName, organisation, start, end, venue } = params;
-
-  const where: any = {
-    deleted: false,
-  };
-
-  if (eventName) {
-    where.eventName = { contains: eventName, mode: 'insensitive' };
-  }
-
-  if (organisation) {
-    where.bookedForOrg = {
-      name: { contains: organisation, mode: 'insensitive' },
-    };
-  }
-
-  if (start) {
-    where.start = { gte: start };
-  }
-
-  if (end) {
-    where.end = { lte: end };
-  }
-
-  if (venue) {
-    where.venue = { name: { contains: venue, mode: 'insensitive' } };
-  }
-
-  return prisma.event.findMany({
-    where,
+export const getEvents = async ({
+  eventName,
+  organisation,
+  start,
+  end,
+  venue,
+}: GetEventsParams = {}) =>
+  prisma.event.findMany({
+    where: {
+      deleted: false,
+      eventName: eventName
+        ? { contains: eventName, mode: 'insensitive' }
+        : undefined,
+      bookedForOrg: organisation
+        ? {
+            name: { contains: organisation, mode: 'insensitive' },
+          }
+        : undefined,
+      start: start ? { gte: start } : undefined,
+      end: end ? { lte: end } : undefined,
+      booking: venue ? { venue: { name: venue } } : undefined,
+    },
     select: {
       id: true,
       eventName: true,
@@ -62,6 +53,5 @@ export const getEvents = async (params: GetEventsParams = {}) => {
       end: true,
     },
   });
-};
 
 export type EventView = Awaited<ReturnType<typeof getEvents>>[number];

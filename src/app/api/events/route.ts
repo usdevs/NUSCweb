@@ -5,19 +5,19 @@ import { getEvents } from '@/lib/utils/server/event';
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
+    const { searchParams } = request.nextUrl;
 
-    const rawParams = Object.fromEntries(searchParams.entries());
-    const parsed = EventQuerySchema.parse(rawParams);
-    let events = await getEvents(parsed);
+    const parsed = EventQuerySchema.parse(
+      Object.fromEntries(searchParams.entries()),
+    );
+    const events = await getEvents(parsed);
 
-    events = events.map(({ id, bookedForOrg, venue, ...rest }: any) => ({
-      ...rest,
-      venue: venue?.name ?? null,
-      bookedForOrg: bookedForOrg ? { name: bookedForOrg.name } : null,
-    }));
-
-    return NextResponse.json(events);
+    return NextResponse.json(
+      events.map(({ id, bookedForOrg, ...rest }) => ({
+        ...rest,
+        bookedForOrg: bookedForOrg ? bookedForOrg.name : null,
+      })),
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
