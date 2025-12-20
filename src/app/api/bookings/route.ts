@@ -7,10 +7,13 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
 
-    const parsed = BookingQuerySchema.parse(
+    const result = BookingQuerySchema.safeParse(
       Object.fromEntries(searchParams.entries()),
     );
-    const bookings = await getBookings(parsed);
+    if (!result.success) {
+      return NextResponse.json({ error: result.error.issues }, { status: 400 });
+    }
+    const bookings = await getBookings(result.data);
 
     return NextResponse.json(
       bookings.map(({ id, bookedForOrg, venue, ...rest }) => ({

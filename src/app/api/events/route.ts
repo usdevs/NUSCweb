@@ -7,13 +7,16 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
 
-    const parsed = EventQuerySchema.parse(
+    const result = EventQuerySchema.safeParse(
       Object.fromEntries(searchParams.entries()),
     );
-    const events = await getEvents(parsed);
+    if (!result.success) {
+      return NextResponse.json({ error: result.error.issues }, { status: 400 });
+    }
+    const events = await getEvents(result.data);
 
     return NextResponse.json(
-      events.map(({ id, bookedForOrg, ...rest }) => ({
+      events.map(({ id, bookedForOrg, booking, ...rest }) => ({
         ...rest,
         bookedForOrg: bookedForOrg ? bookedForOrg.name : null,
       })),
