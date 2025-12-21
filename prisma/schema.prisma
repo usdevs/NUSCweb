@@ -41,6 +41,7 @@ model Organisation {
     category    IGCategory
     isInactive  Boolean     @default(false) @map("is_inactive")
     isInvisible Boolean     @default(false) @map("is_invisible") // is not displayed on the website
+    createdAt   DateTime    @default(now()) @map("created_at")
 
     @@map("organisations")
 }
