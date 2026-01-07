@@ -15,3 +15,16 @@ export const EditEventSchema = z.object({
   ...NewEventSchema.shape,
   ...DeleteEventSchema.shape,
 });
+
+export const EventQuerySchema = z
+  .object({
+    eventName: z.string().min(1).optional(),
+    organisation: z.string().min(1).optional(),
+    venue: z.string().min(1).optional(),
+    start: z.coerce.date().optional(),
+    end: z.coerce.date().optional(),
+  })
+  .refine((d) => !d.start || !d.end || d.start <= d.end, {
+    message: 'start must be before end',
+    path: ['start'],
+  });

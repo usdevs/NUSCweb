@@ -25,3 +25,17 @@ export const EditBookingClientSchema = z.object({
 export const EditBookingServerSchema = EditBookingClientSchema.extend({
   addToCalendar: z.stringbool(),
 });
+
+export const BookingQuerySchema = z
+  .object({
+    bookingName: z.string().min(1).optional(),
+    organisation: z.string().min(1).optional(),
+    venue: z.string().min(1).optional(),
+
+    start: z.coerce.date().optional(),
+    end: z.coerce.date().optional(),
+  })
+  .refine((data) => !data.start || !data.end || data.start <= data.end, {
+    message: 'start must be before end',
+    path: ['start'],
+  });
