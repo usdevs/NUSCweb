@@ -296,6 +296,8 @@ export default function Events({ events, userOrgs }: EventsProps) {
 
           <div className='text-xs'>
             <div className='mb-3 grid grid-cols-7 gap-1'>
+              {/* TODO: Change this to start on Monday instead */}
+              {/* TODO: Add a box to show current date, similar to the calendar on bookings page */}
               {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((dayLetter, index) => (
                 <div
                   key={`${dayLetter}-${index}`}
