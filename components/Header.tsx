@@ -236,7 +236,7 @@ export default function Header() {
                 asChild
               >
                 <Link
-                  href='/https://sites.google.com/view/nusc-wiki-2425/home'
+                  href='https://sites.google.com/view/nusc-wiki-2425/home'
                   target='_blank'
                 >
                   NEWSLETTER
