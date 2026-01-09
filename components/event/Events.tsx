@@ -249,7 +249,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
             className={cn(
               'flex-1 rounded-none text-sm font-semibold transition-colors duration-300',
               viewMode === 'MONTH'
-                ? 'border-2 border-[#FF7D4E] bg-[#FCDED6] text-[#FF7D4E] rounded-l-md'
+                ? 'rounded-l-md border-2 border-[#FF7D4E] bg-[#FCDED6] text-[#FF7D4E]'
                 : 'text-[#A1A1A1]',
             )}
           >
@@ -260,7 +260,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
             className={cn(
               'flex-1 rounded-none text-sm font-semibold transition-colors duration-300',
               viewMode === 'WEEK'
-                ? 'border-2 border-[#FF7D4E] bg-[#FCDED6] text-[#FF7D4E] rounded-r-md'
+                ? 'rounded-r-md border-2 border-[#FF7D4E] bg-[#FCDED6] text-[#FF7D4E]'
                 : 'text-[#A1A1A1]',
             )}
           >
