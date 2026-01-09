@@ -1,7 +1,7 @@
 frontend:
   - changed-files:
     - any-glob-to-any-file:
-      - src/*
+      - app/*
 
 prisma:
   - changed-files:
