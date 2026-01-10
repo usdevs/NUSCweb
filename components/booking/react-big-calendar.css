@@ -11,7 +11,7 @@
 }
 
 .rbc-time-header-content {
-  @apply h-14 justify-center rounded-tl-3xl rounded-tr-3xl bg-white text-[#0C2C47];
+  @apply !m-0 h-14 w-50 justify-center rounded-tl-3xl rounded-tr-3xl bg-white text-[#0C2C47];
 }
 
 .rbc-time-header-gutter {
@@ -24,7 +24,16 @@
 }
 
 .rbc-time-gutter {
-  @apply !border-r-0 !bg-transparent !-translate-y-2 !z-0;
+  @apply !z-0 !-translate-y-3 !border-r-0 !bg-transparent;
+}
+
+.rbc-time-content {
+  /* TODO: This doesn't work - https://stackoverflow.com/a/6433475/19723226 */
+  @apply !overflow-y-visible;
+}
+
+.rbc-time-header {
+  @apply !overflow-visible;
 }
 
 .rbc-time-view,
