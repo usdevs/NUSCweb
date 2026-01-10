@@ -24,7 +24,7 @@
 }
 
 .rbc-time-gutter {
-  @apply !border-r-0 !bg-transparent;
+  @apply !border-r-0 !bg-transparent !-translate-y-2 !z-0;
 }
 
 .rbc-time-view,
@@ -41,14 +41,16 @@
 
 .rbc-day-slot {
   background-color: white;
+  @apply !cursor-cell;
+}
+
+.rbc-day-slot .rbc-timeslot-group {
+  border-color: lab(90.952% -0.0000596046 0);
+  @apply !border-b;
 }
 
 .rbc-label {
   @apply !text-white;
-}
-
-.rbc-time-gutter {
-  @apply !-translate-y-2;
 }
 
 .rbc-event {
@@ -57,13 +59,4 @@
 
 .rbc-event-content {
   white-space: pre-line;
-}
-
-.rbc-day-slot {
-  @apply !cursor-cell;
-}
-
-.rbc-day-slot .rbc-timeslot-group {
-  border-color: lab(90.952% -0.0000596046 0);
-  @apply !border-b;
 }
