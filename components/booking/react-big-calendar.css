@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import 'react-big-calendar/lib/css/react-big-calendar.css';
 
+/* TODO: Known issue - https://github.com/jquense/react-big-calendar/issues/2739 */
+
 .rbc-allday-cell {
   display: none;
 }
@@ -15,7 +17,7 @@
 }
 
 .rbc-time-header-gutter {
-  @apply !border-r-0 !bg-transparent;
+  @apply !z-1 !border-r-0 !bg-[#0C2C47];
 }
 
 .rbc-header,
@@ -24,11 +26,10 @@
 }
 
 .rbc-time-gutter {
-  @apply !z-0 !-translate-y-3 !border-r-0 !bg-transparent;
+  @apply !z-1 !-translate-y-3 !border-r-0 !bg-[#0C2C47];
 }
 
 .rbc-time-content {
-  /* TODO: This doesn't work - https://stackoverflow.com/a/6433475/19723226 */
   @apply !overflow-y-visible;
 }
 

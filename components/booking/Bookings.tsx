@@ -245,7 +245,7 @@ export default function Bookings({
       )}
       {/* Calendar - Hidden on mobile */}
       {/* TODO: How do mobile people select dates? */}
-      <div className={`hidden w-72 rounded-lg bg-white p-4 lg:block`}>
+      <div className='hidden w-72 rounded-lg bg-white p-4 lg:block'>
         <Calendar
           mode='single'
           selected={date}
@@ -256,7 +256,7 @@ export default function Bookings({
               window.history.pushState(null, '', `?${params.toString()}`);
             }
           }}
-          className='w-full rounded-md'
+          className='sticky top-19 w-full rounded-md'
           showOutsideDays={false}
           ISOWeek
         />
@@ -283,6 +283,9 @@ export default function Bookings({
           localizer={localizer}
           events={bookings}
           titleAccessor={(event) =>
+            `${event.bookingName}\n${event.bookedForOrg.name}`
+          }
+          tooltipAccessor={(event) =>
             `${event.bookingName}\n${event.bookedForOrg.name}`
           }
           resources={venues}
