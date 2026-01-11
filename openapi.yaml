@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  title: Bookings and Events API
+  version: 1.0.0
+paths:
+  /bookings:
+    get:
+      operationId: listBookings
+      summary: List all bookings
+      parameters:
+        - name: bookingName
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+        - name: organisation
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+        - name: venue
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: end
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              examples:
+                foo:
+                  value:
+                    [
+                      {
+                        "bookingName": "Dodgeball",
+                        "start": "2025-08-05T14:00:00.000Z",
+                        "end": "2025-08-05T16:00:00.000Z",
+                        "event": null,
+                        "venue": "WW MPH",
+                        "bookedForOrg": "NUSC Dodgeball"
+                      }
+                    ]
+  /events:
+    get:
+      operationId: listEvents
+      summary: List all events
+      parameters:
+        - name: bookingName
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+        - name: organisation
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+        - name: venue
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: end
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              examples:
+                foo:
+                  value:
+                    [
+                      {
+                        "eventName": "CinnaFishers Worship Night",
+                        "start": "2025-10-30T12:00:00.000Z",
+                        "end": "2025-10-30T14:00:00.000Z",
+                        "bookedForOrg": "NUSC Fellowship"
+                      }
+                    ]
