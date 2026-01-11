@@ -83,7 +83,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
   const totalPages = Math.ceil(igCardsToDisplay.length / PAGE_SIZE);
 
   return (
-    <div className='relative flex'>
+    <div className='relative flex flex-1'>
       {orgs.length === 0 && (
         <div className='bg-opacity-60 absolute inset-0 z-50 flex items-center justify-center bg-white'>
           <div className='h-24 w-24'>
