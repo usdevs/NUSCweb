@@ -1,16 +1,26 @@
 'use client';
 
+import 'moment-timezone';
+import './react-big-calendar.css';
+
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
 import { addHours } from 'date-fns';
+import moment from 'moment';
 import { useSearchParams } from 'next/navigation';
-import { useActionState, useEffect, useState } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useActionState, useState } from 'react';
+import {
+  Calendar as ReactCalendar,
+  momentLocalizer,
+  SlotInfo,
+} from 'react-big-calendar';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod/v4';
 
+import BookingModal from '@/components/booking/BookingModal';
 import { Calendar } from '@/components/ui/calendar';
 import { Spinner } from '@/components/ui/spinner';
-import VenuesTimetable from '@/components/venue/VenuesTimetable';
 import {
   createBooking,
   deleteBooking,
@@ -22,7 +32,14 @@ import { getNext30Minutes } from '@/lib/utils/client/time';
 import type { BookingView } from '@/lib/utils/server/booking';
 import type { VenueView } from '@/lib/utils/server/venue';
 
-import BookingModal from './BookingModal';
+moment.tz.setDefault('Asia/Singapore');
+moment.locale('en-sg', {
+  week: {
+    dow: 1,
+    doy: 1,
+  },
+});
+const localizer = momentLocalizer(moment);
 
 interface BookingsProp {
   bookings: BookingView[];
@@ -35,17 +52,24 @@ interface BookingsProp {
 
 const today = getNext30Minutes();
 
-export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
+export default function Bookings({
+  bookings: bookingsOld,
+  venues,
+  userOrgs,
+}: BookingsProp) {
   const isAuthenticated = useAuth();
   const searchParams = useSearchParams();
 
-  let date = today;
-  try {
-    const searchParamsDate = searchParams.get('date');
-    if (searchParamsDate && !isNaN(Date.parse(searchParamsDate))) {
-      date = new Date(searchParamsDate);
-    }
-  } catch {}
+  const date = useMemo(() => {
+    let date = new Date();
+    try {
+      const searchParamsDate = searchParams.get('date');
+      if (searchParamsDate && !isNaN(Date.parse(searchParamsDate))) {
+        date = new Date(searchParamsDate);
+      }
+    } catch {}
+    return date;
+  }, [searchParams]);
 
   const [selectedBooking, setSelectedBooking] = useState<BookingView | null>(
     null,
@@ -190,19 +214,25 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
     });
   };
 
-  // Track mouse position for positioning the hover card
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
-      document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
-    };
+  const bookings = bookingsOld.map((booking) => ({
+    ...booking,
+    resourceId: booking.venue.id,
+  }));
 
-    document.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
+  const handleSelectSlot = useCallback(
+    ({ start, end, resourceId }: SlotInfo) => {
+      setSelectedTimeRange({
+        // Use the room from dragStart (column where user started dragging)
+        venue: venues.find(({ id }) => id === resourceId)!,
+        startTime: start,
+        endTime: end,
+      });
+      form.setValue('venueId', resourceId as number);
+      form.setValue('startTime', start);
+      form.setValue('endTime', end);
+    },
+    [],
+  );
 
   return (
     <div className={`relative flex flex-col bg-[#0C2C47] lg:flex-row`}>
@@ -215,7 +245,7 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
       )}
       {/* Calendar - Hidden on mobile */}
       {/* TODO: How do mobile people select dates? */}
-      <div className={`hidden w-72 rounded-lg bg-white p-4 lg:block`}>
+      <div className='hidden w-72 rounded-lg bg-white p-4 lg:block'>
         <Calendar
           mode='single'
           selected={date}
@@ -226,27 +256,54 @@ export default function Bookings({ bookings, venues, userOrgs }: BookingsProp) {
               window.history.pushState(null, '', `?${params.toString()}`);
             }
           }}
-          className='w-full rounded-md'
+          className='sticky top-19 w-full rounded-md'
           showOutsideDays={false}
+          ISOWeek
         />
       </div>
 
-      <VenuesTimetable
-        bookings={bookings}
-        venues={venues}
-        date={date}
-        handleBookingClick={(booking) => {
-          setSelectedBooking(booking);
-          form.setValue('bookingName', booking.bookingName);
-          form.setValue('organisationId', booking.bookedForOrg.id);
-          form.setValue('venueId', booking.venue.id);
-          form.setValue('startTime', booking.start);
-          form.setValue('endTime', booking.end);
-          form.setValue('addToCalendar', booking.event !== null);
-        }}
-        setSelectedTimeRange={setSelectedTimeRange}
-        form={form}
-      />
+      <div className={`mt-10 flex-1 overflow-auto px-2 lg:ml-4 lg:px-0`}>
+        <ReactCalendar
+          selectable
+          showMultiDayTimes
+          toolbar={false}
+          formats={{
+            eventTimeRangeStartFormat: ({ start, end }, culture, localizer) =>
+              localizer!.format(start, 'hh:mm a', culture) +
+              ' - ' +
+              localizer!.format(end, 'hh:mm a', culture),
+            eventTimeRangeEndFormat: ({ start, end }, culture, localizer) =>
+              localizer!.format(start, 'hh:mm a', culture) +
+              ' - ' +
+              localizer!.format(end, 'hh:mm a', culture),
+          }}
+          date={date}
+          defaultView='day'
+          views={['day']}
+          localizer={localizer}
+          events={bookings}
+          titleAccessor={(event) =>
+            `${event.bookingName}\n${event.bookedForOrg.name}`
+          }
+          tooltipAccessor={(event) =>
+            `${event.bookingName}\n${event.bookedForOrg.name}`
+          }
+          resources={venues}
+          resourceIdAccessor='id'
+          resourceTitleAccessor='name'
+          onSelectSlot={handleSelectSlot}
+          onSelectEvent={(booking) => {
+            setSelectedBooking(booking);
+            form.setValue('bookingName', booking.bookingName);
+            form.setValue('organisationId', booking.bookedForOrg.id);
+            form.setValue('venueId', booking.venue.id);
+            form.setValue('startTime', booking.start);
+            form.setValue('endTime', booking.end);
+            form.setValue('addToCalendar', booking.event !== null);
+          }}
+          step={30}
+        />
+      </div>
 
       {/* Create Booking Modal */}
       <BookingModal

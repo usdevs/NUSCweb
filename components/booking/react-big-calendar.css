@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+@import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+/* TODO: Known issue - https://github.com/jquense/react-big-calendar/issues/2739 */
+
+.rbc-allday-cell {
+  display: none;
+}
+
+.rbc-time-header,
+.rbc-time-content {
+  @apply gap-1;
+}
+
+.rbc-time-header-content {
+  @apply !m-0 h-14 w-50 justify-center rounded-tl-3xl rounded-tr-3xl bg-white text-[#0C2C47];
+}
+
+.rbc-time-header-gutter {
+  @apply !z-1 !border-r-0 !bg-[#0C2C47];
+}
+
+.rbc-header,
+.rbc-day-slot {
+  @apply !min-w-[200];
+}
+
+.rbc-time-gutter {
+  @apply !z-1 !-translate-y-3 !border-r-0 !bg-[#0C2C47];
+}
+
+.rbc-time-content {
+  @apply !overflow-y-visible;
+}
+
+.rbc-time-header {
+  @apply !overflow-visible;
+}
+
+.rbc-time-view,
+.rbc-header,
+.rbc-row-resource,
+.rbc-timeslot-group,
+.rbc-time-content {
+  @apply !border-0;
+}
+
+.rbc-header {
+  white-space: normal !important;
+}
+
+.rbc-day-slot {
+  background-color: white;
+  @apply !cursor-cell;
+}
+
+.rbc-day-slot .rbc-timeslot-group {
+  border-color: lab(90.952% -0.0000596046 0);
+  @apply !border-b;
+}
+
+.rbc-label {
+  @apply !text-white;
+}
+
+.rbc-event {
+  @apply !bg-[#FFD6CC] !text-xs !text-gray-800;
+}
+
+.rbc-event-content {
+  white-space: pre-line;
+}
