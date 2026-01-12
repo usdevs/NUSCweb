@@ -61,9 +61,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ label, items }) => {
         />
       </button>
 
-      {isOpen && (
-        <div className='absolute top-full left-0 z-9999 h-6 w-full'></div>
-      )}
+      {isOpen && <div className='absolute top-full left-0 z-9999 h-6 w-full' />}
 
       <div
         className={`fixed top-[calc(100%+4px)] left-1/2 z-9999 w-40 origin-top -translate-x-1/2 transform overflow-hidden rounded-md bg-white shadow-lg transition-all duration-300 md:absolute ${
@@ -79,7 +77,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ label, items }) => {
           {items.map((item, index) => (
             <li
               key={index}
-              className={`text-center transition-colors duration-200 hover:bg-gray-100`}
+              className='text-center transition-colors duration-200 hover:bg-gray-100'
             >
               <Link
                 href={item.href}

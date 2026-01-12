@@ -93,7 +93,7 @@ export default function EventModal({
         <DialogContent aria-describedby={undefined}>
           <form
             onSubmit={form.handleSubmit(handleSubmitEvent)}
-            className={`flex flex-col gap-3 sm:max-w-md`}
+            className='flex flex-col gap-3 sm:max-w-md'
           >
             <DialogHeader className='bg-[#0C2C47] text-white'>
               <DialogTitle>
@@ -126,9 +126,7 @@ export default function EventModal({
               control={form.control}
               name='organisationId'
               render={({ field }) => (
-                <FormItem
-                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
-                >
+                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
                   <FormLabel>ORGANISATION</FormLabel>
                   <Select
                     value={
@@ -165,9 +163,7 @@ export default function EventModal({
               control={form.control}
               name='startTime'
               render={({ field }) => (
-                <FormItem
-                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
-                >
+                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
                   <FormLabel>START TIME</FormLabel>
                   <div className='grid grid-cols-2 gap-2'>
                     <Popover
@@ -215,7 +211,7 @@ export default function EventModal({
                         field.value.setHours(hours, minutes);
                         field.onChange(field.value);
                       }}
-                      className={`bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none`}
+                      className='bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
                       step={1800}
                     />
                   </div>
@@ -226,9 +222,7 @@ export default function EventModal({
               control={form.control}
               name='endTime'
               render={({ field }) => (
-                <FormItem
-                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
-                >
+                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
                   <FormLabel>END TIME</FormLabel>
                   <div className='grid grid-cols-2 gap-2'>
                     <Popover
@@ -276,7 +270,7 @@ export default function EventModal({
                         field.value.setHours(hours, minutes);
                         field.onChange(field.value);
                       }}
-                      className={`bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none`}
+                      className='bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
                       step={1800}
                     />
                   </div>
@@ -290,7 +284,7 @@ export default function EventModal({
                     <Button
                       variant='destructive'
                       size='icon'
-                      className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
+                      className='rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90'
                       disabled={isPending}
                     >
                       <Trash2Icon />
@@ -303,7 +297,7 @@ export default function EventModal({
                       </AlertDialogTitle>
                       <AlertDialogDescription>
                         This action cannot be undone. This will permanently
-                        delete the event "{selectedEvent.eventName}".
+                        delete the event &quot;{selectedEvent.eventName}&quot;.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -327,7 +321,7 @@ export default function EventModal({
                 </DialogClose>
                 <Button
                   type='submit'
-                  className={`rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90`}
+                  className='rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90'
                   disabled={isPending}
                 >
                   Submit

@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
         <Button
           variant='outline'
-          className={`rounded-[5px] border-[#FF7D4E] bg-[#FF7D4E] text-white hover:border-[#FF7D4E]/90 hover:bg-[#FF7D4E]/90 hover:text-white/90`}
+          className='rounded-[5px] border-[#FF7D4E] bg-[#FF7D4E] text-white hover:border-[#FF7D4E]/90 hover:bg-[#FF7D4E]/90 hover:text-white/90'
           asChild
         >
           <Link href='https://forms.gle/PbmJa9SDVMYxhaFYA' target='_blank'>

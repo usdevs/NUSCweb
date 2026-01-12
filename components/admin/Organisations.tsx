@@ -336,7 +336,7 @@ export default function OrganisationsPage({
                         </AlertDialogTitle>
                         <AlertDialogDescription>
                           This action cannot be undone. This will permanently
-                          delete the organisation "{org.name}".
+                          delete the organisation &quot;{org.name}&quot;.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>

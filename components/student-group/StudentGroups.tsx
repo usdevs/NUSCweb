@@ -96,9 +96,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
       <div className='hidden w-72 border-r bg-white px-8 py-8 lg:block'>
         <div className='mb-6 rounded-md bg-[#F5F5F5] p-4'>
           <h3 className='mb-3 font-semibold text-gray-900'>Join the...</h3>
-          <Button
-            className={`ml-3 rounded-md bg-[#FF7D4E] p-6 text-sm text-white hover:bg-[#FF7D4E]/90`}
-          >
+          <Button className='ml-3 rounded-md bg-[#FF7D4E] p-6 text-sm text-white hover:bg-[#FF7D4E]/90'>
             <Link
               href='https://t.me/+Mm3qL3aL7c0zNDE1'
               target='_blank'
@@ -176,9 +174,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
           </div>
         ) : (
           <>
-            <div
-              className={`mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3`}
-            >
+            <div className='mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
               {paginateArray(page).map((organisation) => (
                 <StudentGroupCard
                   key={organisation.id}

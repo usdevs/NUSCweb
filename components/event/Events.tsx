@@ -278,7 +278,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
               <Button
                 variant='ghost'
                 size='icon'
-                className={`h-6 w-6 text-[#0C2C47] hover:bg-gray-100`}
+                className='h-6 w-6 text-[#0C2C47] hover:bg-gray-100'
                 onClick={handlePrevious}
               >
                 <ChevronLeftIcon className='h-4 w-4' />
@@ -286,7 +286,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
               <Button
                 variant='ghost'
                 size='icon'
-                className={`h-6 w-6 text-[#0C2C47] hover:bg-gray-100`}
+                className='h-6 w-6 text-[#0C2C47] hover:bg-gray-100'
                 onClick={handleNext}
               >
                 <ChevronRightIcon className='h-4 w-4' />
@@ -382,7 +382,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
             <Button
               variant='ghost'
               size='icon'
-              className={`h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90`}
+              className='h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90'
               onClick={handlePrevious}
             >
               <ChevronLeftIcon className='h-4 w-4' />
@@ -390,7 +390,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
             <Button
               variant='ghost'
               size='icon'
-              className={`h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90`}
+              className='h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90'
               onClick={handleNext}
             >
               <ChevronRightIcon className='h-4 w-4' />

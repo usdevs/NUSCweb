@@ -1,9 +1,7 @@
 import type { NextConfig } from 'next';
 
 export default {
-  experimental: {
-    reactCompiler: true,
-  },
+  reactCompiler: true,
   allowedDevOrigins: [
     // Ngrok managed domains
     '*.ngrok.app',
