@@ -143,6 +143,7 @@ export const editEvent = async (
           bookedForOrgId: data.organisationId,
           start: data.startTime,
           end: data.endTime,
+          updatedAt: Date.now(),
         },
         include: { booking: true },
       });
@@ -158,6 +159,7 @@ export const editEvent = async (
             bookedForOrgId: data.organisationId,
             start: data.startTime,
             end: data.endTime,
+            updatedAt: Date.now(),
           },
         });
     });
