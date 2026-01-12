@@ -235,7 +235,7 @@ export default function Bookings({
   );
 
   return (
-    <div className={`relative flex flex-col bg-[#0C2C47] lg:flex-row`}>
+    <div className='relative flex flex-col bg-[#0C2C47] lg:flex-row'>
       {(createBookingPending || editBookingPending || deleteBookingPending) && (
         <div className='bg-opacity-60 absolute inset-0 z-50 flex items-center justify-center bg-white'>
           <div className='h-24 w-24'>
@@ -262,7 +262,7 @@ export default function Bookings({
         />
       </div>
 
-      <div className={`mt-10 flex-1 overflow-auto px-2 lg:ml-4 lg:px-0`}>
+      <div className='mt-10 flex-1 overflow-auto px-2 lg:ml-4 lg:px-0'>
         <ReactCalendar
           selectable
           showMultiDayTimes

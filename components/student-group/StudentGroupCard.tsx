@@ -14,17 +14,15 @@ export default function StudentGroupCard({
       className='relative flex flex-col rounded-lg bg-white p-6'
     >
       {organisation.isInactive && (
-        <div
-          className={`absolute top-2 left-2 rounded bg-gray-500 px-2 py-1 text-xs text-white`}
-        >
+        <div className='absolute top-2 left-2 rounded bg-gray-500 px-2 py-1 text-xs text-white'>
           INACTIVE
         </div>
       )}
 
-      <h3 className={`mb-3 text-center text-xl font-bold text-gray-900`}>
+      <h3 className='mb-3 text-center text-xl font-bold text-gray-900'>
         {organisation.name}
       </h3>
-      <p className={`mb-4 line-clamp-6 text-sm leading-relaxed text-gray-500`}>
+      <p className='mb-4 line-clamp-6 text-sm leading-relaxed text-gray-500'>
         {organisation.description || 'No description available.'}
       </p>
 

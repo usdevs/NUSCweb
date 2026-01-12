@@ -94,7 +94,7 @@ export default function OrganisationModal({
         <DialogContent aria-describedby={undefined}>
           <form
             onSubmit={form.handleSubmit(handleSubmitOrganisation)}
-            className={`flex flex-col gap-3 sm:max-w-md`}
+            className='flex flex-col gap-3 sm:max-w-md'
           >
             <DialogHeader className='bg-[#0C2C47] text-white'>
               <DialogTitle>
@@ -150,9 +150,7 @@ export default function OrganisationModal({
               control={form.control}
               name='category'
               render={({ field }) => (
-                <FormItem
-                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
-                >
+                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
                   <FormLabel>CATEGORY</FormLabel>
                   <Select
                     // value={field.value}
@@ -226,7 +224,7 @@ export default function OrganisationModal({
                     <Button
                       variant='destructive'
                       size='icon'
-                      className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
+                      className='rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90'
                       disabled={isPending}
                     >
                       <Trash2Icon />
@@ -239,7 +237,8 @@ export default function OrganisationModal({
                       </AlertDialogTitle>
                       <AlertDialogDescription>
                         This action cannot be undone. This will permanently
-                        delete the organisation "{selectedOrganisation.name}".
+                        delete the organisation &quot;
+                        {selectedOrganisation.name}&quot;.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -263,7 +262,7 @@ export default function OrganisationModal({
                 </DialogClose>
                 <Button
                   type='submit'
-                  className={`rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90`}
+                  className='rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90'
                   disabled={isPending}
                 >
                   Submit

@@ -65,7 +65,7 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent side='left'>
               <SheetHeader>
-                <SheetTitle></SheetTitle>
+                <SheetTitle />
                 <SheetDescription className='sr-only'>
                   Main navigation menu for mobile devices
                 </SheetDescription>

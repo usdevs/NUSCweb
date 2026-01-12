@@ -88,7 +88,7 @@ export default function ShowIGModal({ organisation }: ShowIGModalProps) {
               <select
                 value={selectedIGHead}
                 onChange={(e) => setSelectedIGHead(e.target.value)}
-                className={`w-full rounded-md border border-gray-300 bg-white p-3 text-sm text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-hidden`}
+                className='w-full rounded-md border border-gray-300 bg-white p-3 text-sm text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-hidden'
               >
                 <option value=''>Select an IG Head</option>
                 {igHeads.map((head) => (
@@ -126,15 +126,11 @@ export default function ShowIGModal({ organisation }: ShowIGModalProps) {
           {/* Status Indicators */}
           <div className='flex flex-wrap gap-2 pt-2'>
             {organisation.isInactive && (
-              <span
-                className={`inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800`}
-              >
+              <span className='inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800'>
                 Inactive
               </span>
             )}
-            <span
-              className={`inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800`}
-            >
+            <span className='inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800'>
               {organisation.category}
             </span>
           </div>

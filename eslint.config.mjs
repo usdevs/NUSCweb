@@ -1,23 +1,15 @@
 // @ts-check
 
 import eslint from '@eslint/js';
-import pluginNext from '@next/eslint-plugin-next';
 import { defineConfig } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
   eslintConfigPrettier,
-  {
-    plugins: {
-      '@next/next': pluginNext,
-    },
-    rules: {
-      ...pluginNext.configs.recommended.rules,
-      ...pluginNext.configs['core-web-vitals'].rules,
-    },
-  },
+  ...nextVitals,
   {
     plugins: {
       'simple-import-sort': simpleImportSort,

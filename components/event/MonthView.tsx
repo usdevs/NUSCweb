@@ -36,7 +36,7 @@ export default function MonthView({
         {DAY_OF_WEEKS.map((day) => (
           <div
             key={day}
-            className={`rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-base font-bold text-[#0C2C47]`}
+            className='rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-base font-bold text-[#0C2C47]'
           >
             {day}
           </div>
@@ -104,7 +104,7 @@ export default function MonthView({
                     {dayEvents.slice(0, maxEventsToShow).map((event) => (
                       <div
                         key={event.id}
-                        className={`flex cursor-pointer items-center gap-2 text-xs`}
+                        className='flex cursor-pointer items-center gap-2 text-xs'
                         onClick={(e) => {
                           e.stopPropagation();
                           handleEventClick(event);
@@ -120,7 +120,7 @@ export default function MonthView({
                     ))}
                     {hasMoreEvents && (
                       <button
-                        className={`w-full rounded bg-gray-300 px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-400`}
+                        className='w-full rounded bg-gray-300 px-2 py-1 text-xs font-medium text-gray-700 hover:bg-gray-400'
                         onClick={() => handleShowMore(day)}
                       >
                         SHOW MORE

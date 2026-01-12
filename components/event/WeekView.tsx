@@ -39,7 +39,7 @@ export default function WeekView({
         {calendarDays.map((day) => (
           <div
             key={`${day.toISOString()}-header`}
-            className={`rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-[#0C2C47]`}
+            className='rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-[#0C2C47]'
           >
             <div className='text-base font-bold'>
               {format(day, 'EEE').toUpperCase()}

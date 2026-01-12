@@ -241,7 +241,7 @@ export default function UsersPage({ users, organisations }: UsersPageProps) {
                         </AlertDialogTitle>
                         <AlertDialogDescription>
                           This action cannot be undone. This will permanently
-                          delete the user "{user.name}".
+                          delete the user &quot;{user.name}&quot;.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
