@@ -126,7 +126,6 @@ export default function OrganisationsPage({
     if (formData.telegramUrl)
       editOrganisation.set('telegramUrl', formData.telegramUrl);
     editOrganisation.set('category', formData.category);
-    // editOrganisation.set('category', formData.category);
 
     editOrganisationAction(editOrganisation);
     setSelectedOrganisation(null);
