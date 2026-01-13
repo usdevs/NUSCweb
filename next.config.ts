@@ -1,6 +1,7 @@
+import { withPayload } from '@payloadcms/next/withPayload';
 import type { NextConfig } from 'next';
 
-export default {
+const nextConfig = {
   reactCompiler: true,
   allowedDevOrigins: [
     // Ngrok managed domains
@@ -16,3 +17,5 @@ export default {
     '*.tunnl.gg',
   ],
 } satisfies NextConfig;
+
+export default withPayload(nextConfig);
