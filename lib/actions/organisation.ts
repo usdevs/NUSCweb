@@ -112,16 +112,7 @@ export const editOrganisation = async (
   try {
     await prisma.organisation.update({
       where: { id: data.id },
-      data: {
-        id: data.id,
-        name: data.name,
-        category: data.category,
-        isAdminOrg: data.isAdminOrg,
-        description: data.description,
-        telegramUrl: data.telegramUrl,
-        updatedAt: Date.now(),
-      },
-
+      data,
     });
   } catch (error) {
     console.error('Error editing organisation:', error);

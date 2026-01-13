@@ -213,7 +213,6 @@ export const editBooking = async (
                   bookedForOrgId: data.organisationId,
                   start: data.startTime,
                   end: data.endTime,
-                  updatedAt: Date.now(),
                 },
               },
             }
