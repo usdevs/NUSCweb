@@ -42,29 +42,52 @@ export const createBooking = async (
       message: 'Unknown error occurred. Please contact admin.',
     };
   }
-
+  const MSPERDAY = 1000 * 60 * 60 * 24; 
+  const MIN_BOOKING_ADVANCE_DAYS = 7; 
+  const MIN_BOOKING_ADVANCE_DAYS_PANTRY = 1; 
+  if (token.isAdmin === false) { 
+    const venue = await prisma.venue.findUnique({ 
+      where: { 
+        id: data.venueId 
+      }, 
+      select: { 
+        name: true 
+      }, 
+    }
+  ); 
+  const isPantry = venue?.name.toLowerCase().includes('pantry'); 
+  const minDaysRequired = isPantry ? MIN_BOOKING_ADVANCE_DAYS_PANTRY : MIN_BOOKING_ADVANCE_DAYS; 
+  const now = new Date(); 
+  const bookingDate = new Date(data.startTime); 
+  // ensure same timezone for rare cases of bookings 
+  const utcNow = Date.UTC( 
+    now.getFullYear(), 
+    now.getMonth(), 
+    now.getDate(), 
+  ); 
+  const utcBookingDate = Date.UTC( 
+    bookingDate.getFullYear(), 
+    bookingDate.getMonth(), 
+    bookingDate.getDate(), 
+  ); 
+  const daysUntilBooking = Math.ceil( 
+    (utcBookingDate - utcNow) / (MSPERDAY), 
+  ); 
+  // if pantries from saga; elm; cendy, bookings can be made up to 24 hours prior 
+  if (daysUntilBooking < minDaysRequired) { 
+    const advanceMessage = isPantry ? 'Pantry bookings must be made at least 24 hours in advance.' : 'Bookings must be made at least one week in advance.'; 
+    return { 
+      success: false, 
+      message: advanceMessage, 
+    }; 
+  }
+}
   // Ensure user has the permissions for the corresponding organisation
   if (!hasOrgPerms(token, data.organisationId)) {
     return {
       success: false,
       message: 'You do not belong to the organisation!',
     };
-  }
-
-  // check booking deadline (one week or more in advance)
-  // unless user is admin
-  if (!token.isAdmin) {
-    const now = new Date();
-    const bookingDate = new Date(data.startTime);
-    const daysUntilBooking = Math.floor(
-      (bookingDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
-    );
-    if (daysUntilBooking < 7) {
-      return {
-        success: false,
-        message: 'Bookings must be made at least one week in advance.',
-      };
-    }
   }
 
   const overlapping = await prisma.booking.findFirst({
@@ -176,6 +199,50 @@ export const editBooking = async (
       success: false,
       message: 'You do not belong to the organisation!',
     };
+  }
+
+  const MSPERDAY = 1000 * 60 * 60 * 24;
+  const MIN_BOOKING_ADVANCE_DAYS = 7;
+  const MIN_BOOKING_ADVANCE_DAYS_PANTRY = 1;
+
+  if (token.isAdmin === false) {
+    const venue = await prisma.venue.findUnique({
+      where: { id: data.venueId },
+      select: { name: true },
+    });
+
+    const isPantry = venue?.name.toLowerCase().includes('pantry');
+    const minDaysRequired = isPantry
+      ? MIN_BOOKING_ADVANCE_DAYS_PANTRY
+      : MIN_BOOKING_ADVANCE_DAYS;
+
+    const now = new Date();
+    const bookingDate = new Date(data.startTime);
+
+    // Ensure same timezone
+    const utcNow = Date.UTC(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+    );
+    const utcBookingDate = Date.UTC(
+      bookingDate.getFullYear(),
+      bookingDate.getMonth(),
+      bookingDate.getDate(),
+    );
+
+    const daysUntilBooking = Math.ceil(
+      (utcBookingDate - utcNow) / MSPERDAY,
+    );
+
+    if (daysUntilBooking < minDaysRequired) {
+      return {
+        success: false,
+        message: isPantry
+          ? 'Pantry bookings must be made at least 24 hours in advance.'
+          : 'Bookings must be made at least one week in advance.',
+      };
+    }
   }
 
   const overlapping = await prisma.booking.findFirst({
