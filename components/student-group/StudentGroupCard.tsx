@@ -24,14 +24,16 @@ export default function StudentGroupCard({
       <h3 className={`mb-3 text-center text-xl font-bold text-gray-900`}>
         {organisation.name}
       </h3>
-      <p className={`mb-4 line-clamp-6 text-sm leading-relaxed text-[#A1A1A1]`}>
+      <p className={`mb-4 line-clamp-6 text-sm leading-relaxed text-gray-500`}>
         {organisation.description || 'No description available.'}
       </p>
 
-      <p className='mb-4 text-sm text-gray-500'>
-        Headed by{' '}
-        {organisation.userOrgs.map((igHead) => igHead.user.name).join(', ')}
-      </p>
+      {organisation.userOrgs.length !== 0 && (
+        <p className='mb-4 text-sm text-[#A1A1A1]'>
+          Headed by{' '}
+          {organisation.userOrgs.map((igHead) => igHead.user.name).join(', ')}
+        </p>
+      )}
 
       <ShowIGModal organisation={organisation} />
     </div>
