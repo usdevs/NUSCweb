@@ -262,6 +262,7 @@ export default function Bookings({
         />
       </div>
 
+      {/* TODO: Might need to make this calendar have a height for proper scrolling */}
       <div className='mt-10 flex-1 overflow-auto px-2 lg:ml-4 lg:px-0'>
         <ReactCalendar
           selectable

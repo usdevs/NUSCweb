@@ -13,7 +13,7 @@
 }
 
 .rbc-time-header-content {
-  @apply !m-0 h-14 w-50 justify-center rounded-tl-3xl rounded-tr-3xl bg-white text-[#0C2C47];
+  @apply border-gray-400 border-b-1 border-0 !m-0 h-14 w-50 justify-center rounded-tl-3xl rounded-tr-3xl bg-white text-[#0C2C47];
 }
 
 .rbc-time-header-gutter {
@@ -26,9 +26,11 @@
 }
 
 .rbc-time-gutter {
-  @apply !z-1 !-translate-y-3 !border-r-0 !bg-[#0C2C47];
+  @apply !z-4 !-translate-y-3 !border-r-0 !bg-[#0C2C47];
 }
 
+/* TODO: This is causing the time gutter to disappear past the halfway mark,
+but is necessary for hiding of content */
 .rbc-time-content {
   @apply !overflow-y-visible;
 }
