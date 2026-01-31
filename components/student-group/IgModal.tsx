@@ -17,10 +17,6 @@ interface ShowIGModalProps {
 }
 
 export default function ShowIGModal({ organisation }: ShowIGModalProps) {
-  const [selectedIGHead, setSelectedIGHead] = useState(
-    organisation?.userOrgs[0]?.user.name ?? '',
-  );
-
   // Extract IG Heads from the organisation data
   const igHeads = useMemo(() => {
     return organisation
@@ -31,12 +27,7 @@ export default function ShowIGModal({ organisation }: ShowIGModalProps) {
       : [];
   }, [organisation]);
 
-  // Set default selected IG Head if not already set
-  useEffect(() => {
-    if (igHeads.length > 0 && !selectedIGHead) {
-      setSelectedIGHead(igHeads[0].name);
-    }
-  }, [igHeads, selectedIGHead]);
+  const [selectedIGHead, setSelectedIGHead] = useState(igHeads[0]?.name ?? '');
 
   if (!organisation) return null;
 

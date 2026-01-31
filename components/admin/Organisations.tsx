@@ -1,7 +1,6 @@
 'use client';
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
-import { IGCategory, type Organisation } from '@/prisma/generated/prisma';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -51,6 +50,7 @@ import {
   editOrganisation,
 } from '@/lib/actions/organisation';
 import { NewOrganisationClientSchema } from '@/lib/schema/organisation';
+import { IGCategory, type Organisation } from '@/prisma/generated/prisma';
 
 const PAGE_SIZE = 9;
 

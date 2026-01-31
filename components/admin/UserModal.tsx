@@ -1,6 +1,5 @@
 'use client';
 
-import type { Organisation } from '@/prisma/generated/prisma';
 import { Trash2Icon } from 'lucide-react';
 import type { UseFormReturn } from 'react-hook-form';
 import z from 'zod/v4';
@@ -35,6 +34,7 @@ import {
 import { MultiSelect } from '@/components/ui/multi-select';
 import { UpdateUserSchema } from '@/lib/schema/user';
 import type { UserView } from '@/lib/utils/server/user';
+import type { Organisation } from '@/prisma/generated/prisma';
 
 interface UserModalProps {
   form: UseFormReturn<z.input<typeof UpdateUserSchema>>;

@@ -1,7 +1,6 @@
 'use client';
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
-import type { Organisation } from '@/prisma/generated/prisma';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -40,6 +39,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { deleteUser, editUser } from '@/lib/actions/user';
 import { UpdateUserSchema } from '@/lib/schema/user';
 import type { UserView } from '@/lib/utils/server/user';
+import type { Organisation } from '@/prisma/generated/prisma';
 
 const PAGE_SIZE = 9;
 

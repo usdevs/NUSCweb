@@ -1,6 +1,5 @@
 'use client';
 
-import { IGCategory } from '@/prisma/generated/prisma';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -22,6 +21,7 @@ import {
 } from '@/components/ui/pagination';
 import { Spinner } from '@/components/ui/spinner';
 import type { OrganisationView } from '@/lib/utils/server/organisation';
+import { IGCategory } from '@/prisma/generated/prisma';
 
 const DEFAULT_FILTERS: string[] = [
   IGCategory.Sports,
@@ -69,6 +69,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
 
   // Reset page whenever filter changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
   }, [interestGroupFilters, interestGroupSearchString, orgs, showInactiveOrgs]);
 

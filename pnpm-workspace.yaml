@@ -9,4 +9,4 @@ onlyBuiltDependencies:
   - unrs-resolver
 
 publicHoistPattern:
-  - "*prisma*"
+  - '*prisma*'

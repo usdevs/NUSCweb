@@ -1,6 +1,5 @@
 'use client';
 
-import { IGCategory, Organisation } from '@/prisma/generated/prisma';
 import { PlusIcon, Trash2Icon } from 'lucide-react';
 import type { Dispatch, SetStateAction } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
@@ -48,6 +47,7 @@ import {
 } from '@/components/ui/select';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { NewOrganisationClientSchema } from '@/lib/schema/organisation';
+import { IGCategory, Organisation } from '@/prisma/generated/prisma';
 
 interface OrganisationModalProps {
   form: UseFormReturn<z.input<typeof NewOrganisationClientSchema>>;
