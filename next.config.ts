@@ -14,5 +14,7 @@ export default {
 
     // tunnl.gg domain
     '*.tunnl.gg',
+
+    '**.localhost',
   ],
 } satisfies NextConfig;

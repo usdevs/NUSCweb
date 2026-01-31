@@ -12,6 +12,7 @@ import Link from 'next/link';
 import posthog from 'posthog-js';
 import { useEffect, useState } from 'react';
 
+import LocalLoginButton from '@/components/auth/LocalLoginButton';
 import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
@@ -277,7 +278,9 @@ export default function Header() {
         {isAuthenticated ? (
           <Button
             onClick={() => {
-              Cookies.remove('auth');
+              Cookies.remove('auth', {
+                domain: window.location.hostname.replace('www.', ''),
+              });
               window.location.reload();
             }}
             variant='ghost'
@@ -285,6 +288,8 @@ export default function Header() {
             <SendIcon className='h-4 w-4' />
             LOGOUT
           </Button>
+        ) : process.env.NODE_ENV === 'development' ? (
+          <LocalLoginButton />
         ) : (
           <LoginButton
             botUsername={process.env.NEXT_PUBLIC_TELEGRAM_LOGIN_BOT!}
