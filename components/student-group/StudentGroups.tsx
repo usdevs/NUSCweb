@@ -1,6 +1,6 @@
 'use client';
 
-import { IGCategory } from '@prisma/client';
+import { IGCategory } from '@/prisma/generated/prisma';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,

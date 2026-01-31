@@ -7,3 +7,6 @@ onlyBuiltDependencies:
   - prisma
   - sharp
   - unrs-resolver
+
+publicHoistPattern:
+  - "*prisma*"

@@ -1,4 +1,4 @@
-import { IGCategory } from '@prisma/client';
+import { IGCategory } from '@/prisma/generated/prisma';
 
 export const TIMETABLE_TIMESLOTS = [
   '12:00 am',

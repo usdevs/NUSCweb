@@ -1,4 +1,4 @@
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { type NextRequest } from 'next/server';
 
 import { getAuthCookie } from '@/lib/auth/server';

@@ -1,7 +1,7 @@
 'use client';
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
-import type { Organisation } from '@prisma/client';
+import type { Organisation } from '@/prisma/generated/prisma';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,

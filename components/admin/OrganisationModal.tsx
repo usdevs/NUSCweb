@@ -1,6 +1,6 @@
 'use client';
 
-import { IGCategory, Organisation } from '@prisma/client';
+import { IGCategory, Organisation } from '@/prisma/generated/prisma';
 import { PlusIcon, Trash2Icon } from 'lucide-react';
 import type { Dispatch, SetStateAction } from 'react';
 import type { UseFormReturn } from 'react-hook-form';

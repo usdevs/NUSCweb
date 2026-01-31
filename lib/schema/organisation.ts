@@ -1,4 +1,4 @@
-import { IGCategory } from '@prisma/client';
+import { IGCategory } from '@/prisma/generated/prisma';
 import { z } from 'zod/v4';
 
 export const NewOrganisationClientSchema = z.object({

@@ -1,6 +1,6 @@
 'use client';
 
-import type { Organisation } from '@prisma/client';
+import type { Organisation } from '@/prisma/generated/prisma';
 import { Trash2Icon } from 'lucide-react';
 import type { UseFormReturn } from 'react-hook-form';
 import z from 'zod/v4';
