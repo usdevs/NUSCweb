@@ -18,6 +18,8 @@ export const DeleteOrganisationSchema = z.object({
   id: z.coerce.number<number>().int().positive(),
 });
 
+export const LeaveOrganisationSchema = DeleteOrganisationSchema;
+
 export const EditOrganisationClientSchema = z.object({
   ...NewOrganisationClientSchema.shape,
   ...DeleteOrganisationSchema.shape,

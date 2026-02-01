@@ -6,6 +6,7 @@ import {
   ChevronRightIcon,
   ChevronsLeftIcon,
   ChevronsRightIcon,
+  CircleArrowLeftIcon,
   EditIcon,
   SearchIcon,
   Trash2Icon,
@@ -48,7 +49,9 @@ import {
   createOrganisation,
   deleteOrganisation,
   editOrganisation,
+  leaveOrganisation,
 } from '@/lib/actions/organisation';
+import { useAuth } from '@/lib/hooks/useAuth';
 import { NewOrganisationClientSchema } from '@/lib/schema/organisation';
 import { IGCategory, type Organisation } from '@/prisma/generated/prisma';
 
@@ -61,6 +64,7 @@ interface OrganisationsPageProps {
 export default function OrganisationsPage({
   organisations,
 }: OrganisationsPageProps) {
+  const isAuthenticated = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All categories');
 
@@ -84,6 +88,11 @@ export default function OrganisationsPage({
     deleteOrganisationAction,
     deleteOrganisationPending,
   ] = useActionState(deleteOrganisation, null);
+  const [
+    leaveOrganisationState,
+    leaveOrganisationAction,
+    leaveOrganisationPending,
+  ] = useActionState(leaveOrganisation, null);
 
   const form = useForm<z.input<typeof NewOrganisationClientSchema>>({
     resolver: standardSchemaResolver(NewOrganisationClientSchema),
@@ -158,6 +167,14 @@ export default function OrganisationsPage({
       telegramUrl: '',
       category: IGCategory.Others,
     });
+  };
+
+  const handleLeaveSubmit = (organisationId: number) => {
+    const leaveOrganisation = new FormData();
+    leaveOrganisation.set('id', organisationId.toString());
+    leaveOrganisationAction(leaveOrganisation);
+    setSelectedOrganisation(null);
+    setIsModalOpen(false);
   };
 
   // Filter organizations based on search and category
@@ -322,37 +339,74 @@ export default function OrganisationsPage({
                     <EditIcon className='mr-1 h-4 w-4' />
                     EDIT
                   </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        className='border-orange-200 text-orange-600 hover:border-orange-300 hover:text-orange-800'
-                      >
-                        <Trash2Icon className='mr-1 h-4 w-4' />
-                        DELETE
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete the organisation &quot;{org.name}&quot;.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => handleDeleteSubmit(org.id)}
+                  {isAuthenticated?.userOrgs?.find(
+                    (userOrg) => userOrg.id === org.id,
+                  ) && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant='outline'
+                          size='sm'
+                          className='border-orange-200 text-orange-600 hover:border-orange-300 hover:text-orange-800'
                         >
-                          Continue
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                          <CircleArrowLeftIcon className='mr-1 h-4 w-4' />
+                          LEAVE
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. You will no longer be
+                            a part of the organisation &quot;{org.name}&quot;.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleLeaveSubmit(org.id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
+                  {isAuthenticated?.isAdmin && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant='outline'
+                          size='sm'
+                          className='border-orange-200 text-orange-600 hover:border-orange-300 hover:text-orange-800'
+                        >
+                          <Trash2Icon className='mr-1 h-4 w-4' />
+                          DELETE
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete the organisation &quot;{org.name}&quot;.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDeleteSubmit(org.id)}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
                 </div>
               </div>
             </div>

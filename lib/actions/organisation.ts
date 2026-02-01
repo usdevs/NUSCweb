@@ -9,6 +9,7 @@ import prisma from '@/lib/prisma';
 import {
   DeleteOrganisationSchema,
   EditOrganisationServerSchema,
+  LeaveOrganisationSchema,
   NewOrganisationServerSchema,
 } from '@/lib/schema/organisation';
 import { formDataToObject } from '@/lib/utils';
@@ -183,5 +184,58 @@ export const deleteOrganisation = async (
   return {
     success: true,
     message: 'Successfully deleted organisation!',
+  };
+};
+
+export const leaveOrganisation = async (
+  _prevState: ServerActionState,
+  formData: FormData,
+): Promise<ServerActionState> => {
+  const token = await getAuthCookie();
+  if (!token) {
+    return {
+      success: false,
+      message: 'Please login!',
+    };
+  }
+
+  let data;
+  try {
+    data = LeaveOrganisationSchema.parse(formDataToObject(formData));
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        message: z.prettifyError(error),
+      };
+    }
+    return {
+      success: false,
+      message: 'Unknown error occurred. Please contact admin.',
+    };
+  }
+
+  // TODO: Use soft delete
+  const deleted = await prisma.userOnOrg.delete({
+    where: {
+      userId_orgId: {
+        orgId: data.id,
+        userId: token.userId,
+      },
+    },
+  });
+
+  if (!deleted) {
+    return {
+      success: false,
+      message: 'You are not part of the organisation!',
+    };
+  }
+
+  revalidatePath('/admin/organisations');
+
+  return {
+    success: true,
+    message: 'You have successfully left th organisation.',
   };
 };

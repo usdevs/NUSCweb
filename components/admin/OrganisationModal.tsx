@@ -221,7 +221,7 @@ export default function OrganisationModal({
               )}
             />
             <DialogFooter className='sm:justify-between'>
-              {selectedOrganisation !== null && (
+              {selectedOrganisation !== null && authToken?.isAdmin && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
