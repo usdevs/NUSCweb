@@ -26,6 +26,7 @@ import {
   deleteBooking,
   editBooking,
 } from '@/lib/actions/booking';
+import { getCategoryBgColor } from '@/lib/formOptions';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { NewBookingClientSchema } from '@/lib/schema/booking';
 import { getNext30Minutes } from '@/lib/utils/client/time';
@@ -291,6 +292,9 @@ export default function Bookings({
           views={['day']}
           localizer={localizer}
           events={bookings}
+          eventPropGetter={(event) => ({
+            className: getCategoryBgColor(event.bookedForOrg.category),
+          })}
           titleAccessor={(event) =>
             `${event.bookingName}\n${event.bookedForOrg.name}`
           }

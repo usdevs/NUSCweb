@@ -52,11 +52,11 @@ export const TIMETABLE_TIMESLOTS = [
 ];
 
 export const EVENT_CATEGORIES: Array<{ name: IGCategory; bgColor: string }> = [
-  { name: IGCategory.Sports, bgColor: 'bg-blue-200' },
-  { name: IGCategory.SocioCultural, bgColor: 'bg-yellow-200' },
-  { name: IGCategory.Guips, bgColor: 'bg-green-200' },
-  { name: IGCategory.Welfare, bgColor: 'bg-[#FCDED6]' },
-  { name: IGCategory.Others, bgColor: 'bg-gray-200' },
+  { name: IGCategory.Sports, bgColor: 'bg-blue-200!' },
+  { name: IGCategory.SocioCultural, bgColor: 'bg-yellow-200!' },
+  { name: IGCategory.Guips, bgColor: 'bg-green-200!' },
+  { name: IGCategory.Welfare, bgColor: 'bg-[#FCDED6]!' },
+  { name: IGCategory.Others, bgColor: 'bg-gray-200!' },
 ];
 
 export const getCategoryBgColor = (category: IGCategory) => {
