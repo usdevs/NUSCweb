@@ -167,7 +167,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
       </div>
 
       {/* Main Content */}
-      <div className='flex-1 bg-[#0C2C47] p-8'>
+      <div className='flex-1 bg-[#0C2C47] p-7'>
         <div className='mb-8'>
           <h1 className='mb-2 text-4xl font-bold text-white'>Student Groups</h1>
           <p className='text-white/80'>{igCardsToDisplay.length} RESULTS</p>
