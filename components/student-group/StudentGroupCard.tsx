@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import { Fragment } from 'react';
 
+import CopyButton from '@/components/CopyButton';
 import ShowIGModal from '@/components/student-group/IgModal';
 import { Button } from '@/components/ui/button';
 import { getCategoryBgColor } from '@/lib/formOptions';
@@ -40,15 +42,21 @@ export default function StudentGroupCard({
       <div className='flex'>
         <ShowIGModal organisation={organisation} />
         {organisation.telegramUrl && (
-          <Button className='rounded-md bg-[#FF7D4E] text-sm text-white hover:bg-[#FF7D4E]/90'>
-            <Link
-              href={organisation.telegramUrl}
-              target='_blank'
-              rel='noopener noreferrer'
+          <div className='flex items-center gap-1'>
+            <CopyButton text={organisation.telegramUrl} iconOnly />
+            <Button
+              size='sm'
+              className='rounded-md bg-[#FF7D4E] text-sm text-white hover:bg-[#FF7D4E]/90'
             >
-              Join the telegram chat
-            </Link>
-          </Button>
+              <Link
+                href={organisation.telegramUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                Join the Telegram chat
+              </Link>
+            </Button>
+          </div>
         )}
       </div>
     </div>

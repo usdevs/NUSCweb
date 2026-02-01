@@ -1,4 +1,4 @@
-import { CopyIcon } from 'lucide-react';
+import { CheckIcon, CopyIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -6,9 +6,14 @@ import { Button } from '@/components/ui/button';
 interface CopyButtonProps {
   text: string;
   labelText?: string;
+  iconOnly?: boolean;
 }
 
-export default function CopyButton({ text, labelText }: CopyButtonProps) {
+export default function CopyButton({
+  text,
+  labelText,
+  iconOnly = false,
+}: CopyButtonProps) {
   const [copySuccess, setCopySuccess] = useState(false);
 
   const copyToClipboard = async () => {
@@ -29,7 +34,11 @@ export default function CopyButton({ text, labelText }: CopyButtonProps) {
       className='px-3 py-2 text-xs'
     >
       {copySuccess ? (
-        <span className='text-green-600'>Copied!</span>
+        iconOnly ? (
+          <CheckIcon className='h-4 w-4 text-green-600' />
+        ) : (
+          <span className='text-green-600'>Copied!</span>
+        )
       ) : (
         <>
           <CopyIcon className='h-4 w-4' />
