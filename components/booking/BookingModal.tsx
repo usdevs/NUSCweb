@@ -57,7 +57,12 @@ import type { BookingView } from '@/lib/utils/server/booking';
 import type { VenueView } from '@/lib/utils/server/venue';
 
 const formatTime = (d: Date) =>
-  d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  d.toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Singapore',
+  });
 
 interface BookingModalProps {
   form: UseFormReturn<z.input<typeof NewBookingClientSchema>>;

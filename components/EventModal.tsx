@@ -53,7 +53,12 @@ import { dateTimeFormatter } from '@/lib/utils/client/time';
 import type { EventView } from '@/lib/utils/server/event';
 
 const formatTime = (d: Date) =>
-  d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  d.toLocaleTimeString('en-SG', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Singapore',
+  });
 
 interface EventModalProps {
   form: UseFormReturn<z.input<typeof NewEventSchema>>;
