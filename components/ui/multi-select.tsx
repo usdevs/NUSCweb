@@ -863,9 +863,8 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                                 'border-transparent text-white',
                               responsiveSettings.compactMode &&
                                 'px-1.5 py-0.5 text-xs',
-                              screenSize === 'mobile' &&
-                                'max-w-[120px] truncate',
-                              singleLine && 'flex-shrink-0 whitespace-nowrap',
+                              screenSize === 'mobile' && 'max-w-30 truncate',
+                              singleLine && 'shrink-0 whitespace-nowrap',
                               '[&>svg]:pointer-events-auto',
                             )}
                             style={{
@@ -936,7 +935,7 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
                           multiSelectVariants({ variant }),
                           responsiveSettings.compactMode &&
                             'px-1.5 py-0.5 text-xs',
-                          singleLine && 'flex-shrink-0 whitespace-nowrap',
+                          singleLine && 'shrink-0 whitespace-nowrap',
                           '[&>svg]:pointer-events-auto',
                         )}
                         style={{
@@ -1010,9 +1009,9 @@ export const MultiSelect = React.forwardRef<MultiSelectRef, MultiSelectProps>(
             className={cn(
               'w-auto p-0',
               getPopoverAnimationClass(),
-              screenSize === 'mobile' && 'w-[85vw] max-w-[280px]',
+              screenSize === 'mobile' && 'w-[85vw] max-w-70',
               screenSize === 'tablet' && 'w-[70vw] max-w-md',
-              screenSize === 'desktop' && 'min-w-[300px]',
+              screenSize === 'desktop' && 'min-w-75',
               popoverClassName,
             )}
             style={{

@@ -278,12 +278,25 @@ export default function Events({ events, userOrgs }: EventsProps) {
       )}
       {/* Sidebar */}
       {/* TODO: How do mobile people select dates? */}
-      <div className='hidden min-h-screen w-72 bg-white px-8 py-4 lg:block'>
+      <div className='hidden min-h-[calc(100vh-125px)] w-72 bg-white px-8 py-4 lg:block'>
         {/* View Toggle */}
         <ToggleGroup
           type='single'
           value={viewMode}
-          onValueChange={(val) => setViewMode(val as 'MONTH' | 'WEEK')}
+          onValueChange={(val: 'MONTH' | 'WEEK') => {
+            setViewMode(val);
+            const params = new URLSearchParams(
+              val === 'MONTH'
+                ? {
+                    [val.toLowerCase()]: currentDate.toLocaleString('en-sg', {
+                      month: 'long',
+                      year: 'numeric',
+                    }),
+                  }
+                : { date: currentDate.toDateString() },
+            );
+            window.history.pushState(null, '', `?${params.toString()}`);
+          }}
           className='relative mb-6 h-10 overflow-hidden rounded-lg border border-[#A1A1A1] bg-white'
         >
           <ToggleGroupItem

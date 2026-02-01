@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 export default function HomePage() {
   return (
     <>
-      <div className='relative h-[738px] w-full overflow-hidden'>
+      <div className='relative h-184.5 w-full overflow-hidden'>
         <div className='absolute inset-0'>
           <Image
             src='/images/hero.jpg'

@@ -46,7 +46,7 @@ export default function ShowIGModal({ organisation }: ShowIGModalProps) {
 
   return (
     <Dialog>
-      <DialogTrigger className='mr-auto rounded-md border-[#0C2C47] bg-[#0C2C47] px-6 py-1 text-xs text-white hover:bg-[#0C2C47]/90'>
+      <DialogTrigger className='mr-auto cursor-pointer rounded-md border-[#0C2C47] bg-[#0C2C47] px-6 py-1 text-sm text-white hover:bg-[#0C2C47]/90'>
         SHOW MORE
       </DialogTrigger>
       <DialogContent aria-describedby={undefined}>

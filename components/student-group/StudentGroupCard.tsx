@@ -1,4 +1,8 @@
+import Link from 'next/link';
+
 import ShowIGModal from '@/components/student-group/IgModal';
+import { Button } from '@/components/ui/button';
+import { getCategoryBgColor } from '@/lib/formOptions';
 import type { OrganisationView } from '@/lib/utils/server/organisation';
 
 interface StudentGroupCardProps {
@@ -11,7 +15,7 @@ export default function StudentGroupCard({
   return (
     <div
       key={organisation.id}
-      className='relative flex flex-col rounded-lg bg-white p-6'
+      className={`relative flex flex-col rounded-lg p-6 ${getCategoryBgColor(organisation.category)}`}
     >
       {organisation.isInactive && (
         <div className='absolute top-2 left-2 rounded bg-gray-500 px-2 py-1 text-xs text-white'>
@@ -33,7 +37,20 @@ export default function StudentGroupCard({
         </p>
       )}
 
-      <ShowIGModal organisation={organisation} />
+      <div className='flex'>
+        <ShowIGModal organisation={organisation} />
+        {organisation.telegramUrl && (
+          <Button className='rounded-md bg-[#FF7D4E] text-sm text-white hover:bg-[#FF7D4E]/90'>
+            <Link
+              href={organisation.telegramUrl}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              Join the telegram chat
+            </Link>
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

@@ -59,7 +59,7 @@ export const EVENT_CATEGORIES: Array<{ name: IGCategory; bgColor: string }> = [
   { name: IGCategory.Others, bgColor: 'bg-gray-200' },
 ];
 
-export const getCategoryBgColor = (category: string) => {
+export const getCategoryBgColor = (category: IGCategory) => {
   const categoryData = EVENT_CATEGORIES.find((cat) => cat.name === category);
   return categoryData ? categoryData.bgColor : 'bg-gray-200';
 };

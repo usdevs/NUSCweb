@@ -2,8 +2,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Loading() {
   return (
-    <div className='flex min-h-[400px] bg-[#0C2C47]'>
-      <div className='min-h-screen w-72 bg-white px-8 py-4'>
+    <div className='flex min-h-100 bg-[#0C2C47]'>
+      <div className='min-h-[calc(100vh-125px)] w-72 bg-white px-8 py-4'>
         <Skeleton className='mb-6 h-10 w-full' />
         {[...Array<never>(7)].map((_, i) => (
           <Skeleton key={i} className='mb-2 h-6 w-full' />

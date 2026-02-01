@@ -1,4 +1,5 @@
 import { isSameDay } from 'date-fns';
+import { Fragment } from 'react';
 
 import { getCategoryBgColor } from '@/lib/formOptions';
 import type { EventView } from '@/lib/utils/server/event';
@@ -34,12 +35,14 @@ export default function MonthView({
       {/* Day headers */}
       <div className='grid grid-cols-7 gap-0.5 p-0.5 pt-0'>
         {DAY_OF_WEEKS.map((day) => (
-          <div
-            key={day}
-            className='rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-base font-bold text-[#0C2C47]'
-          >
-            {day}
-          </div>
+          <Fragment key={day}>
+            <div className='hidden rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-base font-bold text-[#0C2C47] sm:block'>
+              {day}
+            </div>
+            <div className='flex justify-center rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-base font-bold text-[#0C2C47] sm:hidden'>
+              {day.charAt(0)}
+            </div>
+          </Fragment>
         ))}
       </div>
 
@@ -59,7 +62,7 @@ export default function MonthView({
               return (
                 <div
                   key={`${weekIndex}-${dayIndex}`}
-                  className={`h-[140px] bg-white ${
+                  className={`h-35 bg-white ${
                     isLastRow && isFirstCol
                       ? 'rounded-bl-2xl'
                       : isLastRow && isLastCol
@@ -73,7 +76,7 @@ export default function MonthView({
             return (
               <div
                 key={`${weekIndex}-${dayIndex}`}
-                className={`h-[140px] cursor-pointer bg-white p-4 hover:bg-gray-50 ${
+                className={`h-35 cursor-pointer bg-white p-4 hover:bg-gray-50 ${
                   isLastRow && isFirstCol
                     ? 'rounded-bl-2xl'
                     : isLastRow && isLastCol
@@ -92,9 +95,9 @@ export default function MonthView({
               >
                 <div className='pointer-events-none'>
                   <div
-                    className={`mb-2 text-base font-bold ${
+                    className={`mb-2 inline-flex justify-center text-base font-bold ${
                       isSameDay(day, today)
-                        ? `flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7D4E] text-white`
+                        ? `h-8 w-8 items-center rounded-full bg-[#FF7D4E] text-center text-white`
                         : 'text-[#0C2C47]'
                     }`}
                   >

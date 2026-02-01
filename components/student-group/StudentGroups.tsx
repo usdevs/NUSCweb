@@ -13,6 +13,7 @@ import StudentGroupCard from '@/components/student-group/StudentGroupCard';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Pagination,
   PaginationContent,
@@ -20,6 +21,7 @@ import {
   PaginationLink,
 } from '@/components/ui/pagination';
 import { Spinner } from '@/components/ui/spinner';
+import { EVENT_CATEGORIES } from '@/lib/formOptions';
 import type { OrganisationView } from '@/lib/utils/server/organisation';
 import { IGCategory } from '@/prisma/generated/prisma';
 
@@ -96,7 +98,9 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
       {/* Sidebar */}
       <div className='hidden w-72 border-r bg-white px-8 py-8 lg:block'>
         <div className='mb-6 rounded-md bg-[#F5F5F5] p-4'>
-          <h3 className='mb-3 font-semibold text-gray-900'>Join the...</h3>
+          <h3 className='mb-3 text-center font-semibold text-gray-900'>
+            Join the
+          </h3>
           <Button className='ml-3 rounded-md bg-[#FF7D4E] p-6 text-sm text-white hover:bg-[#FF7D4E]/90'>
             <Link
               href='https://t.me/+Mm3qL3aL7c0zNDE1'
@@ -124,20 +128,22 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
         <div className='mb-6'>
           <h3 className='mb-3 font-semibold text-gray-900'>CATEGORIES</h3>
           <div className='space-y-3'>
-            {Object.keys(IGCategory).map((category) => (
-              <div key={category} className='flex items-center space-x-2'>
+            {EVENT_CATEGORIES.map((category) => (
+              <div key={category.name} className='flex items-center space-x-2'>
                 <Checkbox
-                  id={category}
-                  checked={interestGroupFilters.includes(category)}
+                  id={category.name}
+                  checked={interestGroupFilters.includes(category.name)}
                   onCheckedChange={(checked) =>
-                    handleCategoryChange(category, checked as boolean)
+                    handleCategoryChange(category.name, checked as boolean)
                   }
+                  className={category.bgColor}
                 />
-                <label htmlFor={category} className='text-sm text-gray-700'>
-                  {IGCategory[
-                    category as keyof typeof IGCategory
-                  ].toUpperCase()}
-                </label>
+                <Label
+                  htmlFor={`category-${category.name}`}
+                  className='text-[#0C2C47]'
+                >
+                  {category.name.toUpperCase()}
+                </Label>
               </div>
             ))}
           </div>
