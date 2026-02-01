@@ -34,8 +34,8 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import CustomDropdown from './custom-dropdown';
 
 export default function Header() {
-  const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(false);
-  const [adminSubmenuOpen, setAdminSubmenuOpen] = useState(false);
+  const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(true);
+  const [adminSubmenuOpen, setAdminSubmenuOpen] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const isAuthenticated = useAuth();
@@ -89,7 +89,7 @@ export default function Header() {
                   <NavigationMenuItem className='w-full'>
                     {/* Student Life */}
                     <button
-                      className='flex w-full items-center justify-between'
+                      className='mb-1 flex w-full items-center justify-between'
                       onClick={() => setMobileSubmenuOpen((open) => !open)}
                     >
                       <span>STUDENT LIFE</span>
@@ -153,7 +153,7 @@ export default function Header() {
                     <NavigationMenuItem className='w-full'>
                       {/* Student Life */}
                       <button
-                        className='flex w-full items-center justify-between'
+                        className='mb-1 flex w-full items-center justify-between'
                         onClick={() => setAdminSubmenuOpen((open) => !open)}
                       >
                         <span>ADMIN</span>

@@ -1,8 +1,17 @@
 import './telegram-login-button.css';
 
+import { Roboto } from 'next/font/google';
+
+export const roboto = Roboto({
+  subsets: ['latin'],
+  weight: '400',
+});
+
 export default function LocalLoginButton() {
   return (
-    <body className={`widget_frame_base tgme_widget body_widget_login`}>
+    <div
+      className={`${roboto.className} widget_frame_base tgme_widget body_widget_login`}
+    >
       <div className='tgme_widget_login large'>
         <button
           className='btn tgme_widget_login_button'
@@ -17,6 +26,6 @@ export default function LocalLoginButton() {
           onClick={() => window.location.replace('/api/auth/callback')}
         />
       </div>
-    </body>
+    </div>
   );
 }

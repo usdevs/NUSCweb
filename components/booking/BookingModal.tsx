@@ -98,7 +98,10 @@ export default function BookingModal({
           if (!open) handleClose();
         }}
       >
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent
+          aria-describedby={undefined}
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <form
             onSubmit={form.handleSubmit(handleSubmitBooking)}
             className='flex flex-col gap-3 sm:max-w-md'

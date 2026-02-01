@@ -1,9 +1,9 @@
 import { isSameMonth, isSameWeek } from 'date-fns';
-import type { Dispatch, SetStateAction } from 'react';
+import type { Dispatch } from 'react';
 
 interface CalendarGridProps {
   currentDate: Date;
-  setCurrentDate: Dispatch<SetStateAction<Date>>;
+  setCurrentDate: Dispatch<Date>;
   viewMode: 'MONTH' | 'WEEK';
   calendarDays: Date[];
 }

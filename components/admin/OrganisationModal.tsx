@@ -91,7 +91,10 @@ export default function OrganisationModal({
             </Button>
           )}
         </DialogTrigger>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent
+          aria-describedby={undefined}
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <form
             onSubmit={form.handleSubmit(handleSubmitOrganisation)}
             className='flex flex-col gap-3 sm:max-w-md'

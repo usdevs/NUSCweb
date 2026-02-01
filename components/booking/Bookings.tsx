@@ -231,7 +231,7 @@ export default function Bookings({
       form.setValue('startTime', start);
       form.setValue('endTime', end);
     },
-    [],
+    [form, venues],
   );
 
   return (

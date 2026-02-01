@@ -22,7 +22,7 @@ export default function StudentGroupCard({
       <h3 className='mb-3 text-center text-xl font-bold text-gray-900'>
         {organisation.name}
       </h3>
-      <p className='mb-4 line-clamp-6 text-sm leading-relaxed text-gray-500'>
+      <p className='mb-4 line-clamp-6 grow text-sm leading-relaxed text-gray-500'>
         {organisation.description || 'No description available.'}
       </p>
 

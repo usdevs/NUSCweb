@@ -30,7 +30,10 @@ export default function DailyViewModal({
 }: DailyViewModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent aria-describedby={undefined}>
+      <DialogContent
+        aria-describedby={undefined}
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>
             {format(date, 'd MMMM').toUpperCase()} EVENTS

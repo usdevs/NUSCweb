@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import CopyButton from '@/components/CopyButton';
 import {
@@ -10,6 +10,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type { OrganisationView } from '@/lib/utils/server/organisation';
 
 interface ShowIGModalProps {
@@ -38,7 +46,7 @@ export default function ShowIGModal({ organisation }: ShowIGModalProps) {
 
   return (
     <Dialog>
-      <DialogTrigger className='mt-auto mr-auto rounded-md border-[#0C2C47] bg-[#0C2C47] px-6 py-1 text-xs text-white hover:bg-[#0C2C47]/90'>
+      <DialogTrigger className='mr-auto rounded-md border-[#0C2C47] bg-[#0C2C47] px-6 py-1 text-xs text-white hover:bg-[#0C2C47]/90'>
         SHOW MORE
       </DialogTrigger>
       <DialogContent aria-describedby={undefined}>
@@ -61,7 +69,7 @@ export default function ShowIGModal({ organisation }: ShowIGModalProps) {
             <label className='mb-2 block text-sm font-medium text-gray-700'>
               Description
             </label>
-            <div className='min-h-[80px] rounded-md border bg-gray-50 p-3'>
+            <div className='min-h-20 rounded-md border bg-gray-50 p-3'>
               <p className='text-sm leading-relaxed text-gray-900'>
                 {organisation.description || 'No description available.'}
               </p>
@@ -76,20 +84,20 @@ export default function ShowIGModal({ organisation }: ShowIGModalProps) {
               IG Head
             </label>
             {igHeads.length > 1 ? (
-              <select
-                value={selectedIGHead}
-                onChange={(e) => setSelectedIGHead(e.target.value)}
-                className='w-full rounded-md border border-gray-300 bg-white p-3 text-sm text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-hidden'
-              >
-                <option value=''>Select an IG Head</option>
-                {igHeads.map((head) => (
-                  <option key={head.name} value={head.name}>
-                    {head.name}
-                  </option>
-                ))}
-              </select>
+              <Select value={selectedIGHead} onValueChange={setSelectedIGHead}>
+                <SelectTrigger className='rounded-md border border-gray-300 bg-white p-3 text-sm text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-hidden'>
+                  <SelectValue placeholder='Select an IG Head' />
+                </SelectTrigger>
+                <SelectContent>
+                  {igHeads.map((head) => (
+                    <SelectItem key={head.name} value={head.name}>
+                      {head.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             ) : (
-              <div className='rounded-md border bg-gray-50 p-3'>
+              <div className='rounded-md border bg-gray-50 p-3 py-2'>
                 <p className='text-sm text-gray-900'>
                   {igHeads.length > 0 ? igHeads[0].name : 'No IG Head assigned'}
                 </p>
@@ -104,7 +112,7 @@ export default function ShowIGModal({ organisation }: ShowIGModalProps) {
                 IG Head&apos;s Telegram
               </label>
               <div className='flex items-center gap-2'>
-                <div className='flex-1 rounded-md border bg-gray-50 p-3'>
+                <div className='flex-1 rounded-md border bg-gray-50 p-3 py-2'>
                   <p className='text-sm text-gray-900'>
                     {getSelectedIGHeadTelegram()}
                   </p>
