@@ -146,6 +146,14 @@ export default function Bookings({
 
     createBookingAction(newBooking);
     setSelectedTimeRange(null);
+    form.reset({
+      bookingName: '',
+      organisationId: 0,
+      venueId: 0,
+      startTime: today,
+      endTime: addHours(today, 2),
+      addToCalendar: false,
+    });
   };
 
   const handleEditSubmit = (

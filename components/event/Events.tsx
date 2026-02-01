@@ -177,6 +177,13 @@ export default function Events({ events, userOrgs }: EventsProps) {
     const handle =
       selectedEvent === null ? handleCreateSubmit : handleEditSubmit;
     handle(formData);
+
+    form.reset({
+      eventName: '',
+      organisationId: 0,
+      startTime: today,
+      endTime: addHours(today, 2),
+    });
   };
 
   const handleDeleteSubmit = (eventId: number) => {
