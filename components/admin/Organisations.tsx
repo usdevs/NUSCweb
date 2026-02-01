@@ -300,6 +300,10 @@ export default function OrganisationsPage({
                       labelText='COPY TELEGRAM URL'
                     />
                   )}
+                  <CopyButton
+                    text={`${window.location.origin}/student-groups/join?token=${org.inviteToken}`}
+                    labelText='COPY JOIN LINK'
+                  />
                   <Button
                     variant='outline'
                     size='sm'
