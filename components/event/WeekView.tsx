@@ -39,17 +39,20 @@ export default function WeekView({
         {calendarDays.map((day) => (
           <div
             key={`${day.toISOString()}-header`}
-            className={`rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-[#0C2C47]`}
+            className='rounded-t-2xl border-b border-[#0C2C47] bg-white p-4 text-center text-[#0C2C47]'
           >
-            <div className='text-base font-bold'>
+            <div className='hidden text-base font-bold sm:block'>
               {format(day, 'EEE').toUpperCase()}
+            </div>
+            <div className='flex justify-center text-base font-bold sm:hidden'>
+              {format(day, 'EEE').charAt(0)}
             </div>
           </div>
         ))}
       </div>
 
       {/* Week grid */}
-      <div className='mx-0.5 mb-0.5 grid min-h-[600px] grid-cols-7 gap-0.5'>
+      <div className='mx-0.5 mb-0.5 grid min-h-35 grid-cols-7 gap-0.5'>
         {calendarDays.map((day, index) => {
           const dayEvents = getFilteredEvents(day);
           const isFirstCol = index === 0;
@@ -77,9 +80,9 @@ export default function WeekView({
             >
               <div className='pointer-events-none'>
                 <div
-                  className={`mb-2 text-base font-bold ${
+                  className={`mb-2 inline-flex justify-center text-base font-bold ${
                     isSameDay(day, today)
-                      ? `flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7D4E] text-white`
+                      ? `h-8 w-8 items-center rounded-full bg-[#FF7D4E] text-white`
                       : 'text-[#0C2C47]'
                   }`}
                 >
@@ -97,7 +100,7 @@ export default function WeekView({
                         handleEventClick(event);
                       }}
                     >
-                      <div className='font-medium'>{event.eventName}</div>
+                      <div className='mb-2 font-medium'>{event.eventName}</div>
                       <div className='flex items-center gap-1 text-gray-600'>
                         <UserIcon className='h-4 w-4 fill-[#0C2C47]' />
                         <span>{event.bookedForOrg.name}</span>

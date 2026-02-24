@@ -1,11 +1,10 @@
 generator client {
     provider = "prisma-client-js"
+    output   = "./generated/prisma"
 }
 
 datasource db {
-    provider  = "postgresql"
-    url       = env("DATABASE_URL")
-    directUrl = env("DIRECT_URL")
+    provider = "postgresql"
 }
 
 model User {
@@ -16,6 +15,7 @@ model User {
     userOrgs         UserOnOrg[]
     deleted          Boolean     @default(false) // supports soft delete
     deletedAt        DateTime?   @map("deleted_at")
+    updatedAt        DateTime    @updatedAt @map("updated_at")
 
     @@map("users")
 }
@@ -42,6 +42,7 @@ model Organisation {
     isInactive  Boolean     @default(false) @map("is_inactive")
     isInvisible Boolean     @default(false) @map("is_invisible") // is not displayed on the website
     createdAt   DateTime    @default(now()) @map("created_at")
+    updatedAt   DateTime    @updatedAt @map("updated_at")
 
     @@map("organisations")
 }
@@ -56,6 +57,7 @@ model UserOnOrg {
     events     Event[]
     deleted    Boolean      @default(false) // supports soft delete
     deletedAt  DateTime?    @map("deleted_at")
+    updatedAt  DateTime     @updatedAt @map("updated_at")
 
     @@id([userId, orgId])
     @@map("user_on_org")
@@ -85,6 +87,7 @@ model Booking {
     event          Event?
     deleted        Boolean      @default(false) // supports soft delete
     deletedAt      DateTime?    @map("deleted_at")
+    updatedAt      DateTime     @updatedAt @map("updated_at")
 
     @@map("bookings")
 }
@@ -104,6 +107,7 @@ model Event {
     bookingId      Int?         @unique @map("booking_id")
     deleted        Boolean      @default(false) // supports soft delete
     deletedAt      DateTime?    @map("deleted_at")
+    updatedAt      DateTime     @updatedAt @map("updated_at")
 
     @@map("events")
 }

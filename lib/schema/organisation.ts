@@ -1,5 +1,6 @@
-import { IGCategory } from '@prisma/client';
 import { z } from 'zod/v4';
+
+import { IGCategory } from '@/prisma/generated/prisma';
 
 export const NewOrganisationClientSchema = z.object({
   name: z.string().nonempty(),
@@ -16,6 +17,8 @@ export const NewOrganisationServerSchema = NewOrganisationClientSchema.extend({
 export const DeleteOrganisationSchema = z.object({
   id: z.coerce.number<number>().int().positive(),
 });
+
+export const LeaveOrganisationSchema = DeleteOrganisationSchema;
 
 export const EditOrganisationClientSchema = z.object({
   ...NewOrganisationClientSchema.shape,

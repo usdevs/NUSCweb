@@ -22,7 +22,7 @@ export const getBookings = async ({
       start: true,
       end: true,
       venue: { select: { id: true, name: true } },
-      bookedForOrg: { select: { id: true, name: true } },
+      bookedForOrg: { select: { id: true, name: true, category: true } },
       event: true,
     },
     where: {

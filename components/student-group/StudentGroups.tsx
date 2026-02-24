@@ -1,6 +1,5 @@
 'use client';
 
-import { IGCategory } from '@prisma/client';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -14,6 +13,7 @@ import StudentGroupCard from '@/components/student-group/StudentGroupCard';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Pagination,
   PaginationContent,
@@ -21,7 +21,9 @@ import {
   PaginationLink,
 } from '@/components/ui/pagination';
 import { Spinner } from '@/components/ui/spinner';
+import { EVENT_CATEGORIES } from '@/lib/formOptions';
 import type { OrganisationView } from '@/lib/utils/server/organisation';
+import { IGCategory } from '@/prisma/generated/prisma';
 
 const DEFAULT_FILTERS: string[] = [
   IGCategory.Sports,
@@ -69,6 +71,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
 
   // Reset page whenever filter changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
   }, [interestGroupFilters, interestGroupSearchString, orgs, showInactiveOrgs]);
 
@@ -83,7 +86,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
   const totalPages = Math.ceil(igCardsToDisplay.length / PAGE_SIZE);
 
   return (
-    <div className='relative flex'>
+    <div className='relative flex flex-1'>
       {orgs.length === 0 && (
         <div className='bg-opacity-60 absolute inset-0 z-50 flex items-center justify-center bg-white'>
           <div className='h-24 w-24'>
@@ -95,10 +98,10 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
       {/* Sidebar */}
       <div className='hidden w-72 border-r bg-white px-8 py-8 lg:block'>
         <div className='mb-6 rounded-md bg-[#F5F5F5] p-4'>
-          <h3 className='mb-3 font-semibold text-gray-900'>Join the...</h3>
-          <Button
-            className={`ml-3 rounded-md bg-[#FF7D4E] p-6 text-sm text-white hover:bg-[#FF7D4E]/90`}
-          >
+          <h3 className='mb-3 text-center font-semibold text-gray-900'>
+            Join the
+          </h3>
+          <Button className='ml-3 rounded-md bg-[#FF7D4E] p-6 text-sm text-white hover:bg-[#FF7D4E]/90'>
             <Link
               href='https://t.me/+Mm3qL3aL7c0zNDE1'
               target='_blank'
@@ -125,20 +128,22 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
         <div className='mb-6'>
           <h3 className='mb-3 font-semibold text-gray-900'>CATEGORIES</h3>
           <div className='space-y-3'>
-            {Object.keys(IGCategory).map((category) => (
-              <div key={category} className='flex items-center space-x-2'>
+            {EVENT_CATEGORIES.map((category) => (
+              <div key={category.name} className='flex items-center space-x-2'>
                 <Checkbox
-                  id={category}
-                  checked={interestGroupFilters.includes(category)}
+                  id={category.name}
+                  checked={interestGroupFilters.includes(category.name)}
                   onCheckedChange={(checked) =>
-                    handleCategoryChange(category, checked as boolean)
+                    handleCategoryChange(category.name, checked as boolean)
                   }
+                  className={category.bgColor}
                 />
-                <label htmlFor={category} className='text-sm text-gray-700'>
-                  {IGCategory[
-                    category as keyof typeof IGCategory
-                  ].toUpperCase()}
-                </label>
+                <Label
+                  htmlFor={`category-${category.name}`}
+                  className='text-[#0C2C47]'
+                >
+                  {category.name.toUpperCase()}
+                </Label>
               </div>
             ))}
           </div>
@@ -162,7 +167,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
       </div>
 
       {/* Main Content */}
-      <div className='flex-1 bg-[#0C2C47] p-8'>
+      <div className='flex-1 bg-[#0C2C47] p-7'>
         <div className='mb-8'>
           <h1 className='mb-2 text-4xl font-bold text-white'>Student Groups</h1>
           <p className='text-white/80'>{igCardsToDisplay.length} RESULTS</p>
@@ -176,9 +181,7 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
           </div>
         ) : (
           <>
-            <div
-              className={`mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3`}
-            >
+            <div className='mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
               {paginateArray(page).map((organisation) => (
                 <StudentGroupCard
                   key={organisation.id}

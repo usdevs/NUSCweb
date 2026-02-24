@@ -1,6 +1,5 @@
 'use client';
 
-import type { Organisation } from '@prisma/client';
 import { Trash2Icon } from 'lucide-react';
 import type { UseFormReturn } from 'react-hook-form';
 import z from 'zod/v4';
@@ -35,6 +34,7 @@ import {
 import { MultiSelect } from '@/components/ui/multi-select';
 import { UpdateUserSchema } from '@/lib/schema/user';
 import type { UserView } from '@/lib/utils/server/user';
+import type { Organisation } from '@/prisma/generated/prisma';
 
 interface UserModalProps {
   form: UseFormReturn<z.input<typeof UpdateUserSchema>>;
@@ -71,7 +71,7 @@ export default function UserModal({
         <DialogContent aria-describedby={undefined}>
           <form
             onSubmit={form.handleSubmit(handleEditUser)}
-            className={`flex flex-col gap-3 sm:max-w-md`}
+            className='flex flex-col gap-3 sm:max-w-md'
           >
             <DialogHeader className='bg-[#0C2C47] text-white'>
               <DialogTitle>EDIT USER</DialogTitle>
@@ -118,7 +118,7 @@ export default function UserModal({
                   <Button
                     variant='destructive'
                     size='icon'
-                    className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
+                    className='rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90'
                     disabled={isPending}
                   >
                     <Trash2Icon />
@@ -131,7 +131,7 @@ export default function UserModal({
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                       This action cannot be undone. This will permanently delete
-                      the user "{selectedUser.name}".
+                      the user &quot;{selectedUser.name}&quot;.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -153,7 +153,7 @@ export default function UserModal({
                 </DialogClose>
                 <Button
                   type='submit'
-                  className={`rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90`}
+                  className='rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90'
                   disabled={isPending}
                 >
                   Submit

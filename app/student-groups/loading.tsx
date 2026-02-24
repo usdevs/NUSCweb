@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Loading() {
   return (
-    <div className='flex min-h-[calc(100vh-160px)]'>
+    <div className='flex min-h-[calc(100vh-125px)]'>
       <div className='w-72 border-r bg-white px-8 py-8'>
         <Skeleton className='mb-6 h-10 w-full' />
         <Skeleton className='mb-6 h-10 w-full' />

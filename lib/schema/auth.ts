@@ -9,4 +9,5 @@ export default interface AuthCookie {
     isAdminOrg: boolean;
   }[];
   isAdmin: boolean;
+  development?: true;
 }

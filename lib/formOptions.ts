@@ -1,4 +1,4 @@
-import { IGCategory } from '@prisma/client';
+import { IGCategory } from '@/prisma/generated/prisma';
 
 export const TIMETABLE_TIMESLOTS = [
   '12:00 am',
@@ -52,14 +52,14 @@ export const TIMETABLE_TIMESLOTS = [
 ];
 
 export const EVENT_CATEGORIES: Array<{ name: IGCategory; bgColor: string }> = [
-  { name: IGCategory.Sports, bgColor: 'bg-blue-200' },
-  { name: IGCategory.SocioCultural, bgColor: 'bg-yellow-200' },
-  { name: IGCategory.Guips, bgColor: 'bg-green-200' },
-  { name: IGCategory.Welfare, bgColor: 'bg-[#FCDED6]' },
-  { name: IGCategory.Others, bgColor: 'bg-gray-200' },
+  { name: IGCategory.Sports, bgColor: 'bg-blue-200!' },
+  { name: IGCategory.SocioCultural, bgColor: 'bg-yellow-200!' },
+  { name: IGCategory.Guips, bgColor: 'bg-green-200!' },
+  { name: IGCategory.Welfare, bgColor: 'bg-[#FCDED6]!' },
+  { name: IGCategory.Others, bgColor: 'bg-gray-200!' },
 ];
 
-export const getCategoryBgColor = (category: string) => {
+export const getCategoryBgColor = (category: IGCategory) => {
   const categoryData = EVENT_CATEGORIES.find((cat) => cat.name === category);
   return categoryData ? categoryData.bgColor : 'bg-gray-200';
 };

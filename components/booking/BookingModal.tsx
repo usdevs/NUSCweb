@@ -57,7 +57,12 @@ import type { BookingView } from '@/lib/utils/server/booking';
 import type { VenueView } from '@/lib/utils/server/venue';
 
 const formatTime = (d: Date) =>
-  d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  d.toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Singapore',
+  });
 
 interface BookingModalProps {
   form: UseFormReturn<z.input<typeof NewBookingClientSchema>>;
@@ -98,10 +103,13 @@ export default function BookingModal({
           if (!open) handleClose();
         }}
       >
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent
+          aria-describedby={undefined}
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <form
             onSubmit={form.handleSubmit(handleSubmitBooking)}
-            className={`flex flex-col gap-3 sm:max-w-md`}
+            className='flex flex-col gap-3 sm:max-w-md'
           >
             <DialogHeader className='bg-[#0C2C47] text-white'>
               <DialogTitle>
@@ -136,9 +144,7 @@ export default function BookingModal({
               control={form.control}
               name='organisationId'
               render={({ field }) => (
-                <FormItem
-                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
-                >
+                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
                   <FormLabel>ORGANISATION</FormLabel>
                   <Select
                     value={
@@ -175,9 +181,7 @@ export default function BookingModal({
               control={form.control}
               name='venueId'
               render={({ field }) => (
-                <FormItem
-                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
-                >
+                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
                   <FormLabel>VENUE</FormLabel>
                   <Select
                     value={
@@ -214,9 +218,7 @@ export default function BookingModal({
               control={form.control}
               name='startTime'
               render={({ field }) => (
-                <FormItem
-                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
-                >
+                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
                   <FormLabel>START TIME</FormLabel>
                   <div className='grid grid-cols-2 gap-2'>
                     <Popover
@@ -264,7 +266,7 @@ export default function BookingModal({
                         field.value.setHours(hours, minutes);
                         field.onChange(field.value);
                       }}
-                      className={`bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none`}
+                      className='bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
                       step={1800}
                     />
                   </div>
@@ -275,9 +277,7 @@ export default function BookingModal({
               control={form.control}
               name='endTime'
               render={({ field }) => (
-                <FormItem
-                  className={`grid grid-cols-[1fr_2fr] items-center gap-3`}
-                >
+                <FormItem className='grid grid-cols-[1fr_2fr] items-center gap-3'>
                   <FormLabel>END TIME</FormLabel>
                   <div className='grid grid-cols-2 gap-2'>
                     <Popover
@@ -325,7 +325,7 @@ export default function BookingModal({
                         field.value.setHours(hours, minutes);
                         field.onChange(field.value);
                       }}
-                      className={`bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none`}
+                      className='bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
                       step={1800}
                     />
                   </div>
@@ -360,7 +360,7 @@ export default function BookingModal({
                     <Button
                       variant='destructive'
                       size='icon'
-                      className={`rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90`}
+                      className='rounded-[5px] border-none bg-[#FF7D4E] px-6 text-white hover:bg-[#FF7D4E]/90'
                       disabled={isPending}
                     >
                       <Trash2Icon />
@@ -373,7 +373,8 @@ export default function BookingModal({
                       </AlertDialogTitle>
                       <AlertDialogDescription>
                         This action cannot be undone. This will permanently
-                        delete the booking "{selectedBooking.bookingName}".
+                        delete the booking &quot;{selectedBooking.bookingName}
+                        &quot;.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -397,7 +398,7 @@ export default function BookingModal({
                 </DialogClose>
                 <Button
                   type='submit'
-                  className={`rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90`}
+                  className='rounded-[5px] border-none bg-[#FF7D4E] px-4 text-white hover:bg-[#FF7D4E]/90'
                   disabled={isPending}
                 >
                   Submit

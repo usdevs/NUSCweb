@@ -26,6 +26,7 @@ import {
   deleteBooking,
   editBooking,
 } from '@/lib/actions/booking';
+import { getCategoryBgColor } from '@/lib/formOptions';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { NewBookingClientSchema } from '@/lib/schema/booking';
 import { getNext30Minutes } from '@/lib/utils/client/time';
@@ -146,6 +147,14 @@ export default function Bookings({
 
     createBookingAction(newBooking);
     setSelectedTimeRange(null);
+    form.reset({
+      bookingName: '',
+      organisationId: 0,
+      venueId: 0,
+      startTime: today,
+      endTime: addHours(today, 2),
+      addToCalendar: false,
+    });
   };
 
   const handleEditSubmit = (
@@ -231,11 +240,11 @@ export default function Bookings({
       form.setValue('startTime', start);
       form.setValue('endTime', end);
     },
-    [],
+    [form, venues],
   );
 
   return (
-    <div className={`relative flex flex-col bg-[#0C2C47] lg:flex-row`}>
+    <div className='relative flex flex-col bg-[#0C2C47] lg:flex-row'>
       {(createBookingPending || editBookingPending || deleteBookingPending) && (
         <div className='bg-opacity-60 absolute inset-0 z-50 flex items-center justify-center bg-white'>
           <div className='h-24 w-24'>
@@ -262,7 +271,8 @@ export default function Bookings({
         />
       </div>
 
-      <div className={`mt-10 flex-1 overflow-auto px-2 lg:ml-4 lg:px-0`}>
+      {/* TODO: Might need to make this calendar have a height for proper scrolling */}
+      <div className='mt-10 flex-1 overflow-auto px-2 lg:ml-4 lg:px-0'>
         <ReactCalendar
           selectable
           showMultiDayTimes
@@ -282,6 +292,9 @@ export default function Bookings({
           views={['day']}
           localizer={localizer}
           events={bookings}
+          eventPropGetter={(event) => ({
+            className: getCategoryBgColor(event.bookedForOrg.category),
+          })}
           titleAccessor={(event) =>
             `${event.bookingName}\n${event.bookedForOrg.name}`
           }

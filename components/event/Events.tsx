@@ -16,7 +16,8 @@ import {
   subWeeks,
 } from 'date-fns';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { useActionState, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useActionState, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod/v4';
@@ -54,6 +55,7 @@ const today = getNext30Minutes();
 
 export default function Events({ events, userOrgs }: EventsProps) {
   const isAuthenticated = useAuth();
+  const searchParams = useSearchParams();
 
   const [createEventDate, setCreateEventDate] = useState<Date | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<EventView | null>(null);
@@ -62,7 +64,21 @@ export default function Events({ events, userOrgs }: EventsProps) {
 
   const [viewMode, setViewMode] = useState<'MONTH' | 'WEEK'>('MONTH');
 
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const currentDate = useMemo(() => {
+    let date = new Date();
+    try {
+      let searchParamsDate: number | undefined = undefined;
+      const searchParamsMonth = searchParams.get('month');
+      if (searchParamsMonth) searchParamsDate = Date.parse(searchParamsMonth);
+
+      const searchParamsWeek = searchParams.get('date');
+      if (searchParamsWeek) searchParamsDate = Date.parse(searchParamsWeek);
+
+      if (searchParamsDate !== undefined && !isNaN(searchParamsDate))
+        date = new Date(searchParamsDate);
+    } catch {}
+    return date;
+  }, [searchParams]);
 
   const [isDailyViewOpen, setIsDailyViewOpen] = useState(false);
 
@@ -161,6 +177,13 @@ export default function Events({ events, userOrgs }: EventsProps) {
     const handle =
       selectedEvent === null ? handleCreateSubmit : handleEditSubmit;
     handle(formData);
+
+    form.reset({
+      eventName: '',
+      organisationId: 0,
+      startTime: today,
+      endTime: addHours(today, 2),
+    });
   };
 
   const handleDeleteSubmit = (eventId: number) => {
@@ -198,15 +221,41 @@ export default function Events({ events, userOrgs }: EventsProps) {
     form.setValue('endTime', addHours(date, 2));
   };
 
-  const handlePrevious = () =>
-    setCurrentDate((prev) =>
-      viewMode === 'MONTH' ? subMonths(prev, 1) : subWeeks(prev, 1),
+  const handlePrevious = () => {
+    const newDate =
+      viewMode === 'MONTH'
+        ? subMonths(currentDate, 1)
+        : subWeeks(currentDate, 1);
+    const params = new URLSearchParams(
+      viewMode === 'MONTH'
+        ? {
+            [viewMode.toLowerCase()]: newDate.toLocaleString('en-sg', {
+              month: 'long',
+              year: 'numeric',
+            }),
+          }
+        : { date: newDate.toDateString() },
     );
+    window.history.pushState(null, '', `?${params.toString()}`);
+  };
 
-  const handleNext = () =>
-    setCurrentDate((prev) =>
-      viewMode === 'MONTH' ? addMonths(prev, 1) : addWeeks(prev, 1),
+  const handleNext = () => {
+    const newDate =
+      viewMode === 'MONTH'
+        ? addMonths(currentDate, 1)
+        : addWeeks(currentDate, 1);
+    const params = new URLSearchParams(
+      viewMode === 'MONTH'
+        ? {
+            [viewMode.toLowerCase()]: newDate.toLocaleString('en-sg', {
+              month: 'long',
+              year: 'numeric',
+            }),
+          }
+        : { date: newDate.toDateString() },
     );
+    window.history.pushState(null, '', `?${params.toString()}`);
+  };
 
   const calendarStart = startOfWeek(startOfMonth(currentDate), {
     weekStartsOn: 1,
@@ -236,12 +285,25 @@ export default function Events({ events, userOrgs }: EventsProps) {
       )}
       {/* Sidebar */}
       {/* TODO: How do mobile people select dates? */}
-      <div className='hidden min-h-screen w-72 bg-white px-8 py-4 lg:block'>
+      <div className='hidden min-h-[calc(100vh-125px)] w-72 bg-white px-8 py-4 lg:block'>
         {/* View Toggle */}
         <ToggleGroup
           type='single'
           value={viewMode}
-          onValueChange={(val) => setViewMode(val as 'MONTH' | 'WEEK')}
+          onValueChange={(val: 'MONTH' | 'WEEK') => {
+            setViewMode(val);
+            const params = new URLSearchParams(
+              val === 'MONTH'
+                ? {
+                    [val.toLowerCase()]: currentDate.toLocaleString('en-sg', {
+                      month: 'long',
+                      year: 'numeric',
+                    }),
+                  }
+                : { date: currentDate.toDateString() },
+            );
+            window.history.pushState(null, '', `?${params.toString()}`);
+          }}
           className='relative mb-6 h-10 overflow-hidden rounded-lg border border-[#A1A1A1] bg-white'
         >
           <ToggleGroupItem
@@ -278,7 +340,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
               <Button
                 variant='ghost'
                 size='icon'
-                className={`h-6 w-6 text-[#0C2C47] hover:bg-gray-100`}
+                className='h-6 w-6 text-[#0C2C47] hover:bg-gray-100'
                 onClick={handlePrevious}
               >
                 <ChevronLeftIcon className='h-4 w-4' />
@@ -286,7 +348,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
               <Button
                 variant='ghost'
                 size='icon'
-                className={`h-6 w-6 text-[#0C2C47] hover:bg-gray-100`}
+                className='h-6 w-6 text-[#0C2C47] hover:bg-gray-100'
                 onClick={handleNext}
               >
                 <ChevronRightIcon className='h-4 w-4' />
@@ -321,7 +383,19 @@ export default function Events({ events, userOrgs }: EventsProps) {
               <div className='relative grid grid-cols-7 gap-1'>
                 <CalendarGrid
                   currentDate={currentDate}
-                  setCurrentDate={setCurrentDate}
+                  // TODO: Update this
+                  setCurrentDate={(newDate) => {
+                    if (viewMode === 'WEEK') {
+                      const params = new URLSearchParams({
+                        date: newDate.toDateString(),
+                      });
+                      window.history.pushState(
+                        null,
+                        '',
+                        `?${params.toString()}`,
+                      );
+                    }
+                  }}
                   viewMode={viewMode}
                   // TODO: This is problematic
                   calendarDays={calendarDays}
@@ -382,7 +456,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
             <Button
               variant='ghost'
               size='icon'
-              className={`h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90`}
+              className='h-9.5 w-9.5 rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90'
               onClick={handlePrevious}
             >
               <ChevronLeftIcon className='h-4 w-4' />
@@ -390,7 +464,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
             <Button
               variant='ghost'
               size='icon'
-              className={`h-[38px] w-[38px] rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90`}
+              className='h-9.5 w-9.5 rounded-full bg-[#FF7D4E] text-white hover:bg-[#FF7D4E]/90'
               onClick={handleNext}
             >
               <ChevronRightIcon className='h-4 w-4' />
