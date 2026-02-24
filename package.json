@@ -63,8 +63,8 @@
     "@tailwindcss/postcss": "^4.1.18",
     "@types/js-cookie": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^22.19.7",
-    "@types/react": "19.2.10",
+    "@types/node": "^20.19.28",
+    "@types/react": "^19",
     "@types/react-big-calendar": "^1.16.3",
     "@types/react-dom": "19.2.3",
     "dotenv": "^17.2.3",
@@ -79,8 +79,9 @@
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.54.0"
+    "typescript-eslint": "^8.42.0"
   },
   "engines": {
     "node": ">=22"
