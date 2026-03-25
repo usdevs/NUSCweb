@@ -132,6 +132,26 @@ export async function GET(req: NextRequest) {
   }
 
   const headersList = await headers();
-  const redirectUrl = headersList.get('Referer') || '/';
+  const referer = headersList.get('Referer');
+
+  let redirectUrl = '/';
+  if (referer) {
+    try {
+      const url = new URL(referer);
+      const isWebProtocol =
+        url.protocol === 'http:' || url.protocol === 'https:';
+      const isTrustedHost =
+        url.hostname === 'nusc.club' || url.hostname.endsWith('.nusc.club');
+      if (isWebProtocol && isTrustedHost) {
+        redirectUrl = referer;
+      }
+    } catch {
+      // If it's not a valid absolute URL, treat as a relative path
+      if (referer.startsWith('/') && !referer.startsWith('//')) {
+        redirectUrl = referer;
+      }
+    }
+  }
+
   redirect(redirectUrl);
 }
