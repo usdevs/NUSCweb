@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
 
     if (venue) {
       events = events.filter(
-        (event) => event.booking?.venue?.name === venue
+        (event: { booking: { venue: { name: string; }; }; }) => event.booking?.venue?.name === venue
       );
     }
 
