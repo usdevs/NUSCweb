@@ -40,7 +40,21 @@ The frontend for the NUSCC Website.
    pnpm install
    ```
 
-1. Setup your environment variables in `.env` file, with `.env.example` for reference
+1. Generate a JWT key pair for authentication:
+
+   ```bash
+   openssl genrsa -out private.pem 2048
+   openssl rsa -in private.pem -pubout -out public.pem
+   ```
+
+   Then set the following in your `.env` file:
+
+   ```bash
+   JWT_PRIVATE_KEY=$(python -c "f=open('private.pem').read().strip(); print(f.replace(chr(10), r'\n'))")
+   JWT_PUBLIC_KEY=$(python -c "f=open('public.pem').read().strip(); print(f.replace(chr(10), r'\n'))")
+   ```
+
+1. Setup your remaining environment variables in `.env` file, with `.env.example` for reference
 
 1. Expose your localhost port:
 
