@@ -199,7 +199,7 @@ importers:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@25.3.0)(typescript@5.9.3)
       typescript:
-        specifier: ^5.9.2
+        specifier: ^5.9.3
         version: 5.9.3
       typescript-eslint:
         specifier: ^8.56.1
