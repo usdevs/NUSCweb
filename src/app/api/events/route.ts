@@ -1,5 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { getEvents } from '@/lib/utils/server/event';
+import { NextRequest, NextResponse } from 'next/server';
+
+type Event = Awaited<ReturnType<typeof getEvents>>[number];
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,46 +17,45 @@ export async function GET(request: NextRequest) {
 
     if (orgName) {
       events = events.filter(
-        (event: { bookedForOrg: { name: string; }; }) => event.bookedForOrg?.name === orgName
+        (event: Event) => event.bookedForOrg?.name === orgName
       );
     }
 
     if (start) {
       const startDate = new Date(start);
       events = events.filter(
-        (event: { start: string | number | Date; }) => new Date(event.start) >= startDate
+        (event: Event) => new Date(event.start) >= startDate
       );
     }
 
     if (end) {
       const endDate = new Date(end);
       events = events.filter(
-        (event: { end: string | number | Date; }) => new Date(event.end) <= endDate
+        (event: Event) => new Date(event.end) <= endDate
       );
     }
 
     if (venue) {
       events = events.filter(
-        (event: { booking: { venue: { name: string; }; }; }) => event.booking?.venue?.name === venue
+        (event: Event) => event.booking?.venue?.name === venue
       );
     }
 
     if (organisation) {
       events = events.filter(
-        (event: { bookedForOrg: { name: string; }; }) => event.bookedForOrg?.name === organisation
+        (event: Event) => event.bookedForOrg?.name === organisation
       );
     }
 
-    events = events.map(({ id, bookedForOrg, venue, ...rest }: any) => ({
-        ...rest,
-        venue: venue?.name ?? null,
-        bookedForOrg: bookedForOrg
-            ? { name: bookedForOrg.name }
-            : null,
+    const mapped = events.map(({ id, bookedForOrg, booking, ...rest }: Event) => ({
+      ...rest,
+      venue: booking?.venue?.name ?? null,
+      bookedForOrg: bookedForOrg
+        ? { name: bookedForOrg.name }
+        : null,
     }));
 
-    return NextResponse.json(events);
-
+    return NextResponse.json(mapped);
 
   } catch (error) {
     console.error(error);

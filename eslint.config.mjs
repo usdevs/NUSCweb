@@ -36,5 +36,16 @@ export default defineConfig(
       },
     },
   },
+  {
+    files: ['prisma/**/*.ts'],
+    languageOptions: {
+      parserOptions: {
+        projectService: {
+          defaultProject: './prisma/tsconfig.json',
+        },
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   globalIgnores(['./prisma/generated/']),
 );
