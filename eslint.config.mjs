@@ -36,5 +36,5 @@ export default defineConfig(
       },
     },
   },
-  globalIgnores(['./prisma/generated/', './prisma/seed.ts']),
+  globalIgnores(['./prisma/generated/']),
 );
