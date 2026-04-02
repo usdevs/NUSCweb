@@ -17,7 +17,7 @@ import {
 } from 'date-fns';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { useActionState, useMemo, useState } from 'react';
+import { useActionState, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod/v4';
@@ -274,6 +274,43 @@ export default function Events({ events, userOrgs }: EventsProps) {
     form.setValue('endTime', event.end);
   };
 
+  const calendarRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
+  useEffect(() => {
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX.current = e.changedTouches[0].screenX;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      touchEndX.current = e.changedTouches[0].screenX;
+      const deltaX = touchEndX.current - touchStartX.current;
+
+      if (Math.abs(deltaX) > 50) {
+        // swipe threshold
+        if (deltaX > 0) {
+          handlePrevious(); // swipe right → go previous
+        } else {
+          handleNext(); // swipe left → go next
+        }
+      }
+    };
+
+    const calendarEl = calendarRef.current;
+    if (calendarEl) {
+      calendarEl.addEventListener('touchstart', handleTouchStart);
+      calendarEl.addEventListener('touchend', handleTouchEnd);
+    }
+
+    return () => {
+      if (calendarEl) {
+        calendarEl.removeEventListener('touchstart', handleTouchStart);
+        calendarEl.removeEventListener('touchend', handleTouchEnd);
+      }
+    };
+  }, [currentDate, viewMode]);
+
   return (
     <div className='relative flex bg-[#0C2C47]'>
       {(createEventPending || editEventPending || deleteEventPending) && (
@@ -284,7 +321,6 @@ export default function Events({ events, userOrgs }: EventsProps) {
         </div>
       )}
       {/* Sidebar */}
-      {/* TODO: How do mobile people select dates? */}
       <div className='hidden min-h-[calc(100vh-125px)] w-72 bg-white px-8 py-4 lg:block'>
         {/* View Toggle */}
         <ToggleGroup
@@ -449,10 +485,10 @@ export default function Events({ events, userOrgs }: EventsProps) {
       </div>
 
       {/* Main Content */}
-      <div className='flex-1 p-8'>
+      <div className='flex-1 p-8' ref={calendarRef}>
         {/* Header */}
         <div className='mb-8 flex items-center gap-6'>
-          <div className='flex items-center gap-3'>
+          <div className='hidden items-center gap-3 sm:flex'>
             <Button
               variant='ghost'
               size='icon'
