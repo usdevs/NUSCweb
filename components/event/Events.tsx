@@ -477,6 +477,29 @@ export default function Events({ events, userOrgs }: EventsProps) {
             </span>
           </h1>
         </div>
+        <div className='mb-3 flex justify-center overflow-hidden sm:hidden'>
+          <button
+            onClick={() => setViewMode('MONTH')}
+            className={`rounded-l-md px-4 py-2 text-sm font-medium transition ${
+              viewMode === 'MONTH'
+                ? 'bg-blue-800 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            MONTH
+          </button>
+
+          <button
+            onClick={() => setViewMode('WEEK')}
+            className={`rounded-r-md px-4 py-2 text-sm font-medium transition ${
+              viewMode === 'WEEK'
+                ? 'bg-blue-800 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            WEEK
+          </button>
+        </div>
 
         {/* Calendar View */}
         {viewMode === 'MONTH' ? (

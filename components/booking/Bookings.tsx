@@ -20,6 +20,7 @@ import { z } from 'zod/v4';
 
 import BookingModal from '@/components/booking/BookingModal';
 import { Calendar } from '@/components/ui/calendar';
+import { MobileWeekStrip } from '@/components/ui/mobilecalendar';
 import { Spinner } from '@/components/ui/spinner';
 import {
   createBooking,
@@ -197,6 +198,12 @@ export default function Bookings({
     handle(formData);
   };
 
+  const handleDateChange = (newDate: Date) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('date', newDate.toDateString());
+    window.history.pushState(null, '', `?${params.toString()}`);
+  };
+
   const handleDeleteBooking = (bookingId: number) => {
     if (!isAuthenticated) {
       toast.error('Please login to delete bookings!');
@@ -253,16 +260,16 @@ export default function Bookings({
         </div>
       )}
       {/* Calendar - Hidden on mobile */}
-      {/* TODO: How do mobile people select dates? */}
+      <MobileWeekStrip selected={date} onSelect={handleDateChange} />
+
+      {/* Desktop sidebar calendar - hidden on mobile */}
       <div className='hidden w-72 rounded-lg bg-white p-4 lg:block'>
         <Calendar
           mode='single'
           selected={date}
           onSelect={(newDate) => {
             if (newDate) {
-              const params = new URLSearchParams(searchParams.toString());
-              params.set('date', newDate.toDateString());
-              window.history.pushState(null, '', `?${params.toString()}`);
+              handleDateChange(newDate);
             }
           }}
           className='sticky top-19 w-full rounded-md'

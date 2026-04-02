@@ -94,7 +94,6 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
           </div>
         </div>
       )}
-      {/* TODO: How do mobile people view the sidebar? */}
       {/* Sidebar */}
       <div className='hidden w-72 border-r bg-white px-8 py-8 lg:block'>
         <div className='mb-6 rounded-md bg-[#F5F5F5] p-4'>
@@ -170,6 +169,49 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
       <div className='flex-1 bg-[#0C2C47] p-7'>
         <div className='mb-8'>
           <h1 className='mb-2 text-4xl font-bold text-white'>Student Groups</h1>
+          <div className='block rounded-t-md bg-white sm:hidden'>
+            <Input
+              type='search'
+              placeholder='Search groups...'
+              className='w-full outline-none'
+              onChange={onInput}
+              value={interestGroupSearchString}
+            />
+          </div>
+          <div className='flex flex-row space-x-3 bg-white p-2 sm:hidden'>
+            {EVENT_CATEGORIES.map((category) => (
+              <div key={category.name} className='items-top flex space-x-2'>
+                <Checkbox
+                  id={category.name}
+                  checked={interestGroupFilters.includes(category.name)}
+                  onCheckedChange={(checked) =>
+                    handleCategoryChange(category.name, checked as boolean)
+                  }
+                  className={category.bgColor}
+                />
+                <Label
+                  htmlFor={`category-${category.name}`}
+                  className='text-black'
+                >
+                  {category.name.toUpperCase()}
+                </Label>
+              </div>
+            ))}
+          </div>
+          <div>
+            <div className='mb-2 flex items-center space-x-2 rounded-b-sm bg-white p-2 sm:hidden'>
+              <Checkbox
+                id='show-inactive'
+                checked={showInactiveOrgs}
+                onCheckedChange={(checked) =>
+                  setShowInactiveOrgs(checked as boolean)
+                }
+              />
+              <label htmlFor='show-inactive' className='text-sm text-gray-700'>
+                SHOW INACTIVE GROUPS
+              </label>
+            </div>
+          </div>
           <p className='text-white/80'>{igCardsToDisplay.length} RESULTS</p>
         </div>
 
