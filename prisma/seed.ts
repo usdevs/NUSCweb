@@ -47,8 +47,26 @@ async function main() {
       userId: user.id,
       userOrgId: org.id,
       bookedForOrgId: org.id,
-      start: new Date(Date.UTC(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 10, 0, 0)),
-      end: new Date(Date.UTC(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 12, 0, 0)),
+      start: new Date(
+        Date.UTC(
+          yesterday.getFullYear(),
+          yesterday.getMonth(),
+          yesterday.getDate(),
+          10,
+          0,
+          0,
+        ),
+      ),
+      end: new Date(
+        Date.UTC(
+          yesterday.getFullYear(),
+          yesterday.getMonth(),
+          yesterday.getDate(),
+          12,
+          0,
+          0,
+        ),
+      ),
     },
   });
 
@@ -60,8 +78,26 @@ async function main() {
       userId: user.id,
       userOrgId: org.id,
       bookedForOrgId: org.id,
-      start: new Date(Date.UTC(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 8, 0, 0)),
-      end: new Date(Date.UTC(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 10, 0, 0)),
+      start: new Date(
+        Date.UTC(
+          yesterday.getFullYear(),
+          yesterday.getMonth(),
+          yesterday.getDate(),
+          8,
+          0,
+          0,
+        ),
+      ),
+      end: new Date(
+        Date.UTC(
+          yesterday.getFullYear(),
+          yesterday.getMonth(),
+          yesterday.getDate(),
+          10,
+          0,
+          0,
+        ),
+      ),
     },
   });
 }
