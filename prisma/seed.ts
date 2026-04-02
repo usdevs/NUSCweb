@@ -15,7 +15,7 @@ async function main() {
     create: {
       name: 'Alex Lim',
       telegramId: '03448833',
-      telegramUserName: '@AlexLim',
+      telegramUserName: 'AlexLim',
     },
   });
 
@@ -35,6 +35,9 @@ async function main() {
     create: { userId: user.id, orgId: org.id },
   });
 
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
   await prisma.booking.upsert({
     where: { id: 1 },
     update: {},
@@ -44,8 +47,8 @@ async function main() {
       userId: user.id,
       userOrgId: org.id,
       bookedForOrgId: org.id,
-      start: new Date('2025-09-05T14:00:00.000Z'),
-      end: new Date('2025-09-05T16:00:00.000Z'),
+      start: new Date(Date.UTC(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 10, 0, 0)),
+      end: new Date(Date.UTC(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 12, 0, 0)),
     },
   });
 
@@ -57,8 +60,8 @@ async function main() {
       userId: user.id,
       userOrgId: org.id,
       bookedForOrgId: org.id,
-      start: new Date('2025-09-12T14:00:00.000Z'),
-      end: new Date('2025-09-12T17:00:00.000Z'),
+      start: new Date(Date.UTC(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 8, 0, 0)),
+      end: new Date(Date.UTC(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 10, 0, 0)),
     },
   });
 }
