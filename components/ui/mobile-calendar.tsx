@@ -1,23 +1,19 @@
 'use client';
 
+import {
+  addDays,
+  addWeeks,
+  eachDayOfInterval,
+  isSameDay,
+  startOfDay,
+  startOfWeek,
+} from 'date-fns';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-function weekStart(d: Date) {
-  const date = new Date(d);
-  const day = date.getDay();
-  date.setDate(date.getDate() + (day === 0 ? -6 : 1 - day));
-  date.setHours(0, 0, 0, 0);
-  return date;
-}
-
-function sameDay(a: Date, b: Date) {
-  return a.toDateString() === b.toDateString();
-}
 
 export function MobileWeekStrip({
   selected,
@@ -29,20 +25,11 @@ export function MobileWeekStrip({
   const [offset, setOffset] = useState(0);
   //   Main dragging logic
   const dragX = useRef<number | null>(null);
-  const today = useMemo(() => {
-    const d = new Date();
-    d.setHours(0, 0, 0, 0);
-    return d;
-  }, []);
+  const today = useMemo(() => startOfDay(new Date()), []);
 
   const getWeek = (off: number) => {
-    const base = weekStart(today);
-    base.setDate(base.getDate() + off * 7);
-    return Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(base);
-      d.setDate(base.getDate() + i);
-      return d;
-    });
+    const base = addWeeks(startOfWeek(today, { weekStartsOn: 1 }), off);
+    return eachDayOfInterval({ start: base, end: addDays(base, 6) });
   };
 
   const settle = (endX: number) => {
@@ -96,9 +83,9 @@ export function MobileWeekStrip({
             onClick={() => onSelect(day)}
             className={cn(
               'flex flex-col items-center justify-center gap-0.5 rounded-xl py-1.5 transition-colors',
-              sameDay(day, selected)
+              isSameDay(day, selected)
                 ? 'bg-white'
-                : sameDay(day, today)
+                : isSameDay(day, today)
                   ? 'bg-white/20'
                   : 'hover:bg-white/10',
             )}
@@ -106,7 +93,9 @@ export function MobileWeekStrip({
             <span
               className={cn(
                 'text-[9px] leading-none font-medium tracking-wide uppercase',
-                sameDay(day, selected) ? 'text-[#0C2C47]/60' : 'text-white/55',
+                isSameDay(day, selected)
+                  ? 'text-[#0C2C47]/60'
+                  : 'text-white/55',
               )}
             >
               {DAYS[i]}
@@ -114,16 +103,16 @@ export function MobileWeekStrip({
             <span
               className={cn(
                 'mt-0.5 text-sm leading-none font-semibold',
-                sameDay(day, selected) ? 'text-[#0C2C47]' : 'text-white',
+                isSameDay(day, selected) ? 'text-[#0C2C47]' : 'text-white',
               )}
             >
               {day.getDate()}
             </span>
-            {sameDay(day, today) && (
+            {isSameDay(day, today) && (
               <span
                 className={cn(
                   'size-1 rounded-full',
-                  sameDay(day, selected) ? 'bg-[#0C2C47]/40' : 'bg-white/50',
+                  isSameDay(day, selected) ? 'bg-[#0C2C47]/40' : 'bg-white/50',
                 )}
               />
             )}
