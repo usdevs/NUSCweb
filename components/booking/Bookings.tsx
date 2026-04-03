@@ -20,7 +20,7 @@ import { z } from 'zod/v4';
 
 import BookingModal from '@/components/booking/BookingModal';
 import { Calendar } from '@/components/ui/calendar';
-import { MobileWeekStrip } from '@/components/ui/mobilecalendar';
+import { MobileWeekStrip } from '@/components/ui/mobile-calendar';
 import { Spinner } from '@/components/ui/spinner';
 import {
   createBooking,
