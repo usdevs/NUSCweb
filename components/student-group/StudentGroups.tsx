@@ -179,24 +179,26 @@ export default function StudentGroups({ orgs }: StudentGroupsProps) {
             />
           </div>
           <div className='flex flex-row space-x-3 bg-white p-2 sm:hidden'>
-            {EVENT_CATEGORIES.map((category) => (
-              <div key={category.name} className='items-top flex space-x-2'>
-                <Checkbox
-                  id={category.name}
-                  checked={interestGroupFilters.includes(category.name)}
-                  onCheckedChange={(checked) =>
-                    handleCategoryChange(category.name, checked as boolean)
-                  }
-                  className={category.bgColor}
-                />
-                <Label
-                  htmlFor={`category-${category.name}`}
-                  className='text-black'
-                >
-                  {category.name.toUpperCase()}
-                </Label>
-              </div>
-            ))}
+            <div className='grid grid-cols-[auto_auto_auto] gap-y-2'>
+              {EVENT_CATEGORIES.map((category) => (
+                <div key={category.name} className='items-top flex space-x-2'>
+                  <Checkbox
+                    id={category.name}
+                    checked={interestGroupFilters.includes(category.name)}
+                    onCheckedChange={(checked) =>
+                      handleCategoryChange(category.name, checked as boolean)
+                    }
+                    className={category.bgColor}
+                  />
+                  <Label
+                    htmlFor={`category-${category.name}`}
+                    className='text-black'
+                  >
+                    {category.name.toUpperCase()}
+                  </Label>
+                </div>
+              ))}
+            </div>
           </div>
           <div>
             <div className='mb-2 flex items-center space-x-2 rounded-b-sm bg-white p-2 sm:hidden'>
