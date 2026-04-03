@@ -8,6 +8,7 @@ import {
 import { ClockIcon, MapPinIcon, UserIcon } from 'lucide-react';
 
 import { getCategoryBgColor } from '@/lib/formOptions';
+import { toSGT } from '@/lib/utils/client/time';
 import type { EventView } from '@/lib/utils/server/event';
 
 interface WeekViewProps {
@@ -17,7 +18,7 @@ interface WeekViewProps {
   handleEventClick: (event: EventView) => void;
 }
 
-const today = new Date();
+const today = toSGT(new Date());
 
 export default function WeekView({
   currentDate,
@@ -99,8 +100,8 @@ export default function WeekView({
                         <div className='flex items-center gap-1 text-gray-600'>
                           <ClockIcon className='h-4 w-4' />
                           <span>
-                            {format(event.start, 'p')} -{' '}
-                            {format(event.end, 'p')}
+                            {format(toSGT(event.start), 'p')} -{' '}
+                            {format(toSGT(event.end), 'p')}
                           </span>
                         </div>
                         {event.booking && (

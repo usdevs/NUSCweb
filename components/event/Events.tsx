@@ -37,7 +37,7 @@ import { EVENT_CATEGORIES } from '@/lib/formOptions';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { NewEventSchema } from '@/lib/schema/event';
 import { cn } from '@/lib/utils';
-import { getNext30Minutes } from '@/lib/utils/client/time';
+import { getNext30Minutes, SGT, toSGT } from '@/lib/utils/client/time';
 import type { EventView } from '@/lib/utils/server/event';
 
 import CalendarGrid from './CalendarGrid';
@@ -65,7 +65,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
   const [viewMode, setViewMode] = useState<'MONTH' | 'WEEK'>('MONTH');
 
   const currentDate = useMemo(() => {
-    let date = new Date();
+    let date = toSGT(new Date());
     try {
       let searchParamsDate: number | undefined = undefined;
       const searchParamsMonth = searchParams.get('month');
@@ -75,7 +75,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
       if (searchParamsWeek) searchParamsDate = Date.parse(searchParamsWeek);
 
       if (searchParamsDate !== undefined && !isNaN(searchParamsDate))
-        date = new Date(searchParamsDate);
+        date = toSGT(new Date(searchParamsDate));
     } catch {}
     return date;
   }, [searchParams]);
@@ -232,6 +232,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
             [viewMode.toLowerCase()]: newDate.toLocaleString('en-sg', {
               month: 'long',
               year: 'numeric',
+              timeZone: SGT,
             }),
           }
         : { date: newDate.toDateString() },
@@ -250,6 +251,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
             [viewMode.toLowerCase()]: newDate.toLocaleString('en-sg', {
               month: 'long',
               year: 'numeric',
+              timeZone: SGT,
             }),
           }
         : { date: newDate.toDateString() },
@@ -334,6 +336,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
                     [val.toLowerCase()]: currentDate.toLocaleString('en-sg', {
                       month: 'long',
                       year: 'numeric',
+                      timeZone: SGT,
                     }),
                   }
                 : { date: currentDate.toDateString() },

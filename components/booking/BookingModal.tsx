@@ -52,17 +52,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { NewBookingClientSchema } from '@/lib/schema/booking';
-import { dateTimeFormatter } from '@/lib/utils/client/time';
+import { dateTimeFormatter, formatTime, toSGT } from '@/lib/utils/client/time';
 import type { BookingView } from '@/lib/utils/server/booking';
 import type { VenueView } from '@/lib/utils/server/venue';
-
-const formatTime = (d: Date) =>
-  d.toLocaleTimeString('en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'Asia/Singapore',
-  });
 
 interface BookingModalProps {
   form: UseFormReturn<z.input<typeof NewBookingClientSchema>>;
@@ -156,7 +148,7 @@ export default function BookingModal({
                     }
                   >
                     <FormControl>
-                      <SelectTrigger className='[margin-block-end:0]'>
+                      <SelectTrigger className='mbe-0'>
                         <SelectValue placeholder='Select organisation' />
                       </SelectTrigger>
                     </FormControl>
@@ -193,7 +185,7 @@ export default function BookingModal({
                     }
                   >
                     <FormControl>
-                      <SelectTrigger className='[margin-block-end:0]'>
+                      <SelectTrigger className='mbe-0'>
                         <SelectValue placeholder='Select venue' />
                       </SelectTrigger>
                     </FormControl>
@@ -242,12 +234,13 @@ export default function BookingModal({
                           selected={field.value}
                           onSelect={(selectedDate) => {
                             if (selectedDate) {
-                              field.value.setFullYear(
+                              const updated = toSGT(field.value);
+                              updated.setFullYear(
                                 selectedDate.getFullYear(),
                                 selectedDate.getMonth(),
                                 selectedDate.getDate(),
                               );
-                              field.onChange(field.value);
+                              field.onChange(new Date(updated));
                             }
                             setSelectStartDayOpen(false);
                           }}
@@ -260,11 +253,15 @@ export default function BookingModal({
                       type='time'
                       value={formatTime(field.value)}
                       onChange={(e) => {
+                        if (!e.target.value) return;
                         const [hours, minutes] = e.target.value
                           .split(':')
                           .map(Number);
-                        field.value.setHours(hours, minutes);
-                        field.onChange(field.value);
+                        if (Number.isNaN(hours) || Number.isNaN(minutes))
+                          return;
+                        const updated = toSGT(field.value);
+                        updated.setHours(hours, minutes, 0, 0);
+                        field.onChange(new Date(updated));
                       }}
                       className='bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
                       step={1800}
@@ -301,12 +298,13 @@ export default function BookingModal({
                           selected={field.value}
                           onSelect={(selectedDate) => {
                             if (selectedDate) {
-                              field.value.setFullYear(
+                              const updated = toSGT(field.value);
+                              updated.setFullYear(
                                 selectedDate.getFullYear(),
                                 selectedDate.getMonth(),
                                 selectedDate.getDate(),
                               );
-                              field.onChange(field.value);
+                              field.onChange(new Date(updated));
                               setSelectEndDayOpen(false);
                             }
                           }}
@@ -319,11 +317,15 @@ export default function BookingModal({
                       type='time'
                       value={formatTime(field.value)}
                       onChange={(e) => {
+                        if (!e.target.value) return;
                         const [hours, minutes] = e.target.value
                           .split(':')
                           .map(Number);
-                        field.value.setHours(hours, minutes);
-                        field.onChange(field.value);
+                        if (Number.isNaN(hours) || Number.isNaN(minutes))
+                          return;
+                        const updated = toSGT(field.value);
+                        updated.setHours(hours, minutes, 0, 0);
+                        field.onChange(new Date(updated));
                       }}
                       className='bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
                       step={1800}

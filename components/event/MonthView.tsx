@@ -2,11 +2,12 @@ import { isSameDay } from 'date-fns';
 import { Fragment } from 'react';
 
 import { getCategoryBgColor } from '@/lib/formOptions';
+import { toSGT } from '@/lib/utils/client/time';
 import type { EventView } from '@/lib/utils/server/event';
 
 const DAY_OF_WEEKS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
-const today = new Date();
+const today = toSGT(new Date());
 
 interface MonthViewProps {
   currentDate: Date;

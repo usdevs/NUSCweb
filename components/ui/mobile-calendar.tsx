@@ -12,6 +12,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
+import { SGT } from '@/lib/utils/client/time';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -44,6 +45,7 @@ export function MobileWeekStrip({
   const monthLabel = mid.toLocaleString('default', {
     month: 'long',
     year: 'numeric',
+    timeZone: SGT,
   });
 
   return (

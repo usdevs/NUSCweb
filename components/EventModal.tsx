@@ -49,16 +49,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { NewEventSchema } from '@/lib/schema/event';
-import { dateTimeFormatter } from '@/lib/utils/client/time';
+import { dateTimeFormatter, formatTime, toSGT } from '@/lib/utils/client/time';
 import type { EventView } from '@/lib/utils/server/event';
-
-const formatTime = (d: Date) =>
-  d.toLocaleTimeString('en-SG', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'Asia/Singapore',
-  });
 
 interface EventModalProps {
   form: UseFormReturn<z.input<typeof NewEventSchema>>;
@@ -195,12 +187,13 @@ export default function EventModal({
                           selected={field.value}
                           onSelect={(selectedDate) => {
                             if (selectedDate) {
-                              field.value.setFullYear(
+                              const updated = toSGT(field.value);
+                              updated.setFullYear(
                                 selectedDate.getFullYear(),
                                 selectedDate.getMonth(),
                                 selectedDate.getDate(),
                               );
-                              field.onChange(field.value);
+                              field.onChange(new Date(updated));
                             }
                             setSelectStartDayOpen(false);
                           }}
@@ -213,11 +206,15 @@ export default function EventModal({
                       type='time'
                       value={formatTime(field.value)}
                       onChange={(e) => {
+                        if (!e.target.value) return;
                         const [hours, minutes] = e.target.value
                           .split(':')
                           .map(Number);
-                        field.value.setHours(hours, minutes);
-                        field.onChange(field.value);
+                        if (Number.isNaN(hours) || Number.isNaN(minutes))
+                          return;
+                        const updated = toSGT(field.value);
+                        updated.setHours(hours, minutes, 0, 0);
+                        field.onChange(new Date(updated));
                       }}
                       className='bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
                       step={1800}
@@ -254,12 +251,13 @@ export default function EventModal({
                           selected={field.value}
                           onSelect={(selectedDate) => {
                             if (selectedDate) {
-                              field.value.setFullYear(
+                              const updated = toSGT(field.value);
+                              updated.setFullYear(
                                 selectedDate.getFullYear(),
                                 selectedDate.getMonth(),
                                 selectedDate.getDate(),
                               );
-                              field.onChange(field.value);
+                              field.onChange(new Date(updated));
                               setSelectEndDayOpen(false);
                             }
                           }}
@@ -272,11 +270,15 @@ export default function EventModal({
                       type='time'
                       value={formatTime(field.value)}
                       onChange={(e) => {
+                        if (!e.target.value) return;
                         const [hours, minutes] = e.target.value
                           .split(':')
                           .map(Number);
-                        field.value.setHours(hours, minutes);
-                        field.onChange(field.value);
+                        if (Number.isNaN(hours) || Number.isNaN(minutes))
+                          return;
+                        const updated = toSGT(field.value);
+                        updated.setHours(hours, minutes, 0, 0);
+                        field.onChange(new Date(updated));
                       }}
                       className='bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
                       step={1800}
