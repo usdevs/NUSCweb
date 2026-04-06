@@ -12,6 +12,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "dependencies": {
     "@date-fns/tz": "^1.4.1",
     "@hookform/resolvers": "^5.2.2",
