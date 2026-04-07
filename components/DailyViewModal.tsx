@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { getCategoryBgColor } from '@/lib/formOptions';
+import { toSGT } from '@/lib/utils/client/time';
 import type { EventView } from '@/lib/utils/server/event';
 
 interface DailyViewModalProps {
@@ -36,7 +37,7 @@ export default function DailyViewModal({
       >
         <DialogHeader>
           <DialogTitle>
-            {format(date, 'd MMMM').toUpperCase()} EVENTS
+            {format(toSGT(date), 'd MMMM').toUpperCase()} EVENTS
           </DialogTitle>
         </DialogHeader>
         {/* Events list */}
@@ -65,7 +66,8 @@ export default function DailyViewModal({
                   <div className='flex items-center gap-2'>
                     <ClockIcon className='h-4 w-4' />
                     <span>
-                      {format(event.start, 'p')} - {format(event.end, 'p')}
+                      {format(toSGT(event.start), 'p')} -{' '}
+                      {format(toSGT(event.end), 'p')}
                     </span>
                   </div>
 

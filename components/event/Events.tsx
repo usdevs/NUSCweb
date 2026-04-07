@@ -17,7 +17,7 @@ import {
 } from 'date-fns';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { useActionState, useMemo, useState } from 'react';
+import { useActionState, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod/v4';
@@ -37,7 +37,7 @@ import { EVENT_CATEGORIES } from '@/lib/formOptions';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { NewEventSchema } from '@/lib/schema/event';
 import { cn } from '@/lib/utils';
-import { getNext30Minutes } from '@/lib/utils/client/time';
+import { getNext30Minutes, SGT, toSGT } from '@/lib/utils/client/time';
 import type { EventView } from '@/lib/utils/server/event';
 
 import CalendarGrid from './CalendarGrid';
@@ -65,7 +65,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
   const [viewMode, setViewMode] = useState<'MONTH' | 'WEEK'>('MONTH');
 
   const currentDate = useMemo(() => {
-    let date = new Date();
+    let date = toSGT(new Date());
     try {
       let searchParamsDate: number | undefined = undefined;
       const searchParamsMonth = searchParams.get('month');
@@ -75,7 +75,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
       if (searchParamsWeek) searchParamsDate = Date.parse(searchParamsWeek);
 
       if (searchParamsDate !== undefined && !isNaN(searchParamsDate))
-        date = new Date(searchParamsDate);
+        date = toSGT(new Date(searchParamsDate));
     } catch {}
     return date;
   }, [searchParams]);
@@ -232,6 +232,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
             [viewMode.toLowerCase()]: newDate.toLocaleString('en-sg', {
               month: 'long',
               year: 'numeric',
+              timeZone: SGT,
             }),
           }
         : { date: newDate.toDateString() },
@@ -250,6 +251,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
             [viewMode.toLowerCase()]: newDate.toLocaleString('en-sg', {
               month: 'long',
               year: 'numeric',
+              timeZone: SGT,
             }),
           }
         : { date: newDate.toDateString() },
@@ -274,6 +276,43 @@ export default function Events({ events, userOrgs }: EventsProps) {
     form.setValue('endTime', event.end);
   };
 
+  const calendarRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
+  useEffect(() => {
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX.current = e.changedTouches[0].screenX;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      touchEndX.current = e.changedTouches[0].screenX;
+      const deltaX = touchEndX.current - touchStartX.current;
+
+      if (Math.abs(deltaX) > 50) {
+        // swipe threshold
+        if (deltaX > 0) {
+          handlePrevious(); // swipe right → go previous
+        } else {
+          handleNext(); // swipe left → go next
+        }
+      }
+    };
+
+    const calendarEl = calendarRef.current;
+    if (calendarEl) {
+      calendarEl.addEventListener('touchstart', handleTouchStart);
+      calendarEl.addEventListener('touchend', handleTouchEnd);
+    }
+
+    return () => {
+      if (calendarEl) {
+        calendarEl.removeEventListener('touchstart', handleTouchStart);
+        calendarEl.removeEventListener('touchend', handleTouchEnd);
+      }
+    };
+  }, [currentDate, viewMode]);
+
   return (
     <div className='relative flex bg-[#0C2C47]'>
       {(createEventPending || editEventPending || deleteEventPending) && (
@@ -284,7 +323,6 @@ export default function Events({ events, userOrgs }: EventsProps) {
         </div>
       )}
       {/* Sidebar */}
-      {/* TODO: How do mobile people select dates? */}
       <div className='hidden min-h-[calc(100vh-125px)] w-72 bg-white px-8 py-4 lg:block'>
         {/* View Toggle */}
         <ToggleGroup
@@ -298,6 +336,7 @@ export default function Events({ events, userOrgs }: EventsProps) {
                     [val.toLowerCase()]: currentDate.toLocaleString('en-sg', {
                       month: 'long',
                       year: 'numeric',
+                      timeZone: SGT,
                     }),
                   }
                 : { date: currentDate.toDateString() },
@@ -449,10 +488,10 @@ export default function Events({ events, userOrgs }: EventsProps) {
       </div>
 
       {/* Main Content */}
-      <div className='flex-1 p-8'>
+      <div className='flex-1 p-8' ref={calendarRef}>
         {/* Header */}
         <div className='mb-8 flex items-center gap-6'>
-          <div className='flex items-center gap-3'>
+          <div className='hidden items-center gap-3 sm:flex'>
             <Button
               variant='ghost'
               size='icon'
@@ -476,6 +515,29 @@ export default function Events({ events, userOrgs }: EventsProps) {
               {format(currentDate, 'MMMM yyyy')}
             </span>
           </h1>
+        </div>
+        <div className='mb-3 flex justify-center overflow-hidden sm:hidden'>
+          <button
+            onClick={() => setViewMode('MONTH')}
+            className={`rounded-l-md px-4 py-2 text-sm font-medium transition ${
+              viewMode === 'MONTH'
+                ? 'bg-blue-800 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            MONTH
+          </button>
+
+          <button
+            onClick={() => setViewMode('WEEK')}
+            className={`rounded-r-md px-4 py-2 text-sm font-medium transition ${
+              viewMode === 'WEEK'
+                ? 'bg-blue-800 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            WEEK
+          </button>
         </div>
 
         {/* Calendar View */}
