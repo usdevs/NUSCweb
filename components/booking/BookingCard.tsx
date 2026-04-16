@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { CalendarIcon, ClockIcon, MapPinIcon, UserIcon } from 'lucide-react';
 
+import { toSGT } from '@/lib/utils/client/time';
 import type { BookingView } from '@/lib/utils/server/booking';
 
 interface BookingCardProps {
@@ -30,10 +31,10 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking }) => {
           <div>
             {/* TODO: Align both start and end timings vertically */}
             <div className='text-sm'>
-              Start: {format(booking.start, 'd MMMM p')}
+              Start: {format(toSGT(booking.start), 'd MMMM p')}
             </div>
             <div className='text-sm'>
-              End: {format(booking.end, 'd MMMM p')}
+              End: {format(toSGT(booking.end), 'd MMMM p')}
             </div>
           </div>
         </div>

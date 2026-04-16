@@ -1,3 +1,5 @@
+import { toSGT } from '@/lib/utils/client/time';
+
 export function timeToIndex(time: string): number {
   // Parse time string like "8:00am", "2:30pm", etc.
   const match = time.match(/^(\d{1,2}):(\d{2}) (am|pm)$/i);
@@ -18,9 +20,8 @@ export function timeToIndex(time: string): number {
 }
 
 export function dateToHalfHourIndex(date: Date): number {
-  const hour = date.getHours();
-  const minute = date.getMinutes();
-  return hour * 2 + (minute >= 30 ? 1 : 0);
+  const sgt = toSGT(date);
+  return sgt.getHours() * 2 + (sgt.getMinutes() >= 30 ? 1 : 0);
 }
 
 export function getTimeSpanInHalfHours(startDate: Date, endDate: Date): number {
