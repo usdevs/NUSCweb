@@ -129,7 +129,7 @@ export default function Header() {
                   <NavigationMenuItem>
                     <NavigationMenuLink asChild>
                       <Link
-                        href='https://sites.google.com/view/nuscc-academics-site/home'
+                        href='https://sites.google.com/view/nuscc-academics/home'
                         target='_blank'
                       >
                         COURSE REVIEWS
@@ -224,7 +224,7 @@ export default function Header() {
                 asChild
               >
                 <Link
-                  href='https://sites.google.com/view/nuscc-academics-site/home'
+                  href='https://sites.google.com/view/nuscc-academics/home'
                   target='_blank'
                 >
                   COURSE REVIEWS

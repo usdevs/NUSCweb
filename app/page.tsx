@@ -102,7 +102,7 @@ export default function HomePage() {
                 asChild
               >
                 <Link
-                  href='https://sites.google.com/view/nuscc-academics-site/home'
+                  href='https://sites.google.com/view/nuscc-academics/home'
                   target='_blank'
                 >
                   VIEW ALL
