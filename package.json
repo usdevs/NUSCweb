@@ -41,7 +41,7 @@
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
     "http-status-codes": "^2.3.0",
-    "js-cookie": "^3.0.5",
+    "js-cookie": "^3.0.7",
     "jsonwebtoken": "^9.0.3",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.575.0",
