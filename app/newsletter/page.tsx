@@ -4,7 +4,12 @@ const newsletterYears: ArchiveYear[] = [
   { year: 'AY26/27' },
   {
     year: 'AY25/26',
-    editions: [{ label: 'SEMESTER 2', href: 'https://t.me/NUSChannel/6691' }],
+    editions: [
+      {
+        label: 'ISSUE 2 - SEMESTER 2',
+        href: 'https://ogmmddvrmieazwmy.public.blob.vercel-storage.com/newsletters/ay25-26/semester-2.pdf',
+      },
+    ],
   },
   {
     year: 'AY24/25',
