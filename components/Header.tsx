@@ -33,8 +33,24 @@ import { useAuth } from '@/lib/hooks/useAuth';
 
 import CustomDropdown from './custom-dropdown';
 
+const newsletterArchiveItems = [
+  { label: 'AY26/27', href: '/newsletter#ay26-27' },
+  { label: 'AY25/26', href: '/newsletter#ay25-26' },
+  { label: 'AY24/25', href: '/newsletter#ay24-25' },
+  { label: 'AY22/23', href: '/newsletter#ay22-23' },
+];
+
+const wikiArchiveItems = [
+  { label: 'AY25/26', href: '/wiki#ay25-26' },
+  { label: 'AY24/25', href: '/wiki#ay24-25' },
+  { label: 'AY23/24', href: '/wiki#ay23-24' },
+  { label: 'AY22/23', href: '/wiki#ay22-23' },
+];
+
 export default function Header() {
   const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(true);
+  const [mobileNewsletterOpen, setMobileNewsletterOpen] = useState(false);
+  const [mobileWikiOpen, setMobileWikiOpen] = useState(false);
   const [adminSubmenuOpen, setAdminSubmenuOpen] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -60,11 +76,15 @@ export default function Header() {
         <div className='lg:hidden'>
           <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
             <SheetTrigger asChild>
-              <Button variant='ghost' size='icon'>
-                <MenuIcon className='h-6 w-6' />
+              <Button
+                variant='ghost'
+                size='icon'
+                aria-label='Open navigation menu'
+              >
+                <MenuIcon className='h-6 w-6' aria-hidden='true' />
               </Button>
             </SheetTrigger>
-            <SheetContent side='left'>
+            <SheetContent side='left' className='overflow-y-auto'>
               <SheetHeader>
                 <SheetTitle />
                 <SheetDescription className='sr-only'>
@@ -137,15 +157,94 @@ export default function Header() {
                     </NavigationMenuLink>
                   </NavigationMenuItem>
 
-                  <NavigationMenuItem>
-                    <NavigationMenuLink asChild>
+                  <NavigationMenuItem className='w-full'>
+                    <div className='flex items-center justify-between'>
                       <Link
-                        href='https://sites.google.com/view/nusc-wiki-2425/home'
-                        target='_blank'
+                        href='/newsletter'
+                        className='py-1'
+                        onClick={() => setIsSidebarOpen(false)}
                       >
                         NEWSLETTER
                       </Link>
-                    </NavigationMenuLink>
+                      <button
+                        type='button'
+                        className='p-2'
+                        onClick={() => setMobileNewsletterOpen((open) => !open)}
+                        aria-controls='mobile-newsletter-years'
+                        aria-expanded={mobileNewsletterOpen}
+                        aria-label='Toggle Newsletter years'
+                      >
+                        {mobileNewsletterOpen ? (
+                          <ChevronDownIcon className='h-4 w-4' />
+                        ) : (
+                          <ChevronRightIcon className='h-4 w-4' />
+                        )}
+                      </button>
+                    </div>
+                    {mobileNewsletterOpen && (
+                      <div
+                        id='mobile-newsletter-years'
+                        className='pl-4'
+                        role='region'
+                        aria-label='Newsletter years'
+                      >
+                        {newsletterArchiveItems.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className='block py-1 text-sm'
+                            onClick={() => setIsSidebarOpen(false)}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </NavigationMenuItem>
+
+                  <NavigationMenuItem className='w-full'>
+                    <div className='flex items-center justify-between'>
+                      <Link
+                        href='/wiki'
+                        className='py-1'
+                        onClick={() => setIsSidebarOpen(false)}
+                      >
+                        WIKI
+                      </Link>
+                      <button
+                        type='button'
+                        className='p-2'
+                        onClick={() => setMobileWikiOpen((open) => !open)}
+                        aria-controls='mobile-wiki-years'
+                        aria-expanded={mobileWikiOpen}
+                        aria-label='Toggle Wiki years'
+                      >
+                        {mobileWikiOpen ? (
+                          <ChevronDownIcon className='h-4 w-4' />
+                        ) : (
+                          <ChevronRightIcon className='h-4 w-4' />
+                        )}
+                      </button>
+                    </div>
+                    {mobileWikiOpen && (
+                      <div
+                        id='mobile-wiki-years'
+                        className='pl-4'
+                        role='region'
+                        aria-label='Wiki years'
+                      >
+                        {wikiArchiveItems.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className='block py-1 text-sm'
+                            onClick={() => setIsSidebarOpen(false)}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </NavigationMenuItem>
 
                   {/* Admin menu for logged in users */}
@@ -232,17 +331,18 @@ export default function Header() {
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink
-                className={navigationMenuTriggerStyle()}
-                asChild
-              >
-                <Link
-                  href='https://sites.google.com/view/nusc-wiki-2425/home'
-                  target='_blank'
-                >
-                  NEWSLETTER
-                </Link>
-              </NavigationMenuLink>
+              <CustomDropdown
+                label='NEWSLETTER'
+                href='/newsletter'
+                items={newsletterArchiveItems}
+              />
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <CustomDropdown
+                label='WIKI'
+                href='/wiki'
+                items={wikiArchiveItems}
+              />
             </NavigationMenuItem>
 
             {/* Spacer pushes following items to the right */}
