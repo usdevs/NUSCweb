@@ -6,7 +6,7 @@ const newsletterYears: ArchiveYear[] = [
     year: 'AY25/26',
     editions: [
       {
-        label: 'ISSUE 2 - SEMESTER 2',
+        label: 'Issue 2 - Semester 2',
         href: 'https://ogmmddvrmieazwmy.public.blob.vercel-storage.com/newsletters/ay25-26/semester-2.pdf',
       },
     ],
