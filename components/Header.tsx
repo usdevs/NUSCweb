@@ -34,15 +34,28 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import CustomDropdown from './custom-dropdown';
 
 const newsletterArchiveItems = [
-  { label: 'AY25/26', href: '/newsletter#ay25-26' },
-  { label: 'AY22/23', href: '/newsletter#ay22-23' },
+  { label: 'AY26/27', href: '/newsletter' },
+  {
+    label: 'AY25/26',
+    href: 'https://ogmmddvrmieazwmy.public.blob.vercel-storage.com/newsletters/ay25-26/semester-2.pdf',
+  },
+  {
+    label: 'AY22/23',
+    href: 'https://ogmmddvrmieazwmy.public.blob.vercel-storage.com/newsletters/ay22-23/the-nusc-minute.pdf',
+  },
 ];
 
 const wikiArchiveItems = [
-  { label: 'AY25/26', href: '/wiki#ay25-26' },
-  { label: 'AY24/25', href: '/wiki#ay24-25' },
-  { label: 'AY23/24', href: '/wiki#ay23-24' },
-  { label: 'AY22/23', href: '/wiki#ay22-23' },
+  { label: 'AY25/26', href: '/wiki' },
+  {
+    label: 'AY24/25',
+    href: 'https://sites.google.com/view/nusc-wiki-2425/home',
+  },
+  {
+    label: 'AY23/24',
+    href: 'https://nusc-wiki.gitbook.io/nusc-wiki-23-24/',
+  },
+  { label: 'AY22/23', href: 'https://nusc-wiki.gitbook.io/nusc-wiki-22/' },
 ];
 
 export default function Header() {
@@ -190,6 +203,16 @@ export default function Header() {
                           <Link
                             key={item.href}
                             href={item.href}
+                            target={
+                              item.href.startsWith('http')
+                                ? '_blank'
+                                : undefined
+                            }
+                            rel={
+                              item.href.startsWith('http')
+                                ? 'noopener noreferrer'
+                                : undefined
+                            }
                             className='block py-1 text-sm'
                             onClick={() => setIsSidebarOpen(false)}
                           >
@@ -235,6 +258,16 @@ export default function Header() {
                           <Link
                             key={item.href}
                             href={item.href}
+                            target={
+                              item.href.startsWith('http')
+                                ? '_blank'
+                                : undefined
+                            }
+                            rel={
+                              item.href.startsWith('http')
+                                ? 'noopener noreferrer'
+                                : undefined
+                            }
                             className='block py-1 text-sm'
                             onClick={() => setIsSidebarOpen(false)}
                           >

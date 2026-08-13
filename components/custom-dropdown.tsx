@@ -210,6 +210,12 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
             >
               <Link
                 href={item.href}
+                target={item.href.startsWith('http') ? '_blank' : undefined}
+                rel={
+                  item.href.startsWith('http')
+                    ? 'noopener noreferrer'
+                    : undefined
+                }
                 className='block w-full px-4 py-2 text-sm text-gray-700'
                 role='menuitem'
                 tabIndex={isOpen ? undefined : -1}
