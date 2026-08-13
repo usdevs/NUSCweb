@@ -12,15 +12,6 @@ const newsletterYears: ArchiveYear[] = [
     ],
   },
   {
-    year: 'AY24/25',
-    editions: [
-      {
-        label: 'View edition',
-        href: 'https://sites.google.com/view/nusc-wiki-2425/home',
-      },
-    ],
-  },
-  {
     year: 'AY22/23',
     editions: [
       {
