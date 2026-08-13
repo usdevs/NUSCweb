@@ -34,9 +34,7 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import CustomDropdown from './custom-dropdown';
 
 const newsletterArchiveItems = [
-  { label: 'AY26/27', href: '/newsletter#ay26-27' },
   { label: 'AY25/26', href: '/newsletter#ay25-26' },
-  { label: 'AY24/25', href: '/newsletter#ay24-25' },
   { label: 'AY22/23', href: '/newsletter#ay22-23' },
 ];
 
