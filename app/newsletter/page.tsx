@@ -14,13 +14,20 @@ const newsletterYears: ArchiveYear[] = [
   {
     year: 'AY24/25',
     editions: [
-      { label: 'SEMESTER 2', href: 'https://t.me/NUSChannel/6245' },
-      { label: 'SEMESTER 1', href: 'https://t.me/NUSChannel/6005' },
+      {
+        label: 'View edition',
+        href: 'https://sites.google.com/view/nusc-wiki-2425/home',
+      },
     ],
   },
   {
     year: 'AY22/23',
-    editions: [{ label: 'VIEW EDITION', href: 'https://t.me/NUSChannel/5207' }],
+    editions: [
+      {
+        label: 'The NUSC Minute',
+        href: 'https://ogmmddvrmieazwmy.public.blob.vercel-storage.com/newsletters/ay22-23/the-nusc-minute.pdf',
+      },
+    ],
   },
 ];
 
