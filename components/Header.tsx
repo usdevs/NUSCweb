@@ -29,34 +29,17 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import {
+  getArchiveDropdownItems,
+  newsletterArchive,
+  wikiArchive,
+} from '@/lib/archive';
 import { useAuth } from '@/lib/hooks/useAuth';
 
 import CustomDropdown from './custom-dropdown';
 
-const newsletterArchiveItems = [
-  { label: 'AY26/27', href: '/newsletter' },
-  {
-    label: 'AY25/26',
-    href: 'https://ogmmddvrmieazwmy.public.blob.vercel-storage.com/newsletters/ay25-26/semester-2.pdf',
-  },
-  {
-    label: 'AY22/23',
-    href: 'https://ogmmddvrmieazwmy.public.blob.vercel-storage.com/newsletters/ay22-23/the-nusc-minute.pdf',
-  },
-];
-
-const wikiArchiveItems = [
-  { label: 'AY25/26', href: '/wiki' },
-  {
-    label: 'AY24/25',
-    href: 'https://sites.google.com/view/nusc-wiki-2425/home',
-  },
-  {
-    label: 'AY23/24',
-    href: 'https://nusc-wiki.gitbook.io/nusc-wiki-23-24/',
-  },
-  { label: 'AY22/23', href: 'https://nusc-wiki.gitbook.io/nusc-wiki-22/' },
-];
+const newsletterArchiveItems = getArchiveDropdownItems(newsletterArchive);
+const wikiArchiveItems = getArchiveDropdownItems(wikiArchive);
 
 export default function Header() {
   const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(true);
@@ -171,7 +154,7 @@ export default function Header() {
                   <NavigationMenuItem className='w-full'>
                     <div className='flex items-center justify-between'>
                       <Link
-                        href='/newsletter'
+                        href={newsletterArchive.href}
                         className='py-1'
                         onClick={() => setIsSidebarOpen(false)}
                       >
@@ -226,7 +209,7 @@ export default function Header() {
                   <NavigationMenuItem className='w-full'>
                     <div className='flex items-center justify-between'>
                       <Link
-                        href='/wiki'
+                        href={wikiArchive.href}
                         className='py-1'
                         onClick={() => setIsSidebarOpen(false)}
                       >
@@ -364,14 +347,14 @@ export default function Header() {
             <NavigationMenuItem>
               <CustomDropdown
                 label='NEWSLETTER'
-                href='/newsletter'
+                href={newsletterArchive.href}
                 items={newsletterArchiveItems}
               />
             </NavigationMenuItem>
             <NavigationMenuItem>
               <CustomDropdown
                 label='WIKI'
-                href='/wiki'
+                href={wikiArchive.href}
                 items={wikiArchiveItems}
               />
             </NavigationMenuItem>

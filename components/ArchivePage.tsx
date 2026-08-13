@@ -2,30 +2,13 @@ import { ExternalLinkIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-interface ArchiveEdition {
-  label: string;
-  href: string;
-}
-
-export interface ArchiveYear {
-  year: string;
-  editions?: ArchiveEdition[];
-}
-
-interface ArchivePageProps {
-  archiveName: string;
-  description: string;
-  years: ArchiveYear[];
-}
+import { anchorForArchiveYear, type ArchiveDefinition } from '@/lib/archive';
 
 export default function ArchivePage({
-  archiveName,
-  description,
-  years,
-}: ArchivePageProps) {
-  const anchorFor = (year: string) =>
-    year.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-');
-
+  archive,
+}: {
+  archive: ArchiveDefinition;
+}) {
   return (
     <>
       <section className='relative h-80 w-full overflow-hidden md:h-104'>
@@ -40,7 +23,7 @@ export default function ArchivePage({
         <div className='absolute inset-0 bg-linear-to-b from-[rgba(29,107,173,0)] to-[#0C2C47]' />
         <div className='relative z-10 flex h-full items-end px-8 pb-12 md:px-16 md:pb-16'>
           <h1 className='text-4xl font-bold text-white md:text-6xl'>
-            {archiveName}
+            {archive.name}
           </h1>
         </div>
       </section>
@@ -48,14 +31,14 @@ export default function ArchivePage({
       <section className='bg-white px-8 py-14 md:px-16 md:py-20'>
         <div className='mx-auto max-w-7xl'>
           <p className='max-w-3xl text-lg leading-8 text-gray-600'>
-            {description}
+            {archive.description}
           </p>
 
           <div className='mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
-            {years.map((year) => (
+            {archive.years.map((year) => (
               <article
                 key={year.year}
-                id={anchorFor(year.year)}
+                id={anchorForArchiveYear(year.year)}
                 className='flex min-h-56 scroll-mt-24 flex-col items-center justify-center bg-[#FFF4E5] p-8 text-center'
               >
                 <h2 className='text-2xl font-bold text-[#0C2C47] uppercase'>
