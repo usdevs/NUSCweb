@@ -33,6 +33,8 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
     // why: touch and pen pointers should use the stable click interaction.
     if (event.pointerType !== 'mouse') return;
 
+    // why: a short grace period lets the pointer cross the visual gap to the
+    // menu without closing it mid-movement and causing a flicker.
     timeoutRef.current = setTimeout(() => {
       if (
         !isClickOpenRef.current &&
@@ -57,11 +59,14 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   };
 
   const handleFocus = () => {
+    // why: keyboard users who Tab into the control need the same menu reveal
+    // that mouse users get from hovering.
     setIsOpen(true);
   };
 
   const handleBlur = () => {
-    // why: wait for the browser to move focus before deciding it left the menu.
+    // why: blur fires before focus settles on the next element, so checking
+    // immediately would close the menu while the user Tabs into one of its links.
     window.setTimeout(() => {
       if (!dropdownRef.current?.contains(document.activeElement)) {
         isClickOpenRef.current = false;
@@ -70,18 +75,22 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
     }, 0);
   };
 
-  const handleToggleKeyDown = (event: React.KeyboardEvent) => {
+  const handleTriggerKeyDown = (event: React.KeyboardEvent) => {
+    // why: ArrowDown is the standard shortcut for entering an attached menu;
+    // handling keydown lets us prevent page scrolling before it occurs.
     if (event.key !== 'ArrowDown') return;
 
     event.preventDefault();
     setIsOpen(true);
-    // why: the menu must render before its first link can receive focus.
+    // why: let React commit the open state before moving keyboard focus into the menu.
     window.requestAnimationFrame(() => {
       menuRef.current?.querySelector<HTMLAnchorElement>('a')?.focus();
     });
   };
 
   const handleMenuKeyDown = (event: React.KeyboardEvent<HTMLUListElement>) => {
+    // why: menu-style arrow navigation moves focus between choices without
+    // making keyboard users Tab through the rest of the page.
     const items = Array.from(
       menuRef.current?.querySelectorAll<HTMLAnchorElement>('a') ?? [],
     );
@@ -135,11 +144,16 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         }
       }}
     >
+      {/* why: both trigger variants must expose the controlled menu and its open state to screen readers. */}
       {href ? (
         <div className='flex h-10 items-center'>
           <Link
             href={href}
             className='hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground px-4 py-2 text-sm focus:outline-none'
+            onKeyDown={handleTriggerKeyDown}
+            aria-controls={menuId}
+            aria-expanded={isOpen}
+            aria-haspopup='menu'
             onClick={() => {
               isClickOpenRef.current = false;
               setIsOpen(false);
@@ -147,12 +161,13 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
           >
             {label}
           </Link>
+          {/* why: screen readers need to distinguish this menu toggle from the adjacent page link. */}
           <button
             ref={toggleRef}
             type='button'
             className='hover:bg-accent focus:bg-accent h-full px-2 focus:outline-none'
             onClick={handleClick}
-            onKeyDown={handleToggleKeyDown}
+            onKeyDown={handleTriggerKeyDown}
             aria-controls={menuId}
             aria-expanded={isOpen}
             aria-haspopup='menu'
@@ -170,7 +185,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
           type='button'
           className='flex h-10 items-center gap-1 px-4 py-2 text-sm'
           onClick={handleClick}
-          onKeyDown={handleToggleKeyDown}
+          onKeyDown={handleTriggerKeyDown}
           aria-controls={menuId}
           aria-expanded={isOpen}
           aria-haspopup='menu'
@@ -188,6 +203,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
       {isOpen && <div className='absolute top-full left-0 z-9999 h-6 w-full' />}
 
       {/* why: keep the menu mounted for its close animation, but make closed links inert. */}
+      {/* why: assistive technology also needs an explicit signal while those mounted contents are unavailable. */}
       <div
         aria-hidden={!isOpen}
         className={`fixed top-[calc(100%+4px)] left-1/2 z-9999 w-40 origin-top -translate-x-1/2 transform overflow-hidden rounded-md bg-white shadow-lg transition-all duration-300 md:absolute ${
@@ -199,6 +215,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         onPointerLeave={handlePointerLeave}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* why: menu semantics announce that arrow keys move between these choices. */}
         <ul
           id={menuId}
           ref={menuRef}
