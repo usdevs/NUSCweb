@@ -53,6 +53,10 @@ export const newsletterArchive = {
           label: 'Issue 1 - Semester 1',
           href: 'https://ogmmddvrmieazwmy.public.blob.vercel-storage.com/newsletters/ay24-25/semester-1.pdf',
         },
+        {
+          label: 'Issue 2 - Semester 2',
+          href: 'https://ogmmddvrmieazwmy.public.blob.vercel-storage.com/newsletters/ay24-25/semester-2.pdf',
+        },
       ],
     },
     {
