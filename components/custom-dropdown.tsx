@@ -25,10 +25,12 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   const menuRef = useRef<HTMLUListElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // why: hover/focus visibility is transient, while a click pins the menu open.
   const isClickOpenRef = useRef(false);
   const menuId = useId();
 
   const handlePointerLeave = (event: React.PointerEvent) => {
+    // why: touch and pen pointers should use the stable click interaction.
     if (event.pointerType !== 'mouse') return;
 
     timeoutRef.current = setTimeout(() => {
@@ -50,8 +52,6 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   };
 
   const handleClick = () => {
-    // why: click pins an otherwise transient hover/focus menu so touch users
-    // and pointer users moving toward the menu get the same stable control.
     isClickOpenRef.current = !isClickOpenRef.current;
     setIsOpen(isClickOpenRef.current);
   };
@@ -61,6 +61,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   };
 
   const handleBlur = () => {
+    // why: wait for the browser to move focus before deciding it left the menu.
     window.setTimeout(() => {
       if (!dropdownRef.current?.contains(document.activeElement)) {
         isClickOpenRef.current = false;
@@ -74,6 +75,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
 
     event.preventDefault();
     setIsOpen(true);
+    // why: the menu must render before its first link can receive focus.
     window.requestAnimationFrame(() => {
       menuRef.current?.querySelector<HTMLAnchorElement>('a')?.focus();
     });
@@ -182,8 +184,10 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         </button>
       )}
 
+      {/* why: bridge the visual gap so moving a mouse into the menu does not close it. */}
       {isOpen && <div className='absolute top-full left-0 z-9999 h-6 w-full' />}
 
+      {/* why: keep the menu mounted for its close animation, but make closed links inert. */}
       <div
         aria-hidden={!isOpen}
         className={`fixed top-[calc(100%+4px)] left-1/2 z-9999 w-40 origin-top -translate-x-1/2 transform overflow-hidden rounded-md bg-white shadow-lg transition-all duration-300 md:absolute ${
