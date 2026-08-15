@@ -29,6 +29,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { newsletterArchive, wikiArchive } from '@/lib/archive';
 import { useAuth } from '@/lib/hooks/useAuth';
 
 import CustomDropdown from './custom-dropdown';
@@ -60,11 +61,15 @@ export default function Header() {
         <div className='lg:hidden'>
           <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
             <SheetTrigger asChild>
-              <Button variant='ghost' size='icon'>
-                <MenuIcon className='h-6 w-6' />
+              <Button
+                variant='ghost'
+                size='icon'
+                aria-label='Open navigation menu'
+              >
+                <MenuIcon className='h-6 w-6' aria-hidden='true' />
               </Button>
             </SheetTrigger>
-            <SheetContent side='left'>
+            <SheetContent side='left' className='overflow-y-auto'>
               <SheetHeader>
                 <SheetTitle />
                 <SheetDescription className='sr-only'>
@@ -140,10 +145,21 @@ export default function Header() {
                   <NavigationMenuItem>
                     <NavigationMenuLink asChild>
                       <Link
-                        href='https://sites.google.com/view/nusc-wiki-2425/home'
-                        target='_blank'
+                        href={newsletterArchive.href}
+                        onClick={() => setIsSidebarOpen(false)}
                       >
                         NEWSLETTER
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href={wikiArchive.href}
+                        onClick={() => setIsSidebarOpen(false)}
+                      >
+                        WIKI
                       </Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
@@ -236,12 +252,15 @@ export default function Header() {
                 className={navigationMenuTriggerStyle()}
                 asChild
               >
-                <Link
-                  href='https://sites.google.com/view/nusc-wiki-2425/home'
-                  target='_blank'
-                >
-                  NEWSLETTER
-                </Link>
+                <Link href={newsletterArchive.href}>NEWSLETTER</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                className={navigationMenuTriggerStyle()}
+                asChild
+              >
+                <Link href={wikiArchive.href}>WIKI</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
 
