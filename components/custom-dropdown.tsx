@@ -223,9 +223,9 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
           role='menu'
           onKeyDown={handleMenuKeyDown}
         >
-          {items.map((item) => (
+          {items.map((item, index) => (
             <li
-              key={item.href}
+              key={index}
               className='text-center transition-colors duration-200 hover:bg-gray-100'
               role='none'
             >
