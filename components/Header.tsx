@@ -29,22 +29,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import {
-  getArchiveDropdownItems,
-  newsletterArchive,
-  wikiArchive,
-} from '@/lib/archive';
+import { newsletterArchive, wikiArchive } from '@/lib/archive';
 import { useAuth } from '@/lib/hooks/useAuth';
 
 import CustomDropdown from './custom-dropdown';
 
-const newsletterArchiveItems = getArchiveDropdownItems(newsletterArchive);
-const wikiArchiveItems = getArchiveDropdownItems(wikiArchive);
-
 export default function Header() {
   const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(true);
-  const [mobileNewsletterOpen, setMobileNewsletterOpen] = useState(false);
-  const [mobileWikiOpen, setMobileWikiOpen] = useState(false);
   const [adminSubmenuOpen, setAdminSubmenuOpen] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -151,114 +142,26 @@ export default function Header() {
                     </NavigationMenuLink>
                   </NavigationMenuItem>
 
-                  <NavigationMenuItem className='w-full'>
-                    <div className='flex items-center justify-between'>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
                       <Link
                         href={newsletterArchive.href}
-                        className='py-1'
                         onClick={() => setIsSidebarOpen(false)}
                       >
                         NEWSLETTER
                       </Link>
-                      <button
-                        type='button'
-                        className='p-2'
-                        onClick={() => setMobileNewsletterOpen((open) => !open)}
-                        aria-controls='mobile-newsletter-years'
-                        aria-expanded={mobileNewsletterOpen}
-                        aria-label='Toggle Newsletter years'
-                      >
-                        {mobileNewsletterOpen ? (
-                          <ChevronDownIcon className='h-4 w-4' />
-                        ) : (
-                          <ChevronRightIcon className='h-4 w-4' />
-                        )}
-                      </button>
-                    </div>
-                    {mobileNewsletterOpen && (
-                      <div
-                        id='mobile-newsletter-years'
-                        className='pl-4'
-                        role='region'
-                        aria-label='Newsletter years'
-                      >
-                        {newsletterArchiveItems.map((item) => (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            target={
-                              item.href.startsWith('http')
-                                ? '_blank'
-                                : undefined
-                            }
-                            rel={
-                              item.href.startsWith('http')
-                                ? 'noopener noreferrer'
-                                : undefined
-                            }
-                            className='block py-1 text-sm'
-                            onClick={() => setIsSidebarOpen(false)}
-                          >
-                            {item.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
+                    </NavigationMenuLink>
                   </NavigationMenuItem>
 
-                  <NavigationMenuItem className='w-full'>
-                    <div className='flex items-center justify-between'>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
                       <Link
                         href={wikiArchive.href}
-                        className='py-1'
                         onClick={() => setIsSidebarOpen(false)}
                       >
                         WIKI
                       </Link>
-                      <button
-                        type='button'
-                        className='p-2'
-                        onClick={() => setMobileWikiOpen((open) => !open)}
-                        aria-controls='mobile-wiki-years'
-                        aria-expanded={mobileWikiOpen}
-                        aria-label='Toggle Wiki years'
-                      >
-                        {mobileWikiOpen ? (
-                          <ChevronDownIcon className='h-4 w-4' />
-                        ) : (
-                          <ChevronRightIcon className='h-4 w-4' />
-                        )}
-                      </button>
-                    </div>
-                    {mobileWikiOpen && (
-                      <div
-                        id='mobile-wiki-years'
-                        className='pl-4'
-                        role='region'
-                        aria-label='Wiki years'
-                      >
-                        {wikiArchiveItems.map((item) => (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            target={
-                              item.href.startsWith('http')
-                                ? '_blank'
-                                : undefined
-                            }
-                            rel={
-                              item.href.startsWith('http')
-                                ? 'noopener noreferrer'
-                                : undefined
-                            }
-                            className='block py-1 text-sm'
-                            onClick={() => setIsSidebarOpen(false)}
-                          >
-                            {item.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
+                    </NavigationMenuLink>
                   </NavigationMenuItem>
 
                   {/* Admin menu for logged in users */}
@@ -345,18 +248,20 @@ export default function Header() {
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <CustomDropdown
-                label='NEWSLETTER'
-                href={newsletterArchive.href}
-                items={newsletterArchiveItems}
-              />
+              <NavigationMenuLink
+                className={navigationMenuTriggerStyle()}
+                asChild
+              >
+                <Link href={newsletterArchive.href}>NEWSLETTER</Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <CustomDropdown
-                label='WIKI'
-                href={wikiArchive.href}
-                items={wikiArchiveItems}
-              />
+              <NavigationMenuLink
+                className={navigationMenuTriggerStyle()}
+                asChild
+              >
+                <Link href={wikiArchive.href}>WIKI</Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
 
             {/* Spacer pushes following items to the right */}

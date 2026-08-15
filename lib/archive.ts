@@ -20,11 +20,6 @@ export interface ArchiveDefinition {
   years: readonly ArchiveYear[];
 }
 
-export interface ArchiveDropdownItem {
-  label: string;
-  href: string;
-}
-
 export const newsletterArchive = {
   name: 'Newsletter Archive',
   href: '/newsletter',
@@ -110,19 +105,3 @@ export const wikiArchive = {
 
 export const anchorForArchiveYear = (year: string) =>
   year.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-');
-
-export function getArchiveDropdownItems(
-  archive: ArchiveDefinition,
-): ArchiveDropdownItem[] {
-  return archive.years.map((entry) => {
-    if (entry.editions?.length === 1) {
-      return { label: entry.year, href: entry.editions[0].href };
-    }
-
-    // why: forthcoming and multi-edition years need the index because no single destination is canonical.
-    return {
-      label: entry.year,
-      href: `${archive.href}#${anchorForArchiveYear(entry.year)}`,
-    };
-  });
-}
